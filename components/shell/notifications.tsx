@@ -25,7 +25,9 @@ export function NotificationsPopover({ initialUnread }: { initialUnread: number 
     }
   }, []);
   useEffect(() => {
-    if (open) void load();
+    if (!open) return;
+    const t = setTimeout(() => void load(), 0);
+    return () => clearTimeout(t);
   }, [open, load]);
   useEffect(() => {
     const id = setInterval(() => {

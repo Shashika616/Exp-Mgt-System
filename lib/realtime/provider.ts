@@ -3,8 +3,9 @@ import { useEffect, useRef } from "react";
 
 /**
  * architecture.md §8: realtime on the ticket detail, behind one hook with two implementations:
- *  - poll: fetches /api/tickets/[id]/version every 5 s while the tab is visible (portable, serverless-safe,
- *    no long-lived connections — the right fit for Vercel Hobby)
+ *  - poll: fetches /api/tickets/[id]/version every NEXT_PUBLIC_REALTIME_POLL_MS (default 15 s) while the tab is
+ *    visible — portable fallback with no long-lived connections. Prefer `supabase` in production: push-based and
+ *    free of function invocations.
  *  - supabase: Supabase Realtime postgres_changes with a short-lived access token from /api/realtime/token
  *    (token stays in memory; refresh tokens never leave the httpOnly cookie)
  * `onChange` fires when the ticket changed; the page then re-fetches via router.refresh().
@@ -47,7 +48,8 @@ export function useTicketLive(ticketId: string, onChange: () => void, provider: 
       }
     };
     void tick();
-    const id = setInterval(tick, 5000);
+    const interval = Math.max(5000, Number(process.env.NEXT_PUBLIC_REALTIME_POLL_MS ?? 15000) || 15000);
+    const id = setInterval(tick, interval);
     const onVisible = () => {
       if (document.visibilityState === "visible") void tick();
     };

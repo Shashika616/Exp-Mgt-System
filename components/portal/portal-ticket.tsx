@@ -11,7 +11,6 @@ import { useToast } from "@/components/ui/toast";
 import { AttachmentPicker, type Uploaded } from "@/components/tickets/attachment-picker";
 import { useTicketLive } from "@/lib/realtime/provider";
 import type { PortalTicket } from "@/lib/dal/portal/tickets";
-import { cn } from "@/lib/utils";
 
 /** FR-CP-05: reply box, Reopen on resolved, Confirm (close) on resolved, Cancel on new/open, follow-up on closed. */
 export function PortalTicketActions({ t, colleagues, realtime }: { t: PortalTicket; colleagues: { id: string; name: string }[]; realtime: "poll" | "supabase" }) {

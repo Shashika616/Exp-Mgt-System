@@ -5,10 +5,10 @@ import { test as base, type BrowserContext } from "@playwright/test";
  * so EventSource connections never leak into the next test. The default `page` fixture is untouched.
  */
 export const test = base.extend<{ trackedContexts: BrowserContext[] }>({
-  trackedContexts: async ({ browser }, use) => {
+  trackedContexts: async ({ browser }, provide) => {
     const before = new Set(browser.contexts());
     const opened: BrowserContext[] = [];
-    await use(opened);
+    await provide(opened);
     for (const ctx of browser.contexts()) if (!before.has(ctx)) await ctx.close().catch(() => undefined);
   },
 });

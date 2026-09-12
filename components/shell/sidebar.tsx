@@ -14,9 +14,13 @@ export function Sidebar({ items }: { items: NavItem[] }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   useEffect(() => {
-    try {
-      setCollapsed(localStorage.getItem("exp.sidebar") === "rail");
-    } catch {}
+    // Read the persisted preference after mount (outside the render/effect sync path).
+    const raf = requestAnimationFrame(() => {
+      try {
+        setCollapsed(localStorage.getItem("exp.sidebar") === "rail");
+      } catch {}
+    });
+    return () => cancelAnimationFrame(raf);
   }, []);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

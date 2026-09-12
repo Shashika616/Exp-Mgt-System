@@ -29,7 +29,7 @@ export function TicketEmail(p: TicketEmailProps) {
           {p.ctaLabel}
         </Link>
       </Section>
-      <Text style={s.muted}>You'll need to sign in to view the full request.</Text>
+      <Text style={s.muted}>You&apos;ll need to sign in to view the full request.</Text>
     </EmailLayout>
   );
 }

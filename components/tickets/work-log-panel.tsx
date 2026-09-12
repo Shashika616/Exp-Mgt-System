@@ -24,14 +24,19 @@ export function WorkLogPanel({ ticketId, total, entries, canWrite, viewerId, run
   const [state, setState] = useState<WorkState | "">("");
   const [timerRange, setTimerRange] = useState<{ startedAt: string; endedAt: string } | null>(null);
   const [busy, setBusy] = useState(false);
-  const [tick, setTick] = useState(Date.now());
+  const [tick, setTick] = useState(0);
   const [editing, setEditing] = useState<string | null>(null);
   useEffect(() => {
     if (!runningSince) return;
-    const id = setInterval(() => setTick(Date.now()), 15_000);
-    return () => clearInterval(id);
+    const update = () => setTick(Date.now());
+    const id = setInterval(update, 15_000);
+    const raf = requestAnimationFrame(update);
+    return () => {
+      clearInterval(id);
+      cancelAnimationFrame(raf);
+    };
   }, [runningSince]);
-  const elapsed = runningSince ? Math.max(0, Math.floor((tick - new Date(runningSince).getTime()) / 60_000)) : 0;
+  const elapsed = runningSince && tick ? Math.max(0, Math.floor((tick - new Date(runningSince).getTime()) / 60_000)) : 0;
 
   const submit = async () => {
     if (minutes === "" || !note.trim()) return;

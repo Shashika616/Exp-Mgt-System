@@ -1,5 +1,5 @@
 // pnpm cron [job] — run a job from a system cron / container (own-cloud path). Defaults to "all".
-import { loadEnv } from "@/db/load-env";
+import { loadEnv } from "../../db/load-env";
 
 loadEnv();
 const { runJob } = await import("./run");

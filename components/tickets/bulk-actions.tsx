@@ -2,7 +2,6 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { bulkUpdate } from "@/lib/actions/tickets";
-import { Button } from "@/components/ui/button";
 import { Menu } from "@/components/ui/menu";
 import { useToast } from "@/components/ui/toast";
 import { useStaffDirectory } from "./staff-directory";

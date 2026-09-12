@@ -6,6 +6,6 @@ import { renderMarkdown } from "@/lib/markdown";
  */
 export async function SafeHtml({ markdown, html, className }: { markdown: string; html?: string | null; className?: string }) {
   const safe = html ?? (await renderMarkdown(markdown));
-  // eslint-disable-next-line react/no-danger -- sanitised by rehype-sanitize (allowlisted tags/attrs/protocols)
+  // The only dangerouslySetInnerHTML in the codebase: input is sanitised by rehype-sanitize (allowlisted tags/attrs/protocols).
   return <div className={`prose-ticket ${className ?? ""}`} dangerouslySetInnerHTML={{ __html: safe }} />;
 }

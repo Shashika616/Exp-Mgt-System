@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 // security.md A10: max lengths on every string, trim, NFC normalisation, reject control characters.
-// eslint-disable-next-line no-control-regex
 const control = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/;
 
 export const text = (max: number, min = 1) =>

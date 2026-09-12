@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { AlertTriangle, ArrowUpRight, Building2, Check, ChevronDown, Link2, Tag, Timer, UserRoundCheck, UserRoundPlus, UsersRound } from "lucide-react";
+import { AlertTriangle, ArrowUpRight, Building2, Check, ChevronDown, Link2, Tag, UserRoundCheck, UserRoundPlus, UsersRound } from "lucide-react";
 import { useState, useTransition } from "react";
 import { assignTicket, addParticipant, escalateTicket, extendSla, linkTickets, overridePriority, removeParticipant, setCategory, setImpactUrgency, setTags, setWorkState, transitionTicket } from "@/lib/actions/tickets";
 import { Button } from "@/components/ui/button";

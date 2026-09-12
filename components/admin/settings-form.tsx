@@ -25,7 +25,7 @@ export function SettingsForm({ value }: { value: V }) {
           {(p) => (
             <NativeSelect {...p} value={v.developerPublicReply} onChange={(e) => setV({ ...v, developerPublicReply: e.target.value as DeveloperPublicReply })}>
               <option value="always">Always</option>
-              <option value="after_first_admin_reply">After the admin's first reply</option>
+              <option value="after_first_admin_reply">After the admin&apos;s first reply</option>
               <option value="never">Never — admin sends</option>
             </NativeSelect>
           )}

@@ -32,7 +32,7 @@ export function AuthEmail({ kind, name, url, appUrl, orgName }: { kind: AuthEmai
   return (
     <EmailLayout preview={c.subject} title={c.title} appUrl={appUrl}>
       <Text style={s.p}>Hi {name},</Text>
-      {orgName ? <Text style={s.p}>You've been added to <strong>{orgName}</strong>.</Text> : null}
+      {orgName ? <Text style={s.p}>You&apos;ve been added to <strong>{orgName}</strong>.</Text> : null}
       <Text style={s.p}>{c.intro}</Text>
       <Section style={{ margin: "20px 0" }}>
         <Link href={url} style={s.button}>
@@ -41,7 +41,7 @@ export function AuthEmail({ kind, name, url, appUrl, orgName }: { kind: AuthEmai
       </Section>
       <Text style={s.muted}>{c.expiry}</Text>
       <Text style={s.muted}>
-        If the button doesn't work, paste this link into your browser:
+        If the button doesn&apos;t work, paste this link into your browser:
         <br />
         {url}
       </Text>

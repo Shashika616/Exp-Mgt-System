@@ -77,6 +77,7 @@ export async function submitForReview(ctx: AuthContext, ticketId: string, input:
 
 /** FR-DEV-07: approve & reply / return / ask client. Submissions are immutable once decided (trigger + RLS). */
 export async function reviewSubmission(ctx: AuthContext, ticketId: string, decision: ReviewDecision, expectedVersion?: number) {
+  void expectedVersion; // reviews re-read the row under lock; the ticket version is checked by the transition
   return withContext(ctx, async (tx) => {
     const ticket = await loadTicketRow(tx, eq(schema.tickets.id, ticketId));
     if (!ticket) throw notFound();

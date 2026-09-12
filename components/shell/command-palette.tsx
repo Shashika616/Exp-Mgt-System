@@ -33,24 +33,26 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
   const input = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (open) {
+    if (!open) return;
+    const t = setTimeout(() => {
       setQ("");
       setResults([]);
       setActive(0);
-      setTimeout(() => input.current?.focus(), 0);
-    }
+      input.current?.focus();
+    }, 0);
+    return () => clearTimeout(t);
   }, [open]);
 
   useEffect(() => {
     if (!open) return;
     const term = q.trim();
-    if (!term) {
-      setResults([]);
-      return;
-    }
     let cancelled = false;
-    setLoading(true);
     const t = setTimeout(async () => {
+      if (!term) {
+        setResults([]);
+        return;
+      }
+      setLoading(true);
       const r = await globalSearch({ q: term });
       if (cancelled) return;
       setLoading(false);

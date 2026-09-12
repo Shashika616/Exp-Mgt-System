@@ -140,7 +140,7 @@ export const verifyTotp = publicAction(TotpSchema, async (input) => {
   return { next: safeNext(input.next, homeFor(s.ctx)) };
 });
 
-export const useRecoveryCode = publicAction(RecoveryCodeSchema, async (input) => {
+export const signInWithRecoveryCode = publicAction(RecoveryCodeSchema, async (input) => {
   const s = await getSession();
   if (s.kind === "anonymous") throw new AppError("unauthenticated");
   await enforceLimit("login_account", `recovery:${s.ctx.userId}`);

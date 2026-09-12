@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { acceptInvite, consumeMagicLink, confirmTotpEnrollment, requestMagicLink, requestPasswordReset, resetPassword, signInWithPassword, useRecoveryCode, verifyTotp } from "@/lib/actions/auth";
+import { acceptInvite, consumeMagicLink, confirmTotpEnrollment, requestMagicLink, requestPasswordReset, resetPassword, signInWithPassword, signInWithRecoveryCode, verifyTotp } from "@/lib/actions/auth";
 import { LoginSchema, MagicLinkSchema, ResetRequestSchema } from "@/lib/schemas/auth";
 import type { PublicError } from "@/lib/errors";
 import { Button } from "@/components/ui/button";
@@ -267,7 +267,7 @@ export function TotpForm({ next, mode, secret, uri, recoveryCodes }: { next?: st
         noValidate
         onSubmit={form.handleSubmit(async (values) => {
           setError(null);
-          const res = mode === "enroll" ? await confirmTotpEnrollment({ code: values.code, next }) : recovery ? await useRecoveryCode({ code: values.code }) : await verifyTotp({ code: values.code, next });
+          const res = mode === "enroll" ? await confirmTotpEnrollment({ code: values.code, next }) : recovery ? await signInWithRecoveryCode({ code: values.code }) : await verifyTotp({ code: values.code, next });
           if (!res.ok) return setError(res);
           router.replace(res.data.next);
           router.refresh();

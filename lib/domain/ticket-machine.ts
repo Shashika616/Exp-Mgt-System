@@ -51,7 +51,6 @@ const STAFF_SYS: readonly Role[] = ["agent", "lead", "admin", "system"];
 const DEV_STAFF: readonly Role[] = ["agent", "developer", "lead", "admin"];
 const REVIEWERS: readonly Role[] = ["lead", "admin"];
 const CLIENTS: readonly Role[] = ["client_user", "client_admin"];
-const ALL_STAFF_AND_SYSTEM: readonly Role[] = [...STAFF_SYS, "developer"];
 
 export const TRANSITIONS: Readonly<Record<TicketStatus, Partial<Record<TicketAction, Transition>>>> = {
   new: {

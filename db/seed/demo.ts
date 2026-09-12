@@ -7,7 +7,7 @@ import * as schema from "@/db/schema";
 import { computePriority } from "@/lib/domain/priority";
 import { DEFAULT_CALENDAR } from "@/lib/domain/sla-calendar";
 import { DEFAULT_SLA_TARGETS, newTimer, pause, stop, tick, type TimerRow } from "@/lib/domain/sla-timers";
-import type { HoldReason, Level3, Priority, ResolutionCode, TicketStatus, TicketType, WorkState } from "@/lib/domain/types";
+import type { HoldReason, Level3, ResolutionCode, TicketStatus, TicketType, WorkState } from "@/lib/domain/types";
 import { renderMarkdown } from "@/lib/markdown";
 
 type Db = PostgresJsDatabase<typeof schema>;
