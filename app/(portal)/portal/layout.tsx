@@ -24,7 +24,7 @@ export default async function PortalLayout({ children }: { children: React.React
           <PortalNav isClientAdmin={ctx.role === "client_admin"} />
         </div>
       </div>
-      <Topbar surface="portal" crumbs={[{ label: "Client portal" }]} user={{ name: ctx.fullName, email: ctx.email, role: ctx.role }} unread={notifications.unread} />
+      <Topbar surface="portal" crumbs={[{ href: "/portal", label: "My requests" }]} user={{ name: ctx.fullName, email: ctx.email, role: ctx.role }} unread={notifications.unread} />
       <main id="main" className="mx-auto w-full max-w-[1100px] px-page py-6 pb-24">
         {children}
       </main>

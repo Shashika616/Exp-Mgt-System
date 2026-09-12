@@ -9,7 +9,7 @@ import { WORK_STATES, WORK_STATE_LABEL, type WorkState } from "@/lib/domain/type
 import { WORK_STATE_META, TONE_CLASS } from "@/lib/design/status";
 import type { developerDashboard } from "@/lib/dal/stats";
 import type { myTimeSummary } from "@/lib/dal/work-logs";
-import { formatMinutes, relativeTime } from "@/lib/utils";
+import { dueLabel, formatMinutes, relativeTime } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 type Data = Awaited<ReturnType<typeof developerDashboard>>;
@@ -104,7 +104,7 @@ export function DeveloperDashboard({ data, time, timer }: { data: Data; time: Ti
                         <p className="text-body-md mt-0.5 line-clamp-2 text-primary">{t.subject}</p>
                         <div className="mt-2 flex flex-wrap items-center gap-1.5">
                           <PriorityBadge priority={t.priority} short />
-                          {t.resDueAt && !t.resPaused ? <span className={cn("text-[11px] font-heading font-medium", t.resBreached ? "text-danger-fg" : t.resAtRisk ? "text-warning-fg" : "text-on-surface-variant")}>due {relativeTime(t.resDueAt)}</span> : null}
+                          {t.resDueAt && !t.resPaused ? <span className={cn("text-[11px] font-heading font-medium", t.resBreached ? "text-danger-fg" : t.resAtRisk ? "text-warning-fg" : "text-on-surface-variant")}>{dueLabel(t.resDueAt)}</span> : null}
                           {t.timeSpentMinutes ? <span className="tabular text-[11px] font-heading text-on-surface-variant">{formatMinutes(t.timeSpentMinutes)}</span> : null}
                         </div>
                       </Link>
@@ -127,7 +127,7 @@ export function DeveloperDashboard({ data, time, timer }: { data: Data; time: Ti
                   <span className="text-mono w-20 text-on-surface-variant">{t.key}</span>
                   <span className="min-w-0 flex-1 truncate text-body-md">{t.subject}</span>
                   <StatusBadge status={t.status} />
-                  <span className={cn("tabular w-24 text-right text-body-sm", t.resBreached ? "text-danger-fg" : t.resAtRisk ? "text-warning-fg" : "text-on-surface-variant")}>{relativeTime(t.resDueAt!)}</span>
+                  <span className={cn("tabular w-32 text-right text-body-sm", t.resBreached ? "text-danger-fg" : t.resAtRisk ? "text-warning-fg" : "text-on-surface-variant")}>{dueLabel(t.resDueAt!)}</span>
                 </Link>
               </li>
             ))}

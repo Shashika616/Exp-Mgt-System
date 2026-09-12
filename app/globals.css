@@ -233,7 +233,7 @@ a { color: inherit; }
   -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 .material-sheet {
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 }

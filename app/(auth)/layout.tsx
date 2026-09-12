@@ -5,9 +5,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="grid min-h-dvh lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
       <aside className="relative hidden overflow-hidden bg-primary-container text-on-primary lg:flex lg:flex-col lg:justify-between lg:p-10">
-        <Image src="/brand/expendables-mission-vision.png" alt="" fill priority className="object-cover opacity-90" sizes="45vw" />
+        {/* Brand banner as a quiet texture under a navy wash so the copy stays legible (design.md §8.3) */}
+        <Image src="/brand/expendables-banner.png" alt="" fill priority className="object-cover opacity-[0.18]" sizes="45vw" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary-container/40 via-primary-container/70 to-[#011530]" aria-hidden />
         <div className="relative">
-          <Image src="/brand/expendables-logo.png" alt="EXPENDABLES { Software Solutions }" width={72} height={72} className="rounded-md" priority />
+          <Image src="/brand/expendables-logo.png" alt="EXPENDABLES { Software Solutions }" width={120} height={120} className="rounded-md" priority />
         </div>
         <div className="relative max-w-md">
           <p className="text-overline text-secondary-fixed-dim">Client support</p>

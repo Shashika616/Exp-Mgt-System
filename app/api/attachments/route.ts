@@ -9,6 +9,7 @@ import { loadTicketRow } from "@/lib/dal/tickets";
 import { AppError, toPublicError } from "@/lib/errors";
 import { logger } from "@/lib/logger";
 import { enforceLimit } from "@/lib/ratelimit/provider";
+import { env } from "@/lib/env";
 import { getStorageProvider } from "@/lib/storage/provider";
 import { eq } from "drizzle-orm";
 
@@ -23,6 +24,9 @@ const TEXT_EXT = new Set(["txt", "csv", "log"]);
  */
 export async function POST(req: Request) {
   try {
+    // Route handlers don't get the Server Action origin check: enforce same-origin ourselves (CSRF).
+    const origin = req.headers.get("origin");
+    if (!origin || new URL(origin).host !== new URL(env.APP_URL).host) throw new AppError("forbidden");
     const ctx = await requireUser();
     requirePermission(ctx, "attachment.upload");
     await enforceLimit("attachment", ctx.userId);

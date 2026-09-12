@@ -75,3 +75,11 @@ export function formatDate(date: Date | string, tz = "Asia/Colombo"): string {
   const d = typeof date === "string" ? new Date(date) : date;
   return new Intl.DateTimeFormat("en-GB", { timeZone: tz, day: "2-digit", month: "short", year: "numeric" }).format(d);
 }
+
+/** "due in 2h" / "overdue by 5d" — never the ambiguous "due 5d ago". */
+export function dueLabel(dueAt: Date | string, now: Date = new Date()): string {
+  const d = typeof dueAt === "string" ? new Date(dueAt) : dueAt;
+  const rel = relativeTime(d, now);
+  if (d.getTime() >= now.getTime()) return `due ${rel}`;
+  return `overdue by ${rel.replace(" ago", "")}`;
+}

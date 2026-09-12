@@ -19,7 +19,7 @@ import type { TicketDetail } from "@/lib/dal/tickets";
 import { badge as slaBadge, type TimerRow } from "@/lib/domain/sla-timers";
 import { SLA_META } from "@/lib/design/status";
 import { Chip } from "@/components/ui/badge";
-import { cn, formatDateTime, relativeTime } from "@/lib/utils";
+import { cn, dueLabel, formatDateTime, relativeTime } from "@/lib/utils";
 
 type Viewer = { userId: string; role: "agent" | "developer" | "lead" | "admin"; perms: string[] };
 
@@ -214,7 +214,7 @@ export function PropertiesPanel({ t, viewer, onSubmitReview, onReview }: { t: Ti
                   <span className="text-on-surface-variant">{tm.metric === "first_response" ? "First response" : "Resolution"}</span>
                   <span className="flex items-center gap-2">
                     <span className={cn("tabular", state === "breached" || state === "met_late" ? "text-danger-fg" : state === "at_risk" ? "text-warning-fg" : "text-primary")} title={formatDateTime(tm.dueAt)}>
-                      {tm.metAt ? (tm.breachedAt ? "met late" : "met") : tm.pausedAt ? "paused" : `${b.remainingMs < 0 ? "overdue " : "due "}${relativeTime(tm.dueAt)}`}
+                      {tm.metAt ? (tm.breachedAt ? "met late" : "met") : tm.pausedAt ? "paused" : dueLabel(tm.dueAt)}
                     </span>
                     <Chip tone={meta.tone} icon={meta.icon}>{meta.label}</Chip>
                   </span>

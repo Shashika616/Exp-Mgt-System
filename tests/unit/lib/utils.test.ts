@@ -18,3 +18,12 @@ describe("utils", () => {
     expect(relativeTime(new Date("2026-09-05T10:00:00Z"), now)).toBe("1w ago");
   });
 });
+
+import { dueLabel } from "@/lib/utils";
+describe("dueLabel", () => {
+  const now = new Date("2026-09-12T10:00:00Z");
+  it("phrases future and overdue targets unambiguously", () => {
+    expect(dueLabel(new Date("2026-09-12T12:00:00Z"), now)).toBe("due in 2h");
+    expect(dueLabel(new Date("2026-09-07T10:00:00Z"), now)).toBe("overdue by 5d");
+  });
+});

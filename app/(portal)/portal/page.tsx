@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Inbox, Plus } from "lucide-react";
+import { Inbox } from "lucide-react";
 import { RequestCard } from "@/components/portal/request-card";
 import { PortalFilters } from "@/components/portal/portal-filters";
 import { StatTile, fmtMinutes } from "@/components/dashboards/stat-tile";
@@ -24,12 +24,9 @@ export default async function PortalHome({ searchParams }: { searchParams: Promi
   const others = rows.filter((t) => t.status !== "pending_client" && t.status !== "resolved");
   return (
     <>
-      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-headline-lg">Hi {firstName(ctx.fullName)}</h1>
-          <p className="text-body-md mt-1 text-on-surface-variant">{isAdmin ? "All requests from your organisation." : "Your requests and what needs your attention."}</p>
-        </div>
-        <Link href="/portal/new" className={cn(buttonVariants({ variant: "primary", size: "lg" }))}><Plus strokeWidth={1.75} /> New request</Link>
+      <div className="mb-6">
+        <h1 className="text-headline-lg">Hi {firstName(ctx.fullName)}</h1>
+        <p className="text-body-md mt-1 text-on-surface-variant">{isAdmin ? "All requests from your organisation." : "Your requests and what needs your attention."}</p>
       </div>
       {summary ? (
         <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5">
