@@ -1,5 +1,5 @@
 // Reference data: roles, permissions, categories, default SLA policy, staff org, email templates.
-// Idempotent — safe to re-run. Runs as the DDL owner with app.role = system.
+// Idempotent - safe to re-run. Runs as the DDL owner with app.role = system.
 import { eq, sql } from "drizzle-orm";
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import * as schema from "@/db/schema";
@@ -32,15 +32,15 @@ export const CATEGORIES: { name: string; children?: string[] }[] = [
 ];
 
 export const EMAIL_TEMPLATES: { id: string; name: string; subject: string; body: string }[] = [
-  { id: "ticket_created", name: "Ticket received", subject: "[{{ticket.key}}] We received your request", body: "Hi {{requester.first_name}},\n\nThanks — we've logged **{{ticket.subject}}** as {{ticket.key}}. We aim to respond by {{ticket.target_response}}.\n\nYou can follow progress in the portal." },
+  { id: "ticket_created", name: "Ticket received", subject: "[{{ticket.key}}] We received your request", body: "Hi {{requester.first_name}},\n\nThanks, we've logged **{{ticket.subject}}** as {{ticket.key}}. We aim to respond by {{ticket.target_response}}.\n\nYou can follow progress in the portal." },
   { id: "staff_reply", name: "New reply", subject: "[{{ticket.key}}] New reply from {{agent.first_name}}", body: "Hi {{requester.first_name}},\n\n{{agent.first_name}} replied on {{ticket.key}}:\n\n> {{comment.snippet}}\n\nSign in to view and reply." },
   { id: "status_pending_client", name: "Waiting for you", subject: "[{{ticket.key}}] We need something from you", body: "Hi {{requester.first_name}},\n\nWe need a little more information to continue with {{ticket.key}}. Please reply in the portal." },
-  { id: "status_resolved", name: "Resolved", subject: "[{{ticket.key}}] Resolved — please confirm", body: "Hi {{requester.first_name}},\n\nWe believe {{ticket.key}} is resolved:\n\n> {{ticket.resolution_note}}\n\nPlease confirm in the portal, or reopen if something still isn't right." },
+  { id: "status_resolved", name: "Resolved", subject: "[{{ticket.key}}] Resolved: please confirm", body: "Hi {{requester.first_name}},\n\nWe believe {{ticket.key}} is resolved:\n\n> {{ticket.resolution_note}}\n\nPlease confirm in the portal, or reopen if something still isn't right." },
   { id: "status_closed", name: "Closed", subject: "[{{ticket.key}}] Closed", body: "Hi {{requester.first_name}},\n\n{{ticket.key}} is now closed. If you need anything else, raise a follow-up request from the portal." },
-  { id: "assigned", name: "Assigned to you (staff)", subject: "[{{ticket.key}}] Assigned to you", body: "{{ticket.key}} — {{ticket.subject}} ({{ticket.priority}}) has been assigned to you." },
+  { id: "assigned", name: "Assigned to you (staff)", subject: "[{{ticket.key}}] Assigned to you", body: "{{ticket.key}}, {{ticket.subject}} ({{ticket.priority}}) has been assigned to you." },
   { id: "client_reply", name: "Client replied (staff)", subject: "[{{ticket.key}}] {{requester.first_name}} replied", body: "{{requester.first_name}} replied on {{ticket.key}}:\n\n> {{comment.snippet}}" },
-  { id: "sla_at_risk", name: "SLA at risk (staff)", subject: "[{{ticket.key}}] SLA at risk — {{sla.metric}}", body: "{{ticket.key}} has used 75 % of its {{sla.metric}} target. Due {{sla.due_at}}." },
-  { id: "sla_breached", name: "SLA breached (staff)", subject: "[{{ticket.key}}] SLA breached — {{sla.metric}}", body: "{{ticket.key}} has breached its {{sla.metric}} target ({{sla.due_at}}). Escalation level {{ticket.escalation_level}}." },
+  { id: "sla_at_risk", name: "SLA at risk (staff)", subject: "[{{ticket.key}}] SLA at risk: {{sla.metric}}", body: "{{ticket.key}} has used 75 % of its {{sla.metric}} target. Due {{sla.due_at}}." },
+  { id: "sla_breached", name: "SLA breached (staff)", subject: "[{{ticket.key}}] SLA breached: {{sla.metric}}", body: "{{ticket.key}} has breached its {{sla.metric}} target ({{sla.due_at}}). Escalation level {{ticket.escalation_level}}." },
   { id: "submitted_for_review", name: "Submitted for review (staff)", subject: "[{{ticket.key}}] Ready for review", body: "{{developer.first_name}} submitted {{ticket.key}} for review ({{submission.time}} logged)." },
   { id: "review_returned", name: "Returned from review (staff)", subject: "[{{ticket.key}}] Returned from review", body: "{{reviewer.first_name}} returned {{ticket.key}} with notes:\n\n> {{review.notes}}" },
   { id: "invitation", name: "Invitation", subject: "You've been invited to Expendables Support", body: "Hi {{user.first_name}},\n\nAccept your invitation to set a password: {{invite.url}}\n\nThe link expires in 7 days." },
@@ -105,9 +105,9 @@ export async function seedReference(db: Db) {
 
   // Canned responses
   const canned = [
-    { title: "Acknowledged — investigating", shortcut: "ack", body: "Hi {{requester.first_name}},\n\nThanks for reporting this. We're investigating {{ticket.key}} now and will update you shortly." },
+    { title: "Acknowledged, investigating", shortcut: "ack", body: "Hi {{requester.first_name}},\n\nThanks for reporting this. We're investigating {{ticket.key}} now and will update you shortly." },
     { title: "Need more information", shortcut: "info", body: "Hi {{requester.first_name}},\n\nTo continue with {{ticket.key}} could you share:\n\n1. The exact steps you took\n2. A screenshot of the error\n3. Roughly when it last worked\n\nThanks!" },
-    { title: "Resolved — please confirm", shortcut: "done", body: "Hi {{requester.first_name}},\n\nWe've resolved {{ticket.key}}. Please check on your side and confirm, or reopen the request if anything is still off." },
+    { title: "Resolved: please confirm", shortcut: "done", body: "Hi {{requester.first_name}},\n\nWe've resolved {{ticket.key}}. Please check on your side and confirm, or reopen the request if anything is still off." },
   ];
   for (const c of canned) {
     const [exists] = await db.select({ id: schema.cannedResponses.id }).from(schema.cannedResponses).where(eq(schema.cannedResponses.title, c.title)).limit(1);

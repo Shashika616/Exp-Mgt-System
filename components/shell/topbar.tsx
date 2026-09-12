@@ -15,7 +15,7 @@ import { TimerIndicator } from "./timer-indicator";
 
 export type Crumb = { href?: string; label: string };
 
-/** docs/design.md §4 — translucent bar, no border, scroll-edge fade once content has scrolled ≥ 1px. */
+/** docs/design.md §4 - translucent bar, no border, scroll-edge fade once content has scrolled ≥ 1px. */
 export function Topbar({ crumbs, user, unread, surface = "app", timer }: { crumbs?: Crumb[]; user: { name: string; email: string; role: string }; unread: number; surface?: "app" | "portal"; timer?: { key: string; startedAt: string } | null }) {
   const [scrolled, setScrolled] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);

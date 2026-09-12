@@ -52,7 +52,7 @@ export default async function TicketPage({ params, searchParams }: { params: Pro
   const locked = t.status === "closed" || t.status === "cancelled";
   const devPublicReason =
     role === "developer" && t.settings.developerPublicReply === "never"
-      ? "Public replies from developers are turned off — write an internal note for the admin to send."
+      ? "Public replies from developers are turned off, write an internal note for the admin to send."
       : role === "developer" && t.settings.developerPublicReply === "after_first_admin_reply" && !t.lastStaffReplyAt
         ? "You can reply to the client after the admin's first reply."
         : null;

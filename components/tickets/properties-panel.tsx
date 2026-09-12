@@ -26,7 +26,7 @@ type Viewer = { userId: string; role: "agent" | "developer" | "lead" | "admin"; 
 const ACTION_LABEL: Record<TicketAction, string> = { acknowledge: "Acknowledge", start: "Start work", ask_client: "Ask the client", hold: "Put on hold", unhold: "Resume", submit: "Submit for review", return: "Return", approve: "Approve", resolve: "Resolve", reopen: "Reopen", close: "Close", cancel: "Cancel ticket", client_reply: "" };
 const ACTION_PERM: Partial<Record<TicketAction, string>> = { acknowledge: "ticket.transition.acknowledge", start: "ticket.transition.start", ask_client: "ticket.transition.pending_client", hold: "ticket.transition.on_hold", unhold: "ticket.transition.on_hold", resolve: "ticket.transition.resolve", reopen: "ticket.transition.reopen", close: "ticket.transition.close", cancel: "ticket.transition.cancel" };
 
-/** FR-AG-05 properties panel — order never changes (design.md §12.12). */
+/** FR-AG-05 properties panel - order never changes (design.md §12.12). */
 export function PropertiesPanel({ t, viewer, onSubmitReview, onReview }: { t: TicketDetail; viewer: Viewer; onSubmitReview?: () => void; onReview?: () => void }) {
   const router = useRouter();
   const { toast } = useToast();
@@ -55,7 +55,7 @@ export function PropertiesPanel({ t, viewer, onSubmitReview, onReview }: { t: Ti
 
   const doTransition = (action: TicketAction) => {
     if (action === "resolve" || action === "hold" || action === "cancel" || action === "ask_client") return setSheet(action);
-    run(transitionTicket({ ticketId: t.id, action: action as never, expectedVersion: t.version }), `${ACTION_LABEL[action]} — done`);
+    run(transitionTicket({ ticketId: t.id, action: action as never, expectedVersion: t.version }), `${ACTION_LABEL[action]}, done`);
   };
   const submitSheet = () => {
     if (!sheet) return;
@@ -117,7 +117,7 @@ export function PropertiesPanel({ t, viewer, onSubmitReview, onReview }: { t: Ti
             <StatusBadge status={t.status} />
             {t.escalationLevel > 0 ? <Chip tone="danger" icon={AlertTriangle}>Escalated L{t.escalationLevel}</Chip> : null}
           </div>
-          {t.status === "on_hold" && t.holdReason ? <p className="text-body-sm mt-1 text-on-surface-variant">{HOLD_REASON_LABEL[t.holdReason]}{t.holdNote ? ` — ${t.holdNote}` : ""}</p> : null}
+          {t.status === "on_hold" && t.holdReason ? <p className="text-body-sm mt-1 text-on-surface-variant">{HOLD_REASON_LABEL[t.holdReason]}{t.holdNote ? `, ${t.holdNote}` : ""}</p> : null}
         </Row>
 
         {(t.workState || (isDev && t.assigneeId === viewer.userId)) && can("ticket.work_state") ? (
@@ -198,7 +198,7 @@ export function PropertiesPanel({ t, viewer, onSubmitReview, onReview }: { t: Ti
           {can("ticket.category") && !terminal ? (
             <CategoryPicker ticketId={t.id} categoryId={t.categoryId} subcategoryId={t.subcategoryId} onDone={() => router.refresh()} />
           ) : (
-            <span className="text-body-md">{t.categoryName ?? "—"}{t.subcategoryName ? ` / ${t.subcategoryName}` : ""}</span>
+            <span className="text-body-md">{t.categoryName ?? "-"}{t.subcategoryName ? ` / ${t.subcategoryName}` : ""}</span>
           )}
         </Row>
 
@@ -372,7 +372,7 @@ export function PropertiesPanel({ t, viewer, onSubmitReview, onReview }: { t: Ti
             {(p) => <Textarea {...p} value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} data-autofocus placeholder="Why is this ticket being cancelled?" />}
           </Field>
         ) : (
-          <Field label="Your question to the client" required error={errors.message} hint="Sent as a public reply. The client sees “Waiting for you — reply to continue”.">
+          <Field label="Your question to the client" required error={errors.message} hint="Sent as a public reply. The client sees “Waiting for you: reply to continue”.">
             {(p) => <Textarea {...p} rows={6} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} data-autofocus />}
           </Field>
         )}
@@ -455,7 +455,7 @@ function AssigneePicker({ ticketId, value, name, onDone }: { ticketId: string; v
   return (
     <Menu.Root>
       <Menu.Trigger disabled={busy} className="pressable flex h-9 w-full items-center gap-2 rounded-md border border-outline-variant bg-surface-container-lowest px-2.5 text-left text-body-md hover:border-outline disabled:opacity-50" data-testid="assignee-picker">
-        {name ? <><Avatar name={name} size={24} /> <span className="flex-1 truncate">{name}</span></> : <span className="flex-1 italic text-on-surface-variant">Unassigned — choose a developer</span>}
+        {name ? <><Avatar name={name} size={24} /> <span className="flex-1 truncate">{name}</span></> : <span className="flex-1 italic text-on-surface-variant">Unassigned, choose a developer</span>}
         <ChevronDown className="size-4 text-on-surface-variant" strokeWidth={1.75} />
       </Menu.Trigger>
       <Menu.Content className="max-h-80 w-72 overflow-y-auto">
@@ -497,11 +497,11 @@ function CategoryPicker({ ticketId, categoryId, subcategoryId, onDone }: { ticke
   return (
     <div className="grid grid-cols-2 gap-2">
       <NativeSelect aria-label="Category" className="h-9" value={categoryId ?? ""} onChange={(e) => void save(e.target.value || null, null)}>
-        <option value="">—</option>
+        <option value="">-</option>
         {parents.map((c) => (<option key={c.id} value={c.id}>{c.name}</option>))}
       </NativeSelect>
       <NativeSelect aria-label="Subcategory" className="h-9" value={subcategoryId ?? ""} disabled={!children.length} onChange={(e) => void save(categoryId, e.target.value || null)}>
-        <option value="">—</option>
+        <option value="">-</option>
         {children.map((c) => (<option key={c.id} value={c.id}>{c.name}</option>))}
       </NativeSelect>
     </div>
@@ -568,7 +568,7 @@ function ReasonForm({ label, cta, onSubmit, onDone }: { label: string; cta: stri
   const [busy, setBusy] = useState(false);
   const { toast } = useToast();
   return (
-    <form className="flex flex-col gap-3" onSubmit={async (e) => { e.preventDefault(); setBusy(true); const r = await onSubmit(reason); setBusy(false); if (!r.ok) return toast({ title: r.message ?? "Failed", tone: "error" }); toast({ title: `${cta} — done`, tone: "success" }); onDone(); }}>
+    <form className="flex flex-col gap-3" onSubmit={async (e) => { e.preventDefault(); setBusy(true); const r = await onSubmit(reason); setBusy(false); if (!r.ok) return toast({ title: r.message ?? "Failed", tone: "error" }); toast({ title: `${cta}, done`, tone: "success" }); onDone(); }}>
       <Textarea value={reason} onChange={(e) => setReason(e.target.value)} placeholder={label} aria-label={label} rows={3} />
       <Button type="submit" size="sm" loading={busy} disabled={!reason.trim()}>{cta}</Button>
     </form>

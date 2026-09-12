@@ -4,7 +4,7 @@ import { adminSql } from "./helpers/db";
 
 /**
  * security.md §6 snapshot test: a client-role response never contains internal comments, work_logs,
- * submissions, work_state or in_review — checked on a ticket that has ALL of them.
+ * submissions, work_state or in_review - checked on a ticket that has ALL of them.
  */
 test("client ticket page contains none of the staff-only artefacts", async ({ browser }) => {
   const sql = adminSql();
@@ -26,7 +26,7 @@ test("client ticket page contains none of the staff-only artefacts", async ({ br
     expect(html, `client HTML must not contain "${s.slice(0, 40)}"`).not.toContain(s);
   }
   await expect(page.getByText("Being worked on").first()).toBeVisible();
-  // and the portal list JSON-ish payload (RSC) — the same rule applies to the list page
+  // and the portal list JSON-ish payload (RSC) - the same rule applies to the list page
   const list = await page.goto("/portal?scope=all");
   expect(list!.status()).toBe(200);
   const listHtml = await page.content();

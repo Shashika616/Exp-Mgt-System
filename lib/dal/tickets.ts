@@ -419,7 +419,7 @@ export async function transitionInTx(tx: Tx, ctx: AuthContext, ticketId: string,
         orgId: row.orgId,
         ticketId,
         kind: `status_${result.to}`,
-        title: `${row.key} — ${label}`,
+        title: `${row.key}, ${label}`,
         body: result.to === "resolved" ? "Please confirm the resolution or reopen the request." : result.to === "pending_client" ? "We need something from you to continue." : null,
         href: `/portal/tickets/${row.key}`,
         email: true,
@@ -430,7 +430,7 @@ export async function transitionInTx(tx: Tx, ctx: AuthContext, ticketId: string,
       await notifyInTx(tx, { userIds: [row.assigneeId], orgId: row.orgId, ticketId, kind: `status_${result.to}`, title: `${row.key} ${STAFF_STATUS_LABEL[result.to].toLowerCase()}: ${row.subject}`, href: `/app/tickets/${row.key}`, email: true, excludeUserId: ctx.userId });
     }
     if (effects.includes("notify.developer") && row.assigneeId) {
-      await notifyInTx(tx, { userIds: [row.assigneeId], orgId: row.orgId, ticketId, kind: action === "approve" ? "review_approved" : "review_returned", title: action === "approve" ? `${row.key} approved — resolved` : `${row.key} returned from review`, body: input.reviewNotes ?? null, href: `/app/tickets/${row.key}`, email: true, excludeUserId: ctx.userId });
+      await notifyInTx(tx, { userIds: [row.assigneeId], orgId: row.orgId, ticketId, kind: action === "approve" ? "review_approved" : "review_returned", title: action === "approve" ? `${row.key} approved, resolved` : `${row.key} returned from review`, body: input.reviewNotes ?? null, href: `/app/tickets/${row.key}`, email: true, excludeUserId: ctx.userId });
     }
     if (effects.includes("notify.reviewers")) {
       const reviewers = await staffUserIdsByRole(tx, ["lead", "admin"]);
@@ -538,7 +538,7 @@ export async function setWorkState(ctx: AuthContext, ticketId: string, workState
     await emitEvent(tx, ctx, { ticketId, orgId: row.orgId, kind: "work_state_changed", data: { from: before.workState, to: workState, note: note ?? null } });
     if (workState === "blocked" || workState === "needs_info") {
       const reviewers = await staffUserIdsByRole(tx, ["lead", "admin"]);
-      await notifyInTx(tx, { userIds: reviewers, orgId: row.orgId, ticketId, kind: `work_${workState}`, title: `${row.key} is ${workState === "blocked" ? "blocked" : "waiting for information"} — ${firstName(ctx.fullName)}`, body: note ?? null, href: `/app/tickets/${row.key}`, email: true, excludeUserId: ctx.userId });
+      await notifyInTx(tx, { userIds: reviewers, orgId: row.orgId, ticketId, kind: `work_${workState}`, title: `${row.key} is ${workState === "blocked" ? "blocked" : "waiting for information"}, ${firstName(ctx.fullName)}`, body: note ?? null, href: `/app/tickets/${row.key}`, email: true, excludeUserId: ctx.userId });
     }
     return row;
   });

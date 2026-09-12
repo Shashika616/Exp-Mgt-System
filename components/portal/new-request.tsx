@@ -75,7 +75,7 @@ export function NewRequest({ categories, followUpOf }: { categories: { id: strin
       <div className="mx-auto max-w-lg rounded-lg border-t-4 border-secondary-container bg-surface-container-lowest p-8 shadow-[var(--shadow-1)]" role="status" data-testid="request-confirmation">
         <p className="text-overline text-secondary">Request received</p>
         <h1 className="text-headline-lg mt-2">{done.key}</h1>
-        <p className="text-body-lg mt-3 text-on-surface-variant">Thanks — we&apos;ve logged your request{done.firstResponseDueAt ? <> and aim to respond by <strong className="text-primary">{formatDateTime(done.firstResponseDueAt)}</strong></> : null}. A confirmation email is on its way.</p>
+        <p className="text-body-lg mt-3 text-on-surface-variant">Thanks, we&apos;ve logged your request{done.firstResponseDueAt ? <> and aim to respond by <strong className="text-primary">{formatDateTime(done.firstResponseDueAt)}</strong></> : null}. A confirmation email is on its way.</p>
         <div className="mt-6 flex flex-wrap gap-2">
           <Link href={`/portal/tickets/${done.key}`} className="pressable inline-flex h-11 items-center rounded-md bg-primary-container px-5 text-label text-on-primary hover:bg-secondary-container">View request</Link>
           <Link href="/portal" className="pressable inline-flex h-11 items-center rounded-md border-[1.5px] border-primary-container px-5 text-label text-primary-container hover:bg-surface-container-low">Back to my requests</Link>
@@ -87,7 +87,7 @@ export function NewRequest({ categories, followUpOf }: { categories: { id: strin
   const picker = (
     <div>
       <h1 className="text-headline-lg">What do you need?</h1>
-      <p className="text-body-md mt-1 text-on-surface-variant">Choose the closest match — it sets the right form and response target.</p>
+      <p className="text-body-md mt-1 text-on-surface-variant">Choose the closest match, it sets the right form and response target.</p>
       <ul className="mt-6 grid gap-3 sm:grid-cols-2">
         {TICKET_TYPES.map((t) => {
           const Icon = ICONS[t];
@@ -165,7 +165,7 @@ export function NewRequest({ categories, followUpOf }: { categories: { id: strin
           )}
         </Field>
       ) : null}
-      <Field label="Attachments" hint="Up to 10 files, 25 MB each — PDF, images, text/CSV, Excel, Word, ZIP.">
+      <Field label="Attachments" hint="Up to 10 files, 25 MB each, PDF, images, text/CSV, Excel, Word, ZIP.">
         {(p) => (
           <div className="flex flex-col gap-2">
             <input

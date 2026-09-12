@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useMemo, useRef, useState, type
 import { fadeReduced, springToast } from "@/lib/design/motion";
 import { cn } from "@/lib/utils";
 
-/** docs/design.md §7.9 — bottom-right, inverse surface, 6 s, Undo when reversible, aria-live polite. */
+/** docs/design.md §7.9 - bottom-right, inverse surface, 6 s, Undo when reversible, aria-live polite. */
 export type Toast = { id: number; title: string; body?: string; tone?: "default" | "success" | "error"; undo?: () => void | Promise<void>; actionLabel?: string };
 type Ctx = { toast: (t: Omit<Toast, "id">) => number; dismiss: (id: number) => void };
 const ToastCtx = createContext<Ctx | null>(null);

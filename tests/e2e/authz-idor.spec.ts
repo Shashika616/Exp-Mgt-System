@@ -2,7 +2,7 @@ import { expect, test } from "./helpers/fixtures";
 import { USERS, newSession } from "./helpers/auth";
 import { adminSql } from "./helpers/db";
 
-/** security.md A01 — cross-tenant access returns 404 (not 403) and logs access_denied; developers only see assigned. */
+/** security.md A01 - cross-tenant access returns 404 (not 403) and logs access_denied; developers only see assigned. */
 test.describe("IDOR & role scope", () => {
   test("client cannot read another org's ticket, attachment or contacts", async ({ browser }) => {
     const sql = adminSql();

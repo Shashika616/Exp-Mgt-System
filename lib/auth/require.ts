@@ -5,7 +5,7 @@ import type { Permission } from "@/lib/authz/permissions";
 import { getSession, homeFor } from "./session";
 
 /**
- * Layout/page helpers — redirect for UX (the real authz still runs in Server Actions via requireUser()).
+ * Layout/page helpers - redirect for UX (the real authz still runs in Server Actions via requireUser()).
  * Never used in proxy.ts (security.md A01).
  */
 export async function requireUserOrRedirect(surface: "app" | "portal", next?: string): Promise<AuthContext> {

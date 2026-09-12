@@ -166,7 +166,7 @@ export async function extendTimer(tx: Tx, ticketId: string, metric: SlaMetric, e
   await tx.update(schema.slaTimers).set({ adjustedBy: ctx.userId, adjustReason: reason }).where(eq(schema.slaTimers.id, t.id));
 }
 
-/** All running (not met, not paused) timers with their org calendar — for the SLA tick job. */
+/** All running (not met, not paused) timers with their org calendar - for the SLA tick job. */
 export async function runningTimers(tx: Tx) {
   return tx
     .select({

@@ -14,7 +14,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="relative max-w-md">
           <p className="text-overline text-secondary-fixed-dim">Client support</p>
           <h1 className="text-display mt-3 text-on-primary">Engineering Tomorrow.</h1>
-          <p className="text-body-lg mt-4 text-secondary-fixed">Raise requests, follow progress and talk to the engineers working on your systems — in one place.</p>
+          <p className="text-body-lg mt-4 text-secondary-fixed">Raise requests, follow progress and talk to the engineers working on your systems, in one place.</p>
         </div>
         <p className="relative text-body-sm text-on-primary-container">EXPENDABLES (PVT) LTD · 63 Parakum Mawatha, Gampaha</p>
       </aside>

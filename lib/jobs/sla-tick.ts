@@ -37,7 +37,7 @@ export async function slaTick(now = new Date()): Promise<{ atRisk: number; breac
         atRisk++;
         await markTimer(tx, t.id, { atRiskNotified: true });
         await emitEvent(tx, SYSTEM_CONTEXT, { ticketId: r.ticketId, orgId: r.ticketOrgId, kind: "sla_at_risk", data: { metric: t.metric, dueAt: t.dueAt.toISOString() } });
-        await notifyInTx(tx, { userIds: [...(r.assigneeId ? [r.assigneeId] : []), ...leads], orgId: r.ticketOrgId, ticketId: r.ticketId, kind: "sla_at_risk", title: `${r.ticketKey} ${metricLabel} SLA at risk`, body: `Due ${t.dueAt.toISOString()} — ${r.subject}`, href: `/app/tickets/${r.ticketKey}`, email: true });
+        await notifyInTx(tx, { userIds: [...(r.assigneeId ? [r.assigneeId] : []), ...leads], orgId: r.ticketOrgId, ticketId: r.ticketId, kind: "sla_at_risk", title: `${r.ticketKey} ${metricLabel} SLA at risk`, body: `Due ${t.dueAt.toISOString()}, ${r.subject}`, href: `/app/tickets/${r.ticketKey}`, email: true });
       }
       if (result.nowBreached) {
         breached++;
@@ -49,7 +49,7 @@ export async function slaTick(now = new Date()): Promise<{ atRisk: number; breac
           .returning({ level: schema.tickets.escalationLevel });
         await emitEvent(tx, SYSTEM_CONTEXT, { ticketId: r.ticketId, orgId: r.ticketOrgId, kind: "sla_breached", data: { metric: t.metric, dueAt: t.dueAt.toISOString() } });
         await emitEvent(tx, SYSTEM_CONTEXT, { ticketId: r.ticketId, orgId: r.ticketOrgId, kind: "escalated", data: { level: tk?.level ?? 1, reason: `SLA breached (${metricLabel})` } });
-        await notifyInTx(tx, { userIds: [...(r.assigneeId ? [r.assigneeId] : []), ...leads, ...admins], orgId: r.ticketOrgId, ticketId: r.ticketId, kind: "sla_breached", title: `${r.ticketKey} ${metricLabel} SLA breached — escalated to level ${tk?.level ?? 1}`, body: r.subject, href: `/app/tickets/${r.ticketKey}`, email: true });
+        await notifyInTx(tx, { userIds: [...(r.assigneeId ? [r.assigneeId] : []), ...leads, ...admins], orgId: r.ticketOrgId, ticketId: r.ticketId, kind: "sla_breached", title: `${r.ticketKey} ${metricLabel} SLA breached: escalated to level ${tk?.level ?? 1}`, body: r.subject, href: `/app/tickets/${r.ticketKey}`, email: true });
       }
     }
   });

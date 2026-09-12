@@ -32,7 +32,7 @@ export { schema };
 
 /**
  * Run `fn` in a transaction with the RLS session context set for `ctx`
- * (`app.user_id`, `app.org_id`, `app.role`). Every DAL function goes through here — there is no
+ * (`app.user_id`, `app.org_id`, `app.role`). Every DAL function goes through here - there is no
  * code path that touches business tables without a context.
  */
 export async function withContext<T>(ctx: AuthContext, fn: (tx: Tx) => Promise<T>): Promise<T> {

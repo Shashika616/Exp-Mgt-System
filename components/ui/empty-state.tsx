@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/** design.md §7.5 — 24px icon, headline-sm, one sentence, one primary button. */
+/** design.md §7.5 - 24px icon, headline-sm, one sentence, one primary button. */
 export function EmptyState({ icon: Icon, title, body, action, className }: { icon: LucideIcon; title: string; body: string; action?: React.ReactNode; className?: string }) {
   return (
     <div className={cn("flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-outline-variant px-6 py-12 text-center", className)}>

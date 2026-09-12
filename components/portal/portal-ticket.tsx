@@ -28,18 +28,18 @@ export function PortalTicketActions({ t, colleagues }: { t: PortalTicket; collea
     const r = await portalTransition({ ticketId: t.id, action, expectedVersion: t.version, ...extra });
     setBusy(false);
     if (!r.ok) return toast({ title: r.message, tone: "error" });
-    toast({ title: action === "reopen" ? "Request reopened — we'll pick it up again" : action === "close" ? "Thanks for confirming — request closed" : "Request cancelled", tone: "success" });
+    toast({ title: action === "reopen" ? "Request reopened: we'll pick it up again" : action === "close" ? "Thanks for confirming: request closed" : "Request cancelled", tone: "success" });
     router.refresh();
   };
   return (
     <div className="flex flex-col gap-4">
       {t.status === "resolved" ? (
         <div className="rounded-lg border-l-4 border-success-border bg-success-bg/50 p-4" role="region" aria-label="Resolution">
-          <p className="text-label text-success-fg">Resolved — does this fix it for you?</p>
+          <p className="text-label text-success-fg">Resolved: does this fix it for you?</p>
           {t.resolutionNote ? <p className="text-body-md mt-2 whitespace-pre-wrap">{t.resolutionNote}</p> : null}
           <div className="mt-3 flex flex-wrap gap-2">
             <Button size="lg" onClick={() => void transition("close")} loading={busy} data-testid="confirm-close"><ThumbsUp strokeWidth={1.75} /> Yes, close it</Button>
-            <Button size="lg" variant="outline" onClick={() => setReopenOpen(true)} data-testid="reopen"><RotateCcw strokeWidth={1.75} /> Not yet — reopen</Button>
+            <Button size="lg" variant="outline" onClick={() => setReopenOpen(true)} data-testid="reopen"><RotateCcw strokeWidth={1.75} /> Not yet: reopen</Button>
           </div>
         </div>
       ) : null}

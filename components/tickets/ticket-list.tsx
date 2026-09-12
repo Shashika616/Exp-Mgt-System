@@ -169,7 +169,7 @@ function Cell({ col, r }: { col: Column; r: TicketListRow }) {
         <span className="text-body-sm italic text-on-surface-variant">Unassigned</span>
       );
     case "category":
-      return <span className="text-body-sm text-on-surface-variant">{r.categoryName ?? "—"}</span>;
+      return <span className="text-body-sm text-on-surface-variant">{r.categoryName ?? "-"}</span>;
     case "sla":
       return (
         <span className="flex flex-wrap gap-1">
@@ -182,7 +182,7 @@ function Cell({ col, r }: { col: Column; r: TicketListRow }) {
     case "created":
       return <span className="tabular whitespace-nowrap text-body-sm text-on-surface-variant">{relativeTime(r.createdAt)}</span>;
     case "time":
-      return <span className="tabular text-body-sm text-on-surface-variant">{r.timeSpentMinutes ? `${Math.round(r.timeSpentMinutes / 6) / 10}h` : "—"}</span>;
+      return <span className="tabular text-body-sm text-on-surface-variant">{r.timeSpentMinutes ? `${Math.round(r.timeSpentMinutes / 6) / 10}h` : "-"}</span>;
   }
 }
 

@@ -1,4 +1,4 @@
-// pnpm test:rls — runs db/policies/tests/*.sql with pgTAP (installed in the local container and on Supabase).
+// pnpm test:rls - runs db/policies/tests/*.sql with pgTAP (installed in the local container and on Supabase).
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import postgres from "postgres";

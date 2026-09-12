@@ -36,7 +36,7 @@ export function slugify(input: string): string {
     .slice(0, 60);
 }
 
-/** Relative time like "3m ago" / "in 2h" — stable, tabular. */
+/** Relative time like "3m ago" / "in 2h" - stable, tabular. */
 export function relativeTime(date: Date | string, now: Date = new Date()): string {
   const d = typeof date === "string" ? new Date(date) : date;
   const diff = d.getTime() - now.getTime();
@@ -76,7 +76,7 @@ export function formatDate(date: Date | string, tz = "Asia/Colombo"): string {
   return new Intl.DateTimeFormat("en-GB", { timeZone: tz, day: "2-digit", month: "short", year: "numeric" }).format(d);
 }
 
-/** "due in 2h" / "overdue by 5d" — never the ambiguous "due 5d ago". */
+/** "due in 2h" / "overdue by 5d" - never the ambiguous "due 5d ago". */
 export function dueLabel(dueAt: Date | string, now: Date = new Date()): string {
   const d = typeof dueAt === "string" ? new Date(dueAt) : dueAt;
   const rel = relativeTime(d, now);

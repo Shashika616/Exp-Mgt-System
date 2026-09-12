@@ -1,6 +1,6 @@
 /**
  * Status distribution bar (developer load board). Status colours are reserved and always paired with
- * a legend + direct count labels + tooltips — never colour alone (dataviz non-negotiables).
+ * a legend + direct count labels + tooltips - never colour alone (dataviz non-negotiables).
  */
 export type Segment = { key: string; label: string; value: number; color: string };
 

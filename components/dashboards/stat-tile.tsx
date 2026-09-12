@@ -23,7 +23,7 @@ export function StatTile({ label, value, unit, href, tone, hint }: { label: stri
 }
 
 export function fmtMinutes(min: number | null | undefined): string {
-  if (min == null) return "—";
+  if (min == null) return "-";
   if (min < 60) return `${min}m`;
   const h = Math.round((min / 60) * 10) / 10;
   return h < 48 ? `${h}h` : `${Math.round((h / 24) * 10) / 10}d`;

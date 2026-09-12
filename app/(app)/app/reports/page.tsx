@@ -35,7 +35,7 @@ export default async function ReportsPage() {
         <Card>
           <CardHeader eyebrow="Per client" title="Volume & SLA attainment" />
           <table className="w-full"><thead className="text-overline text-left text-on-surface-variant"><tr><th className="pb-2 font-semibold">Client</th><th className="pb-2 text-right font-semibold">Open</th><th className="pb-2 text-right font-semibold">SLA met (30 d)</th></tr></thead>
-            <tbody className="divide-y divide-outline-variant/40">{d.slaByClient.map((c) => (<tr key={c.orgId} className="h-10"><td className="text-body-md">{c.orgName}</td><td className="tabular text-right">{c.open}</td><td className="tabular text-right">{c.total ? `${Math.round((c.met / c.total) * 100)}%` : "—"}</td></tr>))}</tbody></table>
+            <tbody className="divide-y divide-outline-variant/40">{d.slaByClient.map((c) => (<tr key={c.orgId} className="h-10"><td className="text-body-md">{c.orgName}</td><td className="tabular text-right">{c.open}</td><td className="tabular text-right">{c.total ? `${Math.round((c.met / c.total) * 100)}%` : "-"}</td></tr>))}</tbody></table>
         </Card>
         <Card>
           <CardHeader eyebrow="Per developer" title="Load & hours this week" />

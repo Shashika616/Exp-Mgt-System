@@ -5,7 +5,7 @@ import { logger } from "@/lib/logger";
 /**
  * FR-AUTH-01 / security.md A07: breached-password check via the HaveIBeenPwned k-anonymity range API.
  * Only the first 5 hex chars of the SHA-1 leave the server. Allowlisted outbound host; 3 s timeout.
- * Availability failures fail *open* (logged) so an outage never locks users out — the password length rule
+ * Availability failures fail *open* (logged) so an outage never locks users out - the password length rule
  * still applies. Supabase Auth performs its own leaked-password check when that provider is active.
  */
 const HOST = "https://api.pwnedpasswords.com";

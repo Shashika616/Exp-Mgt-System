@@ -155,10 +155,10 @@ export function SetPasswordForm({ mode, token, email, orgName }: { mode: "invite
         {mode === "invite" ? (
           <>
             Set a password for <strong className="text-primary">{email}</strong>
-            {orgName ? <> to join {orgName}</> : null}. At least 12 characters — a phrase works well.
+            {orgName ? <> to join {orgName}</> : null}. At least 12 characters, a phrase works well.
           </>
         ) : (
-          "At least 12 characters — a phrase works well."
+          "At least 12 characters, a phrase works well."
         )}
       </p>
       <form
@@ -250,7 +250,7 @@ export function TotpForm({ next, mode, secret, uri, recoveryCodes }: { next?: st
           </div>
           {recoveryCodes?.length ? (
             <div className="mt-4 rounded-lg border border-warning-border bg-warning-bg p-4 text-warning-fg">
-              <p className="text-label">Recovery codes — save these now</p>
+              <p className="text-label">Recovery codes: save these now</p>
               <ul className="text-mono mt-2 grid grid-cols-2 gap-1">
                 {recoveryCodes.map((c) => (
                   <li key={c}>{c}</li>

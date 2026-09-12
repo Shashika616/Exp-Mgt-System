@@ -8,7 +8,7 @@ import type { TicketListRow } from "@/lib/dal/tickets";
 
 type Data = Awaited<ReturnType<typeof agentDashboard>>;
 
-/** FR-RP-03 — keep the queue moving. */
+/** FR-RP-03 - keep the queue moving. */
 export function AgentDashboard({ data, counts, unassigned, mine }: { data: Data; counts: Record<QueueId, number>; unassigned: TicketListRow[]; mine: TicketListRow[] }) {
   const fr = data.firstResponseToday;
   const pct = fr.total ? Math.round((fr.met / fr.total) * 100) : null;
@@ -19,7 +19,7 @@ export function AgentDashboard({ data, counts, unassigned, mine }: { data: Data;
         <StatTile label="Unassigned" value={counts.unassigned} href="/app/tickets?queue=unassigned" tone={counts.unassigned ? "warning" : undefined} />
         <StatTile label="My tickets" value={counts.mine} href="/app/tickets?queue=mine" />
         <StatTile label="At risk / breached" value={counts.at_risk} href="/app/tickets?queue=at_risk" tone={counts.at_risk ? "danger" : undefined} />
-        <StatTile label="First response today" value={pct === null ? "—" : `${pct}%`} hint={fr.total ? `${fr.met}/${fr.total}` : "no responses yet"} tone={pct !== null && pct < 90 ? "warning" : "success"} />
+        <StatTile label="First response today" value={pct === null ? "-" : `${pct}%`} hint={fr.total ? `${fr.met}/${fr.total}` : "no responses yet"} tone={pct !== null && pct < 90 ? "warning" : "success"} />
       </div>
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <Card className="p-0">
@@ -43,7 +43,7 @@ export function AgentDashboard({ data, counts, unassigned, mine }: { data: Data;
               </div>
             ))}
           </dl>
-          <p className="text-body-sm mt-4 text-on-surface-variant">Waiting for a client reply. Reminders beyond 7 days are the agent&apos;s call — nothing closes automatically.</p>
+          <p className="text-body-sm mt-4 text-on-surface-variant">Waiting for a client reply. Reminders beyond 7 days are the agent&apos;s call, nothing closes automatically.</p>
         </Card>
       </div>
       <Card className="p-0">

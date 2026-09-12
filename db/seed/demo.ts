@@ -44,7 +44,7 @@ const SUBJECTS: Record<TicketType, string[]> = {
     "Dashboard shows yesterday's stock levels",
     "500 error when approving purchase orders above 50 items",
     "Customer portal login loops back to sign-in page",
-    "Nightly backup job failed — disk quota exceeded",
+    "Nightly backup job failed, disk quota exceeded",
     "Loan repayment schedule off by one day after month end",
     "Fleet tracking map blank in Safari 17",
     "Duplicate patient records created on quick registration",
@@ -79,13 +79,13 @@ const SUBJECTS: Record<TicketType, string[]> = {
     "Where is the audit trail for price list changes?",
     "Is there an API to pull daily collections?",
   ],
-  project_enquiry: ["Mobile app for field agents — scoping call", "Migrate legacy FoxPro inventory to the web ERP", "Data warehouse and BI dashboards — proposal", "Patient self-check-in kiosk pilot"],
+  project_enquiry: ["Mobile app for field agents, scoping call", "Migrate legacy FoxPro inventory to the web ERP", "Data warehouse and BI dashboards, proposal", "Patient self-check-in kiosk pilot"],
 };
 
 const DESCRIPTIONS = [
-  "**Steps to reproduce**\n\n1. Open the module\n2. Use the filter for last month\n3. Click export\n\n**Expected:** file downloads.\n**Actual:** spinner for ~30 s then \"Something went wrong\".\n\nAffects the whole finance team — month-end close is on Friday.",
+  "**Steps to reproduce**\n\n1. Open the module\n2. Use the filter for last month\n3. Click export\n\n**Expected:** file downloads.\n**Actual:** spinner for ~30 s then \"Something went wrong\".\n\nAffects the whole finance team, month-end close is on Friday.",
   "Started after this morning's release. Two users on the Kandy site confirmed, one in Colombo could not reproduce. Screenshots attached in the thread.",
-  "This is needed before the audit visit on the 25th. Happy to jump on a call if it helps — I'm free most afternoons.",
+  "This is needed before the audit visit on the 25th. Happy to jump on a call if it helps, I'm free most afternoons.",
   "Not urgent but it is confusing our operators. The value shown in the summary card is correct in the detail view.",
   "Please treat as high priority: customers are calling the branch because the notification has not arrived.",
 ];
@@ -99,8 +99,8 @@ const DEV_NOTES = [
   "Needs the client's confirmation of the expected rounding rule before I change the ledger posting.",
 ];
 
-const CLIENT_REPLIES = ["Thanks — tried again and it works for the March file but not April.", "Screenshot attached. It happens on Chrome and Edge.", "Confirmed fixed on our side, thank you!", "Can this wait until after month end? We'd rather not deploy mid-close.", "Yes please go ahead with the change."];
-const STAFF_REPLIES = ["Thanks for the report — we've reproduced it and Kasun is on it. We'll update you here.", "Could you tell us which browser and version you're using, and whether it happens for other users too?", "We've deployed a fix to production. Please try again and let us know.", "We're waiting on the SMS vendor; we'll keep you posted here.", "This is scheduled for the release on Thursday evening."];
+const CLIENT_REPLIES = ["Thanks, tried again and it works for the March file but not April.", "Screenshot attached. It happens on Chrome and Edge.", "Confirmed fixed on our side, thank you!", "Can this wait until after month end? We'd rather not deploy mid-close.", "Yes please go ahead with the change."];
+const STAFF_REPLIES = ["Thanks for the report, we've reproduced it and Kasun is on it. We'll update you here.", "Could you tell us which browser and version you're using, and whether it happens for other users too?", "We've deployed a fix to production. Please try again and let us know.", "We're waiting on the SMS vendor; we'll keep you posted here.", "This is scheduled for the release on Thursday evening."];
 
 // Deterministic PRNG (mulberry32)
 function rng(seed: number) {
@@ -331,14 +331,14 @@ export async function seedDemo(db: Db, opts: { staffOrgId: string; policyId: str
             changesMade: "Replaced the formatter with a locale-safe implementation; added regression tests for 1M+ amounts and negative values.",
             verification: "Unit tests pass; exported the March and April invoices for Ceylon Agro on staging and compared totals against the ledger.",
             suggestedResolutionCode: "fixed",
-            proposedReply: "Hi — we found that amounts above one million rupees hit a formatting bug in the PDF export. It's fixed and deployed; the March and April exports now match your ledger. Could you re-run the export and confirm?",
+            proposedReply: "Hi, we found that amounts above one million rupees hit a formatting bug in the PDF export. It's fixed and deployed; the March and April exports now match your ledger. Could you re-run the export and confirm?",
             timeMinutes: total,
             submittedAt: at,
             outcome,
             reviewerId: outcome ? staff.admin : null,
             reviewedAt: outcome ? new Date(at.getTime() + 90 * 60_000) : null,
             reviewNotes: outcome === "returned" ? "Please add the negative-amount case to the tests and confirm the export on the April data before we reply." : null,
-            sentReply: outcome === "approved" ? "Hi — amounts above one million rupees were hitting a formatting bug in the PDF export. It's fixed and deployed; please re-run the export and confirm it matches your ledger." : null,
+            sentReply: outcome === "approved" ? "Hi, amounts above one million rupees were hitting a formatting bug in the PDF export. It's fixed and deployed; please re-run the export and confirm it matches your ledger." : null,
           })
           .returning({ id: schema.submissions.id });
         await ev("submitted", at, developer, { submissionId: s!.id, timeMinutes: total });
@@ -350,7 +350,7 @@ export async function seedDemo(db: Db, opts: { staffOrgId: string; policyId: str
         }
         if (outcome === "approved") {
           await ev("review_approved", new Date(at.getTime() + 90 * 60_000), staff.admin, { submissionId: s!.id, developerId: developer, resolutionCode: "fixed", replyEdited: true });
-          await comment(staff.admin, "Hi — amounts above one million rupees were hitting a formatting bug in the PDF export. It's fixed and deployed; please re-run the export and confirm it matches your ledger.", "public", new Date(at.getTime() + 90 * 60_000), "resolution");
+          await comment(staff.admin, "Hi, amounts above one million rupees were hitting a formatting bug in the PDF export. It's fixed and deployed; please re-run the export and confirm it matches your ledger.", "public", new Date(at.getTime() + 90 * 60_000), "resolution");
           await ev("status_changed", new Date(at.getTime() + 90 * 60_000), staff.admin, { action: "approve", from: "in_review", to: "resolved", resolutionCode: "fixed" }, "public");
         }
       };

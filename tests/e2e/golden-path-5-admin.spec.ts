@@ -20,7 +20,7 @@ test("GP5 admin console changes land in the audit log", async ({ browser }) => {
 
   await admin.goto("/app/admin/templates");
   await admin.getByTestId("template-status_resolved").click();
-  await admin.getByTestId("template-subject").fill("[{{ticket.key}}] Resolved — please confirm within 3 days");
+  await admin.getByTestId("template-subject").fill("[{{ticket.key}}] Resolved: please confirm within 3 days");
   await admin.getByTestId("template-save").click();
   await expect(admin.getByText("Template saved")).toBeVisible();
 

@@ -13,8 +13,8 @@ export type TotpEnrollment = { secret: string; uri: string; recoveryCodes: strin
 
 /**
  * architecture.md §7 AuthProvider. Two implementations:
- *  - lib/auth/supabase.ts  — Supabase Auth via @supabase/ssr (production today)
- *  - lib/auth/local.ts     — portable Postgres-backed auth (own-cloud path; also what CI/e2e run on)
+ *  - lib/auth/supabase.ts  - Supabase Auth via @supabase/ssr (production today)
+ *  - lib/auth/local.ts     - portable Postgres-backed auth (own-cloud path; also what CI/e2e run on)
  */
 export interface AuthProvider {
   readonly name: "supabase" | "local";

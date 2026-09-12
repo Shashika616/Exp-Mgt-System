@@ -1,4 +1,4 @@
-# Build status — prototype
+# Build status - prototype
 
 Date: 2026-09-13. Every P0 requirement from `docs/requirements.md` §7 with its state, followed by deviations from the spec
 (all deviations are owner decisions taken during the build or documented trade-offs). ✅ done and verified · ⚠️ done with a caveat · ❌ not done.
@@ -39,13 +39,13 @@ Date: 2026-09-13. Every P0 requirement from `docs/requirements.md` §7 with its 
 | FR-AG-07 | Create on behalf (pick org → contact / create contact inline) | ✅ | |
 | FR-AG-09 | ⌘K search: tickets, clients (+ actions) | ✅ | |
 | FR-AG-11 | Time tracking | ✅ | see FR-DEV-02 |
-| FR-AG-13 | Realtime on detail | ❌ | **removed by owner decision** — changes are delivered as in-app notifications + email; no background updates |
+| FR-AG-13 | Realtime on detail | ❌ | **removed by owner decision** - changes are delivered as in-app notifications + email; no background updates |
 | FR-DEV-01 | My work queue by work_state, priority then SLA | ✅ | dashboard columns + queue |
 | FR-DEV-02 | Work log with timer, totals, 24 h edit window | ✅ | total maintained by trigger in the same transaction |
 | FR-DEV-03 | work_state from panel; blocked/needs_info require note; admin notified | ✅ | |
 | FR-DEV-04 | Submit-for-review sheet with structured fields | ✅ | time adjust needs a reason |
 | FR-DEV-05 | Developer public replies, "Visible to client" banner, display name "Engineer, Expendables" | ✅ | gated by `developer_public_reply` server-side |
-| FR-DEV-06 | Developer cannot resolve/close/cancel/reassign/change priority — hidden and server-enforced | ✅ | authz matrix + state machine + RLS + e2e |
+| FR-DEV-06 | Developer cannot resolve/close/cancel/reassign/change priority - hidden and server-enforced | ✅ | authz matrix + state machine + RLS + e2e |
 | FR-DEV-07 | Review queue; review sheet: approve & reply / return / ask client | ✅ | reviewer cannot review own submission; submissions immutable after decision (trigger + RLS) |
 | FR-ORG-01 | Orgs: name, tier, timezone, SLA policy, notes, status | ✅ | business hours live on the SLA policy |
 | FR-ORG-02 | Contacts per org, invite, deactivate (immediate) | ✅ | deactivation bumps `session_version` + revokes provider sessions |
@@ -71,13 +71,13 @@ Date: 2026-09-13. Every P0 requirement from `docs/requirements.md` §7 with its 
 
 | Area | Spec | Built | Reason |
 |---|---|---|---|
-| Auto-close | resolved → closed after N days; pending reminders | none — closing is a human action | owner decision ("it's the admin's, developer's or customer's decision to drop the ticket, not the system's") |
+| Auto-close | resolved → closed after N days; pending reminders | none - closing is a human action | owner decision ("it's the admin's, developer's or customer's decision to drop the ticket, not the system's") |
 | Realtime | Supabase Realtime / SSE on ticket detail | none; notifications + email | owner decision: live updates hold no value here; avoids Vercel invocation cost |
 | Jobs | pg-boss worker + Vercel Cron every minute | plain job functions behind `/api/cron/[job]` scheduled by Supabase `pg_cron` (+ optional opportunistic tick) | Vercel Hobby has no long-lived processes and daily-only cron; pg_cron is free |
 | Rate limiting | Upstash Redis | Postgres-backed limiter behind the same interface | owner: no Redis |
-| Email | Resend | `log` adapter (server log + dev outbox) behind `EmailProvider` | owner: not Resend; mailbox spelling unconfirmed — `EMAIL_FROM` is a placeholder with a TODO |
+| Email | Resend | `log` adapter (server log + dev outbox) behind `EmailProvider` | owner: not Resend; mailbox spelling unconfirmed - `EMAIL_FROM` is a placeholder with a TODO |
 | Auth | Supabase Auth only | Supabase adapter **and** a self-owned Postgres adapter (`AUTH_PROVIDER=local`) | owner asked for swappable/own auth; local adapter is also what CI/e2e run on |
-| `DATABASE_URL` as the only DB pointer | — | `DATABASE_ADMIN_URL` added for migrations/seed | the app role has no DDL rights by design |
+| `DATABASE_URL` as the only DB pointer | - | `DATABASE_ADMIN_URL` added for migrations/seed | the app role has no DDL rights by design |
 | SLA P2 resolution "1 business day" on a 24×7 calendar | ambiguous | 24 h | Jira semantics; editable per policy in the admin console |
 | Ticket list virtualisation | `@tanstack/react-virtual` past 200 rows | keyset pagination, 50 per page | simpler; never renders more than a page |
 | P2 dark theme | optional, after MVP | not built | light-only like the website |
@@ -89,6 +89,6 @@ Date: 2026-09-13. Every P0 requirement from `docs/requirements.md` §7 with its 
 
 ## Open questions for the company (from requirements §12)
 
-1. Which mailbox becomes `EMAIL_FROM` — `expendables.sesolutions@gmail.com` or `…sesolution@…`?
+1. Which mailbox becomes `EMAIL_FROM` - `expendables.sesolutions@gmail.com` or `…sesolution@…`?
 2. Sri Lanka public holidays list for the SLA calendar (admin → SLA policies → holidays).
 3. Should logged time be shown to clients by default? (Currently per-org opt-in; enterprise demo orgs opt in.)

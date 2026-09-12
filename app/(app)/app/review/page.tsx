@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
 
 export const metadata = { title: "Review queue" };
 
-/** FR-DEV-07 — tickets in review, oldest first, time in review. Opening one lands on the ticket with the review sheet. */
+/** FR-DEV-07 - tickets in review, oldest first, time in review. Opening one lands on the ticket with the review sheet. */
 export default async function ReviewPage({ searchParams }: { searchParams: Promise<{ ticket?: string }> }) {
   const ctx = await requirePermissionOrRedirect("app", "ticket.review", "/app/review");
   const { ticket } = await searchParams;
@@ -20,7 +20,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: Promi
   return (
     <>
       <Breadcrumbs items={[{ href: "/app", label: "Dashboard" }, { label: "Review" }]} />
-      <PageHeader title="Review queue" count={rows.length} description="Developer submissions waiting for your decision — oldest first." />
+      <PageHeader title="Review queue" count={rows.length} description="Developer submissions waiting for your decision, oldest first." />
       {rows.length === 0 ? (
         <EmptyState icon={ClipboardCheck} title="Nothing to review" body="When a developer submits their work it appears here with their findings, fix and proposed reply." />
       ) : (
@@ -46,7 +46,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: Promi
                   <td className="px-4 text-body-sm">{r.developerName}</td>
                   <td className="px-4"><PriorityBadge priority={r.priority} short /></td>
                   <td className="tabular px-4 text-right text-body-sm">{formatMinutes(r.timeSpentMinutes)}</td>
-                  <td className="tabular px-4 text-right text-body-sm text-on-surface-variant" title={r.submittedAt?.toISOString()}>{r.submittedAt ? relativeTime(r.submittedAt).replace(" ago", "") : "—"}</td>
+                  <td className="tabular px-4 text-right text-body-sm text-on-surface-variant" title={r.submittedAt?.toISOString()}>{r.submittedAt ? relativeTime(r.submittedAt).replace(" ago", "") : "-"}</td>
                 </tr>
               ))}
             </tbody>

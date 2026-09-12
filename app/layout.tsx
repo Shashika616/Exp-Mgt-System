@@ -5,7 +5,7 @@ import { CSPProvider } from "@base-ui/react/csp-provider";
 import { Providers } from "@/components/providers";
 import "./globals.css";
 
-// design.md §2.1: Inter for headings/labels/numbers, Source Sans 3 for body — self-hosted via next/font.
+// design.md §2.1: Inter for headings/labels/numbers, Source Sans 3 for body - self-hosted via next/font.
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-inter", display: "swap" });
 const sourceSans = Source_Sans_3({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-source-sans", display: "swap" });
 

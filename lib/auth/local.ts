@@ -11,7 +11,7 @@ import { decrypt, encrypt, hashPassword, randomToken, sha256, verifyPassword } f
 import type { AuthProvider, AuthResult, RequestMeta, SessionUser, TotpEnrollment } from "./types";
 
 /**
- * Portable, Postgres-backed AuthProvider (architecture.md §10 step 5 — the "own cloud" path).
+ * Portable, Postgres-backed AuthProvider (architecture.md §10 step 5 - the "own cloud" path).
  * Passwords: scrypt. Sessions: opaque random token in an httpOnly cookie, hashed at rest, idle timeout
  * 12 h for staff / 30 d for clients (FR-AUTH-06). TOTP: RFC 6238 via `otpauth`, secret AES-256-GCM at rest.
  * The provider id of a user *is* our users.id.

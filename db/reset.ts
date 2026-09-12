@@ -13,4 +13,4 @@ const sql = postgres(url, { max: 1, onnotice: () => {} });
 await sql.unsafe("drop schema if exists public cascade; create schema public; drop schema if exists drizzle cascade; drop schema if exists pgboss cascade;");
 await sql.unsafe("grant usage on schema public to app_rw;");
 await sql.end();
-console.log("schema reset — run pnpm db:migrate && pnpm db:seed");
+console.log("schema reset - run pnpm db:migrate && pnpm db:seed");

@@ -9,7 +9,7 @@ import { Tooltip, TooltipProvider } from "@/components/ui/menu";
 import type { NavItem } from "./nav";
 const ICONS = { dashboard: LayoutDashboard, tickets: Inbox, work: Code2, review: ClipboardCheck, clients: Building2, reports: BarChart3, admin: Settings } as const;
 
-/** docs/design.md §8.1 — solid navy structural sidebar, 260px, ⌘B collapses to a 64px icon rail. */
+/** docs/design.md §8.1 - solid navy structural sidebar, 260px, ⌘B collapses to a 64px icon rail. */
 export function Sidebar({ items }: { items: NavItem[] }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);

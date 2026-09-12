@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 type Data = Awaited<ReturnType<typeof developerDashboard>>;
 type Time = Awaited<ReturnType<typeof myTimeSummary>>;
 
-/** FR-RP-02 — know what to do next. Columns by work_state, returned/blocked/client-replied strips on top. */
+/** FR-RP-02 - know what to do next. Columns by work_state, returned/blocked/client-replied strips on top. */
 export function DeveloperDashboard({ data, time, timer }: { data: Data; time: Time; timer: { key: string; startedAt: string } | null }) {
   const mine = data.mine;
   const returned = mine.filter((t) => t.reviewOutcome === "returned" && t.status === "in_progress");

@@ -2,7 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TONE_CLASS, TONE_DOT, type Tone } from "@/lib/design/status";
 
-// docs/design.md §7.3 — never colour-only: dot or icon + text.
+// docs/design.md §7.3 - never colour-only: dot or icon + text.
 export function Badge({ tone = "neutral", icon: Icon, dot, children, className, title }: { tone?: Tone; icon?: LucideIcon; dot?: boolean; children: React.ReactNode; className?: string; title?: string }) {
   return (
     <span title={title} className={cn("inline-flex h-6 items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 text-overline", TONE_CLASS[tone], className)}>

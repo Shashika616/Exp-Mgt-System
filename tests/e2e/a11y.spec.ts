@@ -2,7 +2,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "./helpers/fixtures";
 import { USERS, newSession } from "./helpers/auth";
 
-/** design.md §12.11 — axe passes with zero violations on the main screens (WCAG 2.2 AA tags). */
+/** design.md §12.11 - axe passes with zero violations on the main screens (WCAG 2.2 AA tags). */
 const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
 async function audit(page: import("@playwright/test").Page, path: string) {

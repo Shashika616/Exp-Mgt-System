@@ -16,7 +16,7 @@ const COPY: Record<AuthEmailKind, { subject: string; title: string; intro: strin
     title: "Reset your password",
     intro: "Use the button below to choose a new password. The link works once and expires in 1 hour.",
     cta: "Choose a new password",
-    expiry: "If you didn't request this, you can ignore this email — your password is unchanged.",
+    expiry: "If you didn't request this, you can ignore this email, your password is unchanged.",
   },
   invitation: {
     subject: "You've been invited to Expendables Support",

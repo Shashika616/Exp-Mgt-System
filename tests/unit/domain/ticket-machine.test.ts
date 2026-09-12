@@ -90,7 +90,7 @@ describe("ticket state machine (requirements §5.2)", () => {
       expect(canTransition("resolved", "close", "developer")).toBe(false);
       expect(canTransition("resolved", "reopen", "developer")).toBe(false);
     });
-    it("can submit, hold, ask client — only when assigned", () => {
+    it("can submit, hold, ask client, only when assigned", () => {
       expect(transition(t, "submit", actor("developer", "dev-1"), { submissionId: "s1" }, now).to).toBe("in_review");
       expect(() => transition(t, "submit", actor("developer", "dev-2"), { submissionId: "s1" }, now)).toThrow(/assigned developer/i);
       expect(transition(t, "ask_client", actor("developer", "dev-1"), {}, now).to).toBe("pending_client");
@@ -142,7 +142,7 @@ describe("ticket state machine (requirements §5.2)", () => {
     expect(() => transition({ ...base, status: "closed" }, "reopen", actor("admin"), {}, now)).toThrow(/cannot reopen/i);
   });
 
-  it("there is no automatic close — every close is a human action", () => {
+  it("there is no automatic close, every close is a human action", () => {
     for (const s of TICKET_STATUSES) {
       for (const a of Object.keys(TRANSITIONS[s])) expect(a).not.toMatch(/auto/);
     }

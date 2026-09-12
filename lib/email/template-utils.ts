@@ -1,4 +1,4 @@
-/** Pure helpers for admin-editable email templates (no server deps — unit-tested). */
+/** Pure helpers for admin-editable email templates (no server deps - unit-tested). */
 export type TemplateVars = Record<string, string | number | null | undefined>;
 
 const KIND_TO_TEMPLATE: Record<string, string> = {

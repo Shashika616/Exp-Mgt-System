@@ -5,7 +5,7 @@ import { ROLES, type Role } from "@/lib/domain/types";
 
 /**
  * Generated role × permission matrix (security.md §5 item 4). Every permission must have an explicit
- * expectation for every role — a new permission without a row here fails CI.
+ * expectation for every role - a new permission without a row here fails CI.
  * Legend: 1 = allowed, 0 = denied. Column order: client_user, client_admin, agent, developer, lead, admin.
  */
 const EXPECT: Record<Permission, [number, number, number, number, number, number]> = {

@@ -2,7 +2,7 @@ import { invalidTransition } from "@/lib/errors";
 import type { HoldReason, ResolutionCode, Role, TicketStatus, WorkState } from "./types";
 
 /**
- * The state chart from requirements.md §5.2 as data — minus auto-close: closing is always a human
+ * The state chart from requirements.md §5.2 as data - minus auto-close: closing is always a human
  * decision (client confirms, or staff closes/cancels), per the company owner. Pure: returns a patch + events + effects,
  * never touches the database. Escalation and reopen are events/flags, not statuses (ADR-04).
  */
@@ -258,7 +258,7 @@ function clientLabelChanges(from: TicketStatus, to: TicketStatus): boolean {
   return collapse(from) !== collapse(to);
 }
 
-/** Actions a role may take from a status, used to render buttons — server re-validates via transition(). */
+/** Actions a role may take from a status, used to render buttons - server re-validates via transition(). */
 export function actionsFor(ticket: Pick<TicketSnapshot, "status" | "assigneeId">, actor: Actor): TicketAction[] {
   return availableActions(ticket.status, actor.role).filter((a) => {
     if (actor.role === "developer") return ticket.assigneeId === actor.userId;

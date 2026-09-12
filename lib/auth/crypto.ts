@@ -1,7 +1,7 @@
 import { createCipheriv, createDecipheriv, createHmac, randomBytes, scrypt as scryptCb, timingSafeEqual } from "node:crypto";
 import { env } from "@/lib/env";
 
-// security.md A04: no custom crypto — only Node's WebCrypto/OpenSSL primitives with standard parameters.
+// security.md A04: no custom crypto - only Node's WebCrypto/OpenSSL primitives with standard parameters.
 const SCRYPT = { N: 2 ** 15, r: 8, p: 1, maxmem: 64 * 1024 * 1024 };
 const scrypt = (password: string, salt: Buffer): Promise<Buffer> =>
   new Promise((resolve, reject) => scryptCb(password, salt, 64, SCRYPT, (err, key) => (err ? reject(err) : resolve(key))));

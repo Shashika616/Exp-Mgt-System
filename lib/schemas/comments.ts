@@ -11,7 +11,7 @@ export const StaffCommentSchema = z
   })
   .strict();
 
-/** Clients never choose visibility — always public. */
+/** Clients never choose visibility - always public. */
 export const PortalCommentSchema = z.object({ ticketId: uuid, body: markdown(20000), attachmentIds: z.array(uuid).max(10).optional() }).strict();
 
 export const EditCommentSchema = z.object({ commentId: uuid, body: markdown(20000) }).strict();

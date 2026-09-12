@@ -4,7 +4,7 @@ import { boundedInt, markdown, optionalMarkdown, optionalText, optionalUuid, tex
 
 // Every schema is .strict(): unknown keys are rejected, so mass assignment is impossible (security.md A01).
 
-/** Portal form — clients can NEVER submit priority, impact, assignee, visibility; category is optional. */
+/** Portal form - clients can NEVER submit priority, impact, assignee, visibility; category is optional. */
 export const PortalCreateTicketSchema = z
   .object({
     type: z.enum(TICKET_TYPES),
@@ -21,7 +21,7 @@ export const PortalCreateTicketSchema = z
   });
 export type PortalCreateTicketInput = z.infer<typeof PortalCreateTicketSchema>;
 
-/** Agent on-behalf form — may set org, requester, impact and category. */
+/** Agent on-behalf form - may set org, requester, impact and category. */
 export const AgentCreateTicketSchema = z
   .object({
     orgId: uuid,

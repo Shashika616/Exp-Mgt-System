@@ -6,7 +6,7 @@ import { getGlobalConfig } from "@/lib/dal/orgs";
 
 export const metadata = { title: "Settings" };
 
-/** FR-ADM-05 (workflow policies). Auto-close was removed by owner decision — closing is always a human action. */
+/** FR-ADM-05 (workflow policies). Auto-close was removed by owner decision - closing is always a human action. */
 export default async function SettingsPage() {
   const ctx = await requirePermissionOrRedirect("app", "admin.settings", "/app/admin/settings");
   const cfg = await getGlobalConfig(ctx);

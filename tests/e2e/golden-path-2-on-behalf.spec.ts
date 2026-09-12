@@ -13,7 +13,7 @@ test("GP2 on-behalf ticket; internal notes never reach the client", async ({ bro
   const contactLabel = await agent.getByLabel("Contact").locator("option:checked").textContent();
   await agent.getByLabel("Type").selectOption("service_request");
   await agent.getByLabel("Subject").fill("GP2 Create depot supervisor accounts (phone request)");
-  await agent.getByLabel("Description").fill("Sanduni called: three new supervisors start Monday — needs accounts with the depot role.");
+  await agent.getByLabel("Description").fill("Sanduni called: three new supervisors start Monday, needs accounts with the depot role.");
   await agent.getByLabel("Impact").selectOption("low");
   await agent.getByLabel("Urgency").selectOption("medium");
   const assignOptions = await agent.getByLabel("Assign to").locator("option").allTextContents();
@@ -33,7 +33,7 @@ test("GP2 on-behalf ticket; internal notes never reach the client", async ({ bro
   await colleague.getByTestId("composer-send").click();
   await expect(colleague.getByText("Internal note added")).toBeVisible();
   await colleague.getByRole("tab", { name: "Reply to client" }).click();
-  await colleague.getByTestId("composer").fill("Hi — accounts are being set up now; you'll have the details before Monday.");
+  await colleague.getByTestId("composer").fill("Hi, accounts are being set up now; you'll have the details before Monday.");
   await colleague.getByTestId("composer-send").click();
   await expect(colleague.getByText("Reply sent to the client")).toBeVisible();
   await expect(colleague.getByText("INTERNAL-ONLY")).toBeVisible();

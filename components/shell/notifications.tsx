@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 type N = { id: string; kind: string; title: string; body: string | null; href: string | null; readAt: string | null; createdAt: string };
 
-/** FR-NT-03 — bell with unread count, mark read. */
+/** FR-NT-03 - bell with unread count, mark read. */
 export function NotificationsPopover({ initialUnread }: { initialUnread: number }) {
   const [unread, setUnread] = useState(initialUnread);
   const [items, setItems] = useState<N[] | null>(null);

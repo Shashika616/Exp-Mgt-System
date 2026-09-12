@@ -135,7 +135,7 @@ const DEVELOPER: Permission[] = [
   "worklog.read",
   "worklog.write",
   "comment.internal",
-  "comment.public", // subject to org_settings.developer_public_reply — checked server-side in createComment
+  "comment.public", // subject to org_settings.developer_public_reply, checked server-side in createComment
   "attachment.upload",
   "attachment.download",
   "search.global",

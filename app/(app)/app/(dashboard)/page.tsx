@@ -31,7 +31,7 @@ export default async function DashboardPage() {
     return (
       <>
         <Breadcrumbs items={[{ label: "Dashboard" }]} />
-        <PageHeader title={greeting} description="The desk at a glance — open work, reviews waiting, SLA health and developer load." />
+        <PageHeader title={greeting} description="The desk at a glance, open work, reviews waiting, SLA health and developer load." />
         <AdminDashboard data={data} review={review} />
       </>
     );

@@ -2,7 +2,7 @@
 import { useId, useMemo, useState } from "react";
 
 /**
- * Two-series line chart (created vs resolved) as inline SVG — dataviz skill: thin 2px lines, one axis,
+ * Two-series line chart (created vs resolved) as inline SVG - dataviz skill: thin 2px lines, one axis,
  * legend + direct end labels, crosshair tooltip, text in text tokens (never the series colour).
  * Palette validated: #1470e8 / #146b3f (ΔE 25 deutan, PASS).
  */

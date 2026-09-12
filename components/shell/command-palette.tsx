@@ -22,7 +22,7 @@ const ACTIONS: Result[] = [
   { id: "a-clients", kind: "action", label: "Go to clients", href: "/app/clients" },
 ];
 
-/** docs/design.md §7.8 — ⌘K: tickets by key/subject/body, clients, actions. 640px, grows from top-centre. */
+/** docs/design.md §7.8 - ⌘K: tickets by key/subject/body, clients, actions. 640px, grows from top-centre. */
 export function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [q, setQ] = useState("");
   const [results, setResults] = useState<Result[]>([]);

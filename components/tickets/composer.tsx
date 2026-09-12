@@ -12,7 +12,7 @@ import { AttachmentPicker, type Uploaded } from "./attachment-picker";
 import { useDirectory } from "./staff-directory";
 
 /**
- * FR-AG-04 / FR-DEV-05 composer: tabs *Reply to client* / *Internal note* — visually unmistakable
+ * FR-AG-04 / FR-DEV-05 composer: tabs *Reply to client* / *Internal note* - visually unmistakable
  * (design.md §12.10). Developers see a "Visible to client" banner with their client-facing display name.
  * Canned responses expand {{requester.first_name}} / {{ticket.key}} placeholders. Ctrl/⌘+Enter sends; R focuses.
  */
@@ -102,7 +102,7 @@ export function Composer({
   if (locked)
     return (
       <p className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-4 text-body-md text-on-surface-variant">
-        This ticket is closed. Replies are locked — the client can raise a
+        This ticket is closed. Replies are locked, the client can raise a
         follow-up request.
       </p>
     );

@@ -1,5 +1,5 @@
 // Applies db/migrations/*.sql in journal order using Drizzle's migrator.
-// Runs with DATABASE_ADMIN_URL (DDL owner) — the app itself uses the least-privilege DATABASE_URL.
+// Runs with DATABASE_ADMIN_URL (DDL owner) - the app itself uses the least-privilege DATABASE_URL.
 import { drizzle } from "drizzle-orm/postgres-js";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import postgres from "postgres";

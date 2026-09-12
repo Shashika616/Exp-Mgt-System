@@ -11,7 +11,7 @@ export type OrgSettings = { developersCanSelfAssign: boolean; developerPublicRep
 
 export async function getStaffOrgId(tx: Tx): Promise<string> {
   const [row] = await tx.select({ id: schema.organisations.id }).from(schema.organisations).where(eq(schema.organisations.type, "staff")).limit(1);
-  if (!row) throw new AppError("internal", "staff organisation missing — run pnpm db:seed");
+  if (!row) throw new AppError("internal", "staff organisation missing, run pnpm db:seed");
   return row.id;
 }
 

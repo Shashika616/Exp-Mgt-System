@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 /**
  * Routing only (architecture.md ADR-07, security.md A01): per-request CSP nonce, Supabase cookie refresh,
- * and a UX redirect for obviously-anonymous requests to /app or /portal. NO authorisation decisions live here —
+ * and a UX redirect for obviously-anonymous requests to /app or /portal. NO authorisation decisions live here -
  * every layout, Server Action and Route Handler calls requireUser()/requirePermission() itself.
  */
 const SUPABASE = process.env.NEXT_PUBLIC_SUPABASE_URL;

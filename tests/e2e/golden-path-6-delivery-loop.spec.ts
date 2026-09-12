@@ -3,7 +3,7 @@ import { USERS, newSession } from "./helpers/auth";
 import { adminSql } from "./helpers/db";
 
 /**
- * Golden path 6 — the full support delivery loop (requirements §5.4, FR-DEV-01..07):
+ * Golden path 6 - the full support delivery loop (requirements §5.4, FR-DEV-01..07):
  * client raises a bug → admin triages + assigns to a developer → developer logs two work entries (timer + manual),
  * sets fix_in_progress, asks the client directly in-thread (client sees it, replies) → developer submits for review
  * → admin returns once with notes → developer updates and resubmits → admin approves (edits the reply) → ticket resolves,
@@ -51,7 +51,7 @@ test("GP6 admin → developer → review → client", async ({ browser }) => {
   await expect(dev.getByText("Fix in progress").first()).toBeVisible();
 
   // Developer asks the client directly in the thread (public reply, shows as Engineer)
-  await dev.getByTestId("composer").fill("Hi Priyantha — could you confirm the invoice date format you use (DD/MM/YYYY)? I want to verify the fix against your data.");
+  await dev.getByTestId("composer").fill("Hi Priyantha, could you confirm the invoice date format you use (DD/MM/YYYY)? I want to verify the fix against your data.");
   await dev.getByTestId("composer-send").click();
   await expect(dev.getByText("Reply sent to the client")).toBeVisible();
 
@@ -116,9 +116,9 @@ test("GP6 admin → developer → review → client", async ({ browser }) => {
 
   // Admin approves with an edited reply → resolved; client receives the reply and confirms
   await admin.goto(`/app/tickets/${key}?review=1`);
-  await admin.getByTestId("review-reply").fill("Hi Priyantha, amounts above one million rupees were hitting a formatting bug in the PDF export. It's fixed and deployed — please re-run INV-2201 and confirm it matches your ledger.");
+  await admin.getByTestId("review-reply").fill("Hi Priyantha, amounts above one million rupees were hitting a formatting bug in the PDF export. It's fixed and deployed, please re-run INV-2201 and confirm it matches your ledger.");
   await admin.getByTestId("review-approve").click();
-  await expect(admin.getByText(`${key} resolved — reply sent to the client`)).toBeVisible();
+  await expect(admin.getByText(`${key} resolved: reply sent to the client`)).toBeVisible();
   await expect(admin.getByText("Resolved").first()).toBeVisible();
 
   await client.goto(`/portal/tickets/${key}`);

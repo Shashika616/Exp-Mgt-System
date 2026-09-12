@@ -134,7 +134,7 @@ export const dailyTicketStats = pgTable(
   (t) => [primaryKey({ columns: [t.day, t.orgId] })],
 );
 
-// Portable rate limiter storage (lib/ratelimit/postgres.ts) — used when Upstash is not configured.
+// Portable rate limiter storage (lib/ratelimit/postgres.ts) - used when Upstash is not configured.
 export const rateLimits = pgTable(
   "rate_limits",
   {

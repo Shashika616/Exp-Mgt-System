@@ -49,7 +49,7 @@ export function ContactsTable({ orgId, contacts, canManage }: { orgId: string; c
         <div className="flex flex-col gap-4">
           <Field label="Full name" required error={errors.fullName}>{(p) => <Input {...p} value={f.fullName} onChange={(e) => setF({ ...f, fullName: e.target.value })} data-autofocus />}</Field>
           <Field label="Email" required error={errors.email}>{(p) => <Input {...p} type="email" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} />}</Field>
-          <Field label="Role" required>{(p) => <NativeSelect {...p} value={f.roleId} onChange={(e) => setF({ ...f, roleId: e.target.value as typeof f.roleId })}><option value="client_user">Client user — own requests</option><option value="client_admin">Client admin — all requests + invite colleagues</option></NativeSelect>}</Field>
+          <Field label="Role" required>{(p) => <NativeSelect {...p} value={f.roleId} onChange={(e) => setF({ ...f, roleId: e.target.value as typeof f.roleId })}><option value="client_user">Client user, own requests</option><option value="client_admin">Client admin, all requests + invite colleagues</option></NativeSelect>}</Field>
         </div>
       </Sheet>
     </div>

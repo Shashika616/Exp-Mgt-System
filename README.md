@@ -1,12 +1,12 @@
 # Expendables Client Request Management System
 
-Ticket / client-request management for **EXPENDABLES (PVT) LTD** — one Next.js 16 monolith with three surfaces:
+Ticket / client-request management for **EXPENDABLES (PVT) LTD** - one Next.js 16 monolith with three surfaces:
 
 | Surface | Route | Who |
 |---|---|---|
-| Client Portal | `/portal` | client users & client admins — raise and track requests, reply, confirm/reopen |
+| Client Portal | `/portal` | client users & client admins - raise and track requests, reply, confirm/reopen |
 | Agent Workspace | `/app` | agents, **developers** (My work, work log, submit for review), leads |
-| Admin Console | `/app/admin` | admins — staff, clients, categories, SLA policies, templates, settings, audit; review queue on the dashboard |
+| Admin Console | `/app/admin` | admins - staff, clients, categories, SLA policies, templates, settings, audit; review queue on the dashboard |
 
 Stack: Next.js 16 (App Router, Server Actions) · React 19 · TypeScript strict · Tailwind 4 · Base UI · `motion` · Drizzle + postgres.js over `DATABASE_URL` · PostgreSQL 16 (Supabase in production, Docker locally) · Vitest · Playwright · pnpm.
 
@@ -30,7 +30,7 @@ Works with npm as well (`npm install`, then `npm run db:migrate`, `npm run db:se
 ### Demo accounts
 
 **Password for every account below: `Expendables#2026!`**
-Admin and lead also need a 6-digit TOTP code — add the secret `JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP` to Google Authenticator / 1Password (or use recovery code `recovery-code-1`).
+Admin and lead also need a 6-digit TOTP code - add the secret `JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP` to Google Authenticator / 1Password (or use recovery code `recovery-code-1`).
 
 | Role | Email |
 |---|---|
@@ -41,7 +41,7 @@ Admin and lead also need a 6-digit TOTP code — add the secret `JBSWY3DPEHPK3PX
 | Client admin / users (Ceylon Agro) | `sanduni@ceylonagro.example` / `priyantha@…`, `malith@…` |
 | Other client admins | `roshan@serendibfreight.example`, `chamari@ruhunumf.example`, `harsha@kandytextile.example`, `menaka@islandhealth.example`, `amila@colomboproperty.example` |
 
-Emails (invitations, magic links, notifications) are written to `.local/outbox.jsonl` in development — open it to follow links. Admins and leads must enter a TOTP code; add the secret above to any authenticator app.
+Emails (invitations, magic links, notifications) are written to `.local/outbox.jsonl` in development - open it to follow links. Admins and leads must enter a TOTP code; add the secret above to any authenticator app.
 
 ## Commands
 

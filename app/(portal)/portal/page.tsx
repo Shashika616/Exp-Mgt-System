@@ -12,7 +12,7 @@ import { cn, firstName } from "@/lib/utils";
 
 export const metadata = { title: "My requests" };
 
-/** FR-RP-04 + FR-CP-03/04: client dashboard — needs-your-reply, open with target dates, recently resolved, monthly summary. */
+/** FR-RP-04 + FR-CP-03/04: client dashboard - needs-your-reply, open with target dates, recently resolved, monthly summary. */
 export default async function PortalHome({ searchParams }: { searchParams: Promise<{ scope?: string; q?: string; contact?: string }> }) {
   const ctx = await requireUserOrRedirect("portal", "/portal");
   const sp = await searchParams;
@@ -34,7 +34,7 @@ export default async function PortalHome({ searchParams }: { searchParams: Promi
           <StatTile label="Created this month" value={summary.created} />
           <StatTile label="Resolved this month" value={summary.resolved} />
           <StatTile label="Avg resolution" value={fmtMinutes(summary.avgResolutionMin)} />
-          <StatTile label="SLA met" value={summary.slaMetPct === null ? "—" : `${summary.slaMetPct}%`} hint={summary.minutesLogged !== null ? `${fmtMinutes(summary.minutesLogged)} logged` : undefined} />
+          <StatTile label="SLA met" value={summary.slaMetPct === null ? "-" : `${summary.slaMetPct}%`} hint={summary.minutesLogged !== null ? `${fmtMinutes(summary.minutesLogged)} logged` : undefined} />
         </div>
       ) : null}
       <PortalFilters scope={scope} q={sp.q ?? ""} contacts={isAdmin ? contacts.map((c) => ({ id: c.id, name: c.fullName })) : []} contact={sp.contact ?? ""} />
@@ -44,13 +44,13 @@ export default async function PortalHome({ searchParams }: { searchParams: Promi
         <div className="flex flex-col gap-6">
           {needsReply.length ? (
             <section aria-labelledby="needs-reply">
-              <h2 id="needs-reply" className="text-headline-sm mb-3 text-warning-fg">Waiting for you — reply to continue</h2>
+              <h2 id="needs-reply" className="text-headline-sm mb-3 text-warning-fg">Waiting for you: reply to continue</h2>
               <div className="flex flex-col gap-3">{needsReply.map((t) => <RequestCard key={t.id} t={t} highlight />)}</div>
             </section>
           ) : null}
           {resolved.length ? (
             <section aria-labelledby="resolved">
-              <h2 id="resolved" className="text-headline-sm mb-3">Resolved — please confirm</h2>
+              <h2 id="resolved" className="text-headline-sm mb-3">Resolved: please confirm</h2>
               <div className="flex flex-col gap-3">{resolved.map((t) => <RequestCard key={t.id} t={t} />)}</div>
             </section>
           ) : null}

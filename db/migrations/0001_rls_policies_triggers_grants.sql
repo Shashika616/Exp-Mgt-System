@@ -211,7 +211,7 @@ CREATE POLICY attachments_client_insert ON attachments FOR INSERT WITH CHECK (
 );--> statement-breakpoint
 
 -- ---------------------------------------------------------------------------
--- Work logs, timers, submissions: staff only — client roles have NO policy (deny)
+-- Work logs, timers, submissions: staff only - client roles have NO policy (deny)
 -- ---------------------------------------------------------------------------
 CREATE POLICY work_logs_staff_read ON work_logs FOR SELECT USING (
   app_is_staff() AND EXISTS (SELECT 1 FROM tickets t WHERE t.id = work_logs.ticket_id)

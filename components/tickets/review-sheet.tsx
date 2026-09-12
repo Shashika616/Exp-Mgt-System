@@ -34,7 +34,7 @@ export function ReviewSheet({ open, onClose, ticketId, ticketKey, submission, ve
       setErrors(r.fields ?? {});
       return toast({ title: r.message, tone: "error" });
     }
-    toast({ title: mode === "approve" ? `${ticketKey} resolved — reply sent to the client` : mode === "return" ? "Returned to the developer with notes" : "Question sent to the client", tone: "success" });
+    toast({ title: mode === "approve" ? `${ticketKey} resolved: reply sent to the client` : mode === "return" ? "Returned to the developer with notes" : "Question sent to the client", tone: "success" });
     onClose();
     router.refresh();
   };
@@ -60,10 +60,10 @@ export function ReviewSheet({ open, onClose, ticketId, ticketKey, submission, ve
         <section className="rounded-lg border-t-4 border-review-border bg-review-bg/40 p-4" aria-label="Submission">
           <dl className="flex flex-col gap-3 text-body-md">
             <div><dt className="text-overline text-on-surface-variant">Findings</dt><dd className="mt-1 whitespace-pre-wrap">{submission.findings}</dd></div>
-            <div><dt className="text-overline text-on-surface-variant">Root cause</dt><dd className="mt-1 whitespace-pre-wrap">{submission.rootCause ?? "—"}</dd></div>
+            <div><dt className="text-overline text-on-surface-variant">Root cause</dt><dd className="mt-1 whitespace-pre-wrap">{submission.rootCause ?? "-"}</dd></div>
             <div><dt className="text-overline text-on-surface-variant">What was changed</dt><dd className="mt-1 whitespace-pre-wrap">{submission.changesMade}</dd></div>
             <div><dt className="text-overline text-on-surface-variant">How it was verified</dt><dd className="mt-1 whitespace-pre-wrap">{submission.verification}</dd></div>
-            <div><dt className="text-overline text-on-surface-variant">Suggested code</dt><dd className="mt-1">{submission.suggestedResolutionCode ? RESOLUTION_CODE_LABEL[submission.suggestedResolutionCode] : "—"}</dd></div>
+            <div><dt className="text-overline text-on-surface-variant">Suggested code</dt><dd className="mt-1">{submission.suggestedResolutionCode ? RESOLUTION_CODE_LABEL[submission.suggestedResolutionCode] : "-"}</dd></div>
             {submission.timeAdjustReason ? <div><dt className="text-overline text-on-surface-variant">Time adjusted</dt><dd className="mt-1">{submission.timeAdjustReason}</dd></div> : null}
           </dl>
         </section>
@@ -79,7 +79,7 @@ export function ReviewSheet({ open, onClose, ticketId, ticketKey, submission, ve
                   </NativeSelect>
                 )}
               </Field>
-              <Field label="Reply to client" required error={errors.reply} hint="Edit freely — this is sent as the public resolution and stored as the resolution note.">
+              <Field label="Reply to client" required error={errors.reply} hint="Edit freely, this is sent as the public resolution and stored as the resolution note.">
                 {(p) => <Textarea {...p} rows={12} value={reply} onChange={(e) => setReply(e.target.value)} data-autofocus data-testid="review-reply" />}
               </Field>
             </>

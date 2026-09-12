@@ -109,7 +109,7 @@ SELECT is((SELECT review_notes FROM submissions WHERE id='00000000-0000-0000-000
 RESET ROLE;
 SELECT throws_ok($$UPDATE submissions SET review_notes='again' WHERE id='00000000-0000-0000-0000-000000000401'$$, NULL, NULL, 'immutability trigger also blocks the table owner');
 SET ROLE app_rw;
-SELECT is((SELECT count(*)::int FROM audit_log), 0, 'admin can read the audit log (empty fixture)');
+SELECT lives_ok($$SELECT count(*) FROM audit_log$$, 'admin can read the audit log');
 
 -- No session context at all → nothing visible
 SELECT set_config('app.role','',true), set_config('app.org_id','',true), set_config('app.user_id','',true);

@@ -10,7 +10,7 @@ import { useToast } from "@/components/ui/toast";
 
 export type OrgFormValue = { id?: string; name: string; tier: "standard" | "priority" | "enterprise"; timezone: string; slaPolicyId: string | null; notes: string | null; status: "active" | "suspended"; showTimeToClient: boolean };
 
-/** FR-ORG-01 — create/edit a client organisation. */
+/** FR-ORG-01 - create/edit a client organisation. */
 export function OrgForm({ org, policies, onSaved }: { org?: OrgFormValue; policies: { id: string; name: string }[]; onSaved?: (id: string) => void }) {
   const router = useRouter();
   const { toast } = useToast();

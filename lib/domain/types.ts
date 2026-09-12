@@ -1,4 +1,4 @@
-// Domain vocabulary — kept in sync with db/schema/enums.ts (the DB enums are generated from the same lists).
+// Domain vocabulary - kept in sync with db/schema/enums.ts (the DB enums are generated from the same lists).
 
 export const ROLES = ["client_user", "client_admin", "agent", "developer", "lead", "admin", "system"] as const;
 export type Role = (typeof ROLES)[number];
@@ -80,12 +80,12 @@ export const CLIENT_STATUS_LABEL: Record<TicketStatus, string> = {
   in_review: "Being worked on",
   pending_client: "Waiting for you",
   on_hold: "On hold",
-  resolved: "Resolved — please confirm",
+  resolved: "Resolved: please confirm",
   closed: "Closed",
   cancelled: "Cancelled",
 };
 
-/** Client-facing status *key* — what the portal exposes instead of the raw status (never `in_review`). */
+/** Client-facing status *key* - what the portal exposes instead of the raw status (never `in_review`). */
 export type ClientStatus = Exclude<TicketStatus, "in_review">;
 export const toClientStatus = (s: TicketStatus): ClientStatus => (s === "in_review" ? "in_progress" : s);
 

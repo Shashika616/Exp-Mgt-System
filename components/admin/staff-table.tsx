@@ -41,12 +41,12 @@ export function StaffTable({ staff, selfId }: { staff: Staff[]; selfId: string }
               <tr key={s.id} className="row-comfortable border-b border-outline-variant/40">
                 <td className="px-4"><span className="flex items-center gap-2"><Avatar name={s.fullName} size={24} /><span><span className="block text-body-md">{s.fullName}{s.id === selfId ? <span className="text-body-sm text-on-surface-variant"> (you)</span> : null}</span><span className="block text-body-sm text-on-surface-variant">{s.email}</span></span></span></td>
                 <td className="px-4">
-                  <NativeSelect aria-label={`Role of ${s.fullName}`} value={s.roleId} disabled={s.id === selfId} className="h-8 w-36" onChange={(e) => void act(setRole({ userId: s.id, roleId: e.target.value as (typeof ROLES)[number] }), `Role updated — ${s.fullName} will sign in again`)}>
+                  <NativeSelect aria-label={`Role of ${s.fullName}`} value={s.roleId} disabled={s.id === selfId} className="h-8 w-36" onChange={(e) => void act(setRole({ userId: s.id, roleId: e.target.value as (typeof ROLES)[number] }), `Role updated, ${s.fullName} will sign in again`)}>
                     {ROLES.map((r) => (<option key={r} value={r}>{r}</option>))}
                   </NativeSelect>
                 </td>
                 <td className="px-4 text-body-sm">{s.status}</td>
-                <td className="px-4 text-body-sm">{s.mfaEnrolled ? "enrolled" : (s.roleId === "admin" || s.roleId === "lead") ? <span className="text-warning-fg">required</span> : "—"}</td>
+                <td className="px-4 text-body-sm">{s.mfaEnrolled ? "enrolled" : (s.roleId === "admin" || s.roleId === "lead") ? <span className="text-warning-fg">required</span> : "-"}</td>
                 <td className="px-4 text-body-sm text-on-surface-variant">{s.lastSeenAt ? relativeTime(s.lastSeenAt) : "never"}</td>
                 <td className="px-4 text-right">
                   {s.id !== selfId ? (
@@ -54,7 +54,7 @@ export function StaffTable({ staff, selfId }: { staff: Staff[]; selfId: string }
                       <Menu.Trigger className="pressable rounded-md px-2 py-1 text-label text-on-surface-variant hover:bg-surface-container">Actions</Menu.Trigger>
                       <Menu.Content align="end">
                         {s.status === "deactivated" ? <Menu.Item onClick={() => void act(reactivateUserAction({ userId: s.id }), "Reactivated")}>Reactivate</Menu.Item> : <Menu.Item onClick={() => setConfirm(s)}>Deactivate</Menu.Item>}
-                        {s.mfaEnrolled ? <Menu.Item onClick={() => void act(resetUserMfa({ userId: s.id }), "MFA reset — they'll enrol again at next sign-in")}>Force MFA reset</Menu.Item> : null}
+                        {s.mfaEnrolled ? <Menu.Item onClick={() => void act(resetUserMfa({ userId: s.id }), "MFA reset, they'll enrol again at next sign-in")}>Force MFA reset</Menu.Item> : null}
                       </Menu.Content>
                     </Menu.Root>
                   ) : null}

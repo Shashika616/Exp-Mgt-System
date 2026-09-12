@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   1. Colour tokens — copied verbatim from docs/design.md §1.1 (website values)
+   1. Colour tokens - copied verbatim from docs/design.md §1.1 (website values)
    --------------------------------------------------------------------------- */
 :root {
   /* Brand */
   --primary:                    #000a1e;  /* headings, primary text */
   --on-primary:                 #ffffff;
-  --primary-container:          #002147;  /* brand navy — buttons, sidebar */
+  --primary-container:          #002147;  /* brand navy - buttons, sidebar */
   --on-primary-container:       #708ab5;
   --primary-fixed:              #d6e3ff;  /* icon bubbles, selected rows */
   --primary-fixed-dim:          #aec7f6;
@@ -59,7 +59,7 @@
   --error-container:            #ffdad6;
   --on-error-container:         #93000a;
 
-  /* 1.2 Semantic status colours (new) — fg / bg / border */
+  /* 1.2 Semantic status colours (new) - fg / bg / border */
   --info-fg: #0058bd;      --info-bg: #d8e2ff;      --info-border: #adc6ff;
   --success-fg: #146b3f;   --success-bg: #d5f2e0;   --success-border: #9ad9b6;
   --warning-fg: #9a5b00;   --warning-bg: #ffe9c2;   --warning-border: #f2c46b;
@@ -206,7 +206,7 @@ a { color: inherit; }
 }
 
 /* ---------------------------------------------------------------------------
-   2. Type scale — docs/design.md §2.2 (size-specific tracking)
+   2. Type scale - docs/design.md §2.2 (size-specific tracking)
    --------------------------------------------------------------------------- */
 @layer utilities {
 .text-display     { font-family: var(--font-heading); font-size: clamp(28px, 3.5vw, 36px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; }
@@ -224,7 +224,7 @@ a { color: inherit; }
 }
 
 /* ---------------------------------------------------------------------------
-   Materials (design.md §4) — translucent chrome, scroll-edge fade
+   Materials (design.md §4) - translucent chrome, scroll-edge fade
    --------------------------------------------------------------------------- */
 @layer components {
 .material-topbar {
@@ -270,13 +270,13 @@ a { color: inherit; }
   .soft-lift-hover:hover { transform: none; }
 }
 
-/* Skeleton shimmer — static in reduced motion */
+/* Skeleton shimmer - static in reduced motion */
 .skeleton { background: var(--surface-container-high); border-radius: var(--radius-md); position: relative; overflow: hidden; }
 .skeleton::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent); animation: shimmer 1.4s infinite; }
 @keyframes shimmer { 100% { transform: translateX(100%); } }
 @media (prefers-reduced-motion: reduce) { .skeleton::after { animation: none; } }
 
-/* Timer pulse (design.md §7.11a) — gentle, not looping fast */
+/* Timer pulse (design.md §7.11a) - gentle, not looping fast */
 @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .pulse-dot { animation: none; } }

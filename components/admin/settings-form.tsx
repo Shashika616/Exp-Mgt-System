@@ -21,17 +21,17 @@ export function SettingsForm({ value }: { value: V }) {
     <Card className="max-w-2xl">
       <CardHeader eyebrow="Workflow" title="Developers & clients" />
       <form className="flex flex-col gap-6" onSubmit={async (e) => { e.preventDefault(); setBusy(true); const r = await saveGlobalSettings(v); setBusy(false); if (!r.ok) return toast({ title: r.message, tone: "error" }); toast({ title: "Settings saved", tone: "success" }); router.refresh(); }}>
-        <Field label="Developer replies to clients" hint="always — developers may reply publicly in the thread (default). after first admin reply — only once the admin has replied. never — developers draft internally; the admin sends.">
+        <Field label="Developer replies to clients" hint="always, developers may reply publicly in the thread (default). after first admin reply, only once the admin has replied. never, developers draft internally; the admin sends.">
           {(p) => (
             <NativeSelect {...p} value={v.developerPublicReply} onChange={(e) => setV({ ...v, developerPublicReply: e.target.value as DeveloperPublicReply })}>
               <option value="always">Always</option>
               <option value="after_first_admin_reply">After the admin&apos;s first reply</option>
-              <option value="never">Never — admin sends</option>
+              <option value="never">Never: admin sends</option>
             </NativeSelect>
           )}
         </Field>
         <label className="flex items-center justify-between gap-4 text-body-md">
-          <span><span className="block">Developers can take unassigned tickets</span><span className="text-body-sm text-on-surface-variant">Off by default — dispatch goes through the admin.</span></span>
+          <span><span className="block">Developers can take unassigned tickets</span><span className="text-body-sm text-on-surface-variant">Off by default, dispatch goes through the admin.</span></span>
           <Switch checked={v.developersCanSelfAssign} onCheckedChange={(c) => setV({ ...v, developersCanSelfAssign: c })} aria-label="Developers can self-assign" />
         </label>
         <label className="flex items-center justify-between gap-4 text-body-md">

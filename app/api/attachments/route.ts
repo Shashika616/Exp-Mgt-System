@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     } else {
       throw new AppError("validation", "Could not verify the file type.");
     }
-    // Ticket must be visible to the caller (RLS) — otherwise 404, never a hint about existence.
+    // Ticket must be visible to the caller (RLS) - otherwise 404, never a hint about existence.
     const ticket = await withContext(ctx, (tx) => loadTicketRow(tx, eq(schema.tickets.id, ticketId)));
     if (!ticket) throw new AppError("not_found");
     if (ctx.role === "developer" && ticket.assigneeId !== ctx.userId) throw new AppError("not_found");

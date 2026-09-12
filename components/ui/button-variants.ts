@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 
-// docs/design.md §7.1 — one primary per view; feedback on pointer-down (.pressable); loading keeps width.
+// docs/design.md §7.1 - one primary per view; feedback on pointer-down (.pressable); loading keeps width.
 export const buttonVariants = cva(
   "pressable inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-label select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0",
   {

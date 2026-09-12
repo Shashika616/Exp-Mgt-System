@@ -9,7 +9,7 @@ import Link from "next/link";
 export const metadata = { title: "Audit log" };
 const PAGE = 50;
 
-/** FR-ADM-06 — who did what, when, from where; filters; CSV export. */
+/** FR-ADM-06 - who did what, when, from where; filters; CSV export. */
 export default async function AuditPage({ searchParams }: { searchParams: Promise<{ action?: string; actor?: string; page?: string }> }) {
   const ctx = await requirePermissionOrRedirect("app", "admin.audit", "/app/admin/audit");
   const sp = await searchParams;
@@ -32,7 +32,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
                 <td className="px-4 py-2 text-mono">{r.action}</td>
                 <td className="px-4 py-2 text-body-sm text-on-surface-variant">{r.entityType}{r.entityId ? ` · ${r.entityId.slice(0, 8)}` : ""}</td>
                 <td className="px-4 py-2 text-body-sm"><Diff before={r.before} after={r.after} /></td>
-                <td className="px-4 py-2 text-body-sm text-on-surface-variant">{r.ip ?? "—"}<br /><span className="line-clamp-1 max-w-48 text-[11px]">{r.userAgent ?? ""}</span></td>
+                <td className="px-4 py-2 text-body-sm text-on-surface-variant">{r.ip ?? "-"}<br /><span className="line-clamp-1 max-w-48 text-[11px]">{r.userAgent ?? ""}</span></td>
               </tr>
             ))}
             {rows.length === 0 ? <tr><td colSpan={6} className="px-4 py-8 text-center text-body-sm text-on-surface-variant">No entries match.</td></tr> : null}
@@ -52,7 +52,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
 
 function Diff({ before, after }: { before: Record<string, unknown> | null; after: Record<string, unknown> | null }) {
   const keys = [...new Set([...Object.keys(before ?? {}), ...Object.keys(after ?? {})])].filter((k) => JSON.stringify(before?.[k]) !== JSON.stringify(after?.[k]));
-  if (!keys.length) return <span className="text-on-surface-variant">—</span>;
+  if (!keys.length) return <span className="text-on-surface-variant">-</span>;
   return (
     <ul className="flex flex-col gap-0.5">
       {keys.slice(0, 6).map((k) => (

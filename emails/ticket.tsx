@@ -14,7 +14,7 @@ export type TicketEmailProps = {
   appUrl: string;
 };
 
-/** Generic branded ticket notification. `snippet` is a short excerpt of a reply — never the full body (requirements.md §8). */
+/** Generic branded ticket notification. `snippet` is a short excerpt of a reply - never the full body (requirements.md §8). */
 export function TicketEmail(p: TicketEmailProps) {
   return (
     <EmailLayout preview={p.subjectLine} title={p.title} appUrl={p.appUrl}>

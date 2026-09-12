@@ -21,7 +21,7 @@ const [staff] = await db.select({ id: schema.organisations.id }).from(schema.org
 if (!staff) throw new Error("run pnpm db:seed first");
 const [existingAdmin] = await db.select({ id: schema.users.id }).from(schema.users).where(eq(schema.users.roleId, "admin")).limit(1);
 if (existingAdmin) {
-  console.error("an admin already exists — invite further admins from the Admin Console");
+  console.error("an admin already exists, invite further admins from the Admin Console");
   process.exit(1);
 }
 let providerId: string | null = null;

@@ -15,7 +15,7 @@ import { listTickets } from "@/lib/dal/tickets";
 import { listOrgContacts } from "@/lib/dal/users";
 import { relativeTime } from "@/lib/utils";
 
-/** FR-ORG-03 — org page: open tickets, SLA performance, contacts, recent activity. */
+/** FR-ORG-03 - org page: open tickets, SLA performance, contacts, recent activity. */
 export default async function ClientPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const ctx = await requirePermissionOrRedirect("app", "org.read", `/app/clients/${id}`);
@@ -30,7 +30,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <StatTile label="Open tickets" value={stats.open} href={`/app/tickets?orgId=${id}&queue=all_open`} />
         <StatTile label="Created (30 d)" value={stats.created30} href={`/app/tickets?orgId=${id}&queue=all`} />
-        <StatTile label="SLA met (30 d)" value={stats.slaMetPct === null ? "—" : `${stats.slaMetPct}%`} tone={stats.slaMetPct !== null && stats.slaMetPct < 90 ? "warning" : "success"} />
+        <StatTile label="SLA met (30 d)" value={stats.slaMetPct === null ? "-" : `${stats.slaMetPct}%`} tone={stats.slaMetPct !== null && stats.slaMetPct < 90 ? "warning" : "success"} />
         <StatTile label="Hours logged (30 d)" value={fmtMinutes(stats.minutes30)} />
       </div>
       <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">

@@ -1,4 +1,4 @@
-// pnpm db:seed — reference data always; demo data unless NODE_ENV=production or SEED_DEMO=0.
+// pnpm db:seed - reference data always; demo data unless NODE_ENV=production or SEED_DEMO=0.
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { loadEnv } from "../load-env";
@@ -24,6 +24,6 @@ if (wantDemo) {
   console.log(`sign in with password "${DEMO_PASSWORD}" as any of: ${Object.values(DEMO_USERS).map((u) => u.email).join(", ")}`);
   console.log("admin/lead TOTP secret (demo only): see db/seed/demo.ts DEMO_TOTP_SECRET");
 } else {
-  console.log("demo data skipped — create the first admin with: pnpm tsx db/seed/first-admin.ts <email> <name>");
+  console.log("demo data skipped, create the first admin with: pnpm tsx db/seed/first-admin.ts <email> <name>");
 }
 await client.end();

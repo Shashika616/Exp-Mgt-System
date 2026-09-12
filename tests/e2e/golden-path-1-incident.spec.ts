@@ -52,7 +52,7 @@ test("GP1 incident from portal to closed", async ({ browser }) => {
 
   // Client sees "Waiting for you", replies → back to in progress
   await client.goto("/portal");
-  await expect(client.getByText("Waiting for you — reply to continue")).toBeVisible();
+  await expect(client.getByText("Waiting for you: reply to continue")).toBeVisible();
   await client.goto(`/portal/tickets/${key}`);
   await expect(client.getByText("Which Android version")).toBeVisible();
   await client.getByTestId("portal-reply").fill("Both are on Android 14, build UP1A.");
@@ -71,7 +71,7 @@ test("GP1 incident from portal to closed", async ({ browser }) => {
 
   // Client confirms → closed
   await client.goto(`/portal/tickets/${key}`);
-  await expect(client.getByText("Resolved — does this fix it for you?")).toBeVisible();
+  await expect(client.getByText("Resolved: does this fix it for you?")).toBeVisible();
   await client.getByTestId("confirm-close").click();
   await expect(client.getByText("This request is closed.")).toBeVisible();
   await expect(client.getByTestId("follow-up")).toBeVisible();

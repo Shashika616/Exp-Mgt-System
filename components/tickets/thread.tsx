@@ -119,7 +119,7 @@ function SubmissionCard({ s }: { s: SubmissionRow }) {
         </summary>
         <dl className="mt-3 grid gap-3 text-body-md sm:grid-cols-2">
           <Block label="Findings" text={s.findings} />
-          <Block label="Root cause" text={s.rootCause ?? "—"} />
+          <Block label="Root cause" text={s.rootCause ?? "-"} />
           <Block label="What was changed" text={s.changesMade} />
           <Block label="How it was verified" text={s.verification} />
           <Block label="Proposed reply to client" text={s.proposedReply} wide />
@@ -153,16 +153,16 @@ function eventNode(e: EventRow): React.ReactNode | null {
   const b = (x: React.ReactNode) => <strong className="font-medium text-primary">{x}</strong>;
   switch (e.kind) {
     case "status_changed":
-      return line("info", ArrowRightLeft, <>{b(who)} moved {STAFF_STATUS_LABEL[d.from as TicketStatus]} → {b(STAFF_STATUS_LABEL[d.to as TicketStatus])}{d.holdReason ? ` (${HOLD_REASON_LABEL[d.holdReason as HoldReason]})` : ""}{d.reason ? ` — ${String(d.reason)}` : ""}</>);
+      return line("info", ArrowRightLeft, <>{b(who)} moved {STAFF_STATUS_LABEL[d.from as TicketStatus]} → {b(STAFF_STATUS_LABEL[d.to as TicketStatus])}{d.holdReason ? ` (${HOLD_REASON_LABEL[d.holdReason as HoldReason]})` : ""}{d.reason ? `, ${String(d.reason)}` : ""}</>);
     case "assigned":
-      return line("info", UserRoundCheck, <>{b(who)} {d.to ? "assigned this ticket" : "unassigned this ticket"}{d.note ? ` — ${String(d.note)}` : ""}</>);
+      return line("info", UserRoundCheck, <>{b(who)} {d.to ? "assigned this ticket" : "unassigned this ticket"}{d.note ? `, ${String(d.note)}` : ""}</>);
     case "work_state_changed":
-      return line("progress", NotebookPen, <>{b(who)} set work state to {b(WORK_STATE_LABEL[d.to as WorkState] ?? String(d.to))}{d.note ? ` — ${String(d.note)}` : ""}</>);
+      return line("progress", NotebookPen, <>{b(who)} set work state to {b(WORK_STATE_LABEL[d.to as WorkState] ?? String(d.to))}{d.note ? `, ${String(d.note)}` : ""}</>);
     case "work_logged":
       return line("progress", Timer, <>{b(who)} logged {b(formatMinutes(Number(d.minutes)))} · total {formatMinutes(Number(d.total ?? 0))}</>);
     case "priority_changed":
     case "priority_overridden":
-      return line("warning", Flag, <>{b(who)} changed priority {PRIORITY_LABEL[d.from as Priority]} → {b(PRIORITY_LABEL[d.to as Priority])}{d.reason ? ` — ${String(d.reason)}` : ""}</>);
+      return line("warning", Flag, <>{b(who)} changed priority {PRIORITY_LABEL[d.from as Priority]} → {b(PRIORITY_LABEL[d.to as Priority])}{d.reason ? `, ${String(d.reason)}` : ""}</>);
     case "review_approved":
       return line("success", CheckCircle2, <>{b(who)} approved the submission{d.replyEdited ? " (reply edited)" : ""}</>);
     case "review_returned":
@@ -170,11 +170,11 @@ function eventNode(e: EventRow): React.ReactNode | null {
     case "review_asked_client":
       return line("warning", Send, <>{b(who)} asked the client a question during review</>);
     case "sla_at_risk":
-      return line("warning", Timer, <>SLA at risk — {String(d.metric).replace("_", " ")}</>);
+      return line("warning", Timer, <>SLA at risk: {String(d.metric).replace("_", " ")}</>);
     case "sla_breached":
-      return line("danger", OctagonAlert, <>SLA breached — {String(d.metric).replace("_", " ")}</>);
+      return line("danger", OctagonAlert, <>SLA breached: {String(d.metric).replace("_", " ")}</>);
     case "escalated":
-      return line("danger", OctagonAlert, <>Escalated to level {String(d.level)}{d.reason ? ` — ${String(d.reason)}` : ""}</>);
+      return line("danger", OctagonAlert, <>Escalated to level {String(d.level)}{d.reason ? `, ${String(d.reason)}` : ""}</>);
     case "first_response":
       return line("success", Send, <>First response recorded</>);
     case "participant_added":
@@ -182,7 +182,7 @@ function eventNode(e: EventRow): React.ReactNode | null {
     case "watcher_added":
       return line("neutral", UserRoundCheck, <>{b(who)} is now watching</>);
     case "sla_extended":
-      return line("warning", Timer, <>{b(who)} extended the {String(d.metric).replace("_", " ")} target by {formatMinutes(Number(d.extraMinutes))} — {String(d.reason)}</>);
+      return line("warning", Timer, <>{b(who)} extended the {String(d.metric).replace("_", " ")} target by {formatMinutes(Number(d.extraMinutes))}, {String(d.reason)}</>);
     case "linked":
       return line("neutral", ArrowRightLeft, <>{b(who)} linked {String(d.key)} ({String(d.kind).replace("_", " ")})</>);
     case "attachment_added":

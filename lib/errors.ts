@@ -1,4 +1,4 @@
-// Uniform error handling (docs/security.md A10). Clients receive a code + generic message + error id — never a stack.
+// Uniform error handling (docs/security.md A10). Clients receive a code + generic message + error id - never a stack.
 import { randomUUID } from "node:crypto";
 
 export type ErrorCode =

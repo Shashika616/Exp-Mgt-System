@@ -11,7 +11,7 @@ import { useToast } from "@/components/ui/toast";
 import { RESOLUTION_CODES, RESOLUTION_CODE_LABEL, type ResolutionCode } from "@/lib/domain/types";
 import { formatMinutes } from "@/lib/utils";
 
-/** FR-DEV-04 — structured hand-off (requirements §5.4 rule 5). "Submit to admin" is the only navy button. */
+/** FR-DEV-04 - structured hand-off (requirements §5.4 rule 5). "Submit to admin" is the only navy button. */
 export function SubmitReviewSheet({ open, onClose, ticketId, loggedMinutes, version, requesterFirstName }: { open: boolean; onClose: () => void; ticketId: string; loggedMinutes: number; version: number; requesterFirstName: string }) {
   const router = useRouter();
   const { toast } = useToast();

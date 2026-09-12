@@ -18,7 +18,7 @@ const WS = [
   { key: "blocked", label: "Blocked", color: "#ba1a1a" },
 ] as const;
 
-/** FR-RP-01 — run the desk. Every tile links to the filtered list. */
+/** FR-RP-01 - run the desk. Every tile links to the filtered list. */
 export function AdminDashboard({ data, review }: { data: Data; review: Awaited<ReturnType<typeof reviewQueue>> }) {
   const t = data.tiles;
   return (
@@ -117,7 +117,7 @@ export function AdminDashboard({ data, review }: { data: Data; review: Awaited<R
                   <div className="h-2 w-28 overflow-hidden rounded-sm bg-surface-container-high" role="img" aria-label={`${pct ?? 0}% of SLAs met`}>
                     <div className={`h-full rounded-sm ${pct !== null && pct < 80 ? "bg-danger-fg" : pct !== null && pct < 95 ? "bg-warning-fg" : "bg-success-fg"}`} style={{ width: `${pct ?? 0}%` }} />
                   </div>
-                  <span className="tabular w-12 text-right font-heading text-[13px] font-semibold">{pct === null ? "—" : `${pct}%`}</span>
+                  <span className="tabular w-12 text-right font-heading text-[13px] font-semibold">{pct === null ? "-" : `${pct}%`}</span>
                 </li>
               );
             })}

@@ -81,7 +81,7 @@ export async function adminDashboard(ctx: AuthContext) {
 
 export type AdminDashboard = Awaited<ReturnType<typeof adminDashboard>>;
 
-/** created vs resolved per day — last `days` days, from daily_ticket_stats with today computed live. */
+/** created vs resolved per day - last `days` days, from daily_ticket_stats with today computed live. */
 export async function createdVsResolved(tx: Tx, days: number, orgId: string | null) {
   const rows = await tx
     .select({

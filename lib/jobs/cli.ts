@@ -1,4 +1,4 @@
-// pnpm cron [job] — run a job from a system cron / container (own-cloud path). Defaults to "all".
+// pnpm cron [job] - run a job from a system cron / container (own-cloud path). Defaults to "all".
 import { loadEnv } from "../../db/load-env";
 
 loadEnv();

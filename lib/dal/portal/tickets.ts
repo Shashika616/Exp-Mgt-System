@@ -131,7 +131,7 @@ export async function getPortalTicket(ctx: AuthContext, key: string) {
       .where(and(eq(schema.tickets.key, key), isNull(schema.tickets.deletedAt), eq(schema.tickets.orgId, ctx.orgId)))
       .limit(1);
     if (!row) return null;
-    // Public comments only — belt (this filter) and braces (RLS policy comments_client_public_only)
+    // Public comments only - belt (this filter) and braces (RLS policy comments_client_public_only)
     const comments = (await listCommentsInTx(tx, row.id, "public")).map((c) => ({
       id: c.id,
       body: c.body,
@@ -140,7 +140,7 @@ export async function getPortalTicket(ctx: AuthContext, key: string) {
       editedAt: c.editedAt,
       authorId: c.authorId,
       authorName: c.authorName,
-      // Client-facing display: staff show as "Name · Expendables" — never an internal role label (§5.4 rule 4)
+      // Client-facing display: staff show as "Name · Expendables" - never an internal role label (§5.4 rule 4)
       authorSide: ["client_user", "client_admin"].includes(c.authorRole) ? ("client" as const) : ("staff" as const),
       authorTitle: c.authorRole === "developer" ? "Engineer, Expendables" : ["client_user", "client_admin"].includes(c.authorRole) ? null : "Support, Expendables",
       kind: c.kind,

@@ -91,7 +91,7 @@ export async function notifyFlush(limit = 50): Promise<{ sent: number; failed: n
 function bodyFor(kind: string): string {
   switch (kind) {
     case "ticket_created":
-      return "Thanks — we've received your request and will respond within the target below.";
+      return "Thanks, we've received your request and will respond within the target below.";
     case "staff_reply":
       return "There's a new reply on your request.";
     case "client_reply":
@@ -113,7 +113,7 @@ function bodyFor(kind: string): string {
     case "review_returned":
       return "Your submission was returned with notes.";
     case "sla_at_risk":
-      return "An SLA target is at 75 % — please act now.";
+      return "An SLA target is at 75 %, please act now.";
     case "sla_breached":
       return "An SLA target has been breached and the ticket was escalated.";
     case "escalated":

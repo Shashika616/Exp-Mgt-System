@@ -136,7 +136,7 @@ export function Sheet({
   );
 }
 
-/** Confirmation dialog — destructive/irreversible actions only (design.md §7.7). Safe action is the default. */
+/** Confirmation dialog - destructive/irreversible actions only (design.md §7.7). Safe action is the default. */
 export function ConfirmDialog({
   open,
   onClose,

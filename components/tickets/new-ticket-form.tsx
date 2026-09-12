@@ -17,7 +17,7 @@ import { useDirectory } from "./staff-directory";
 type Input = z.input<typeof AgentCreateTicketSchema>;
 type Contact = { id: string; fullName: string; email: string };
 
-/** FR-AG-07: create on behalf of a client — pick org → contact (or create inline), impact + urgency → computed priority. */
+/** FR-AG-07: create on behalf of a client - pick org → contact (or create inline), impact + urgency → computed priority. */
 export function NewTicketForm({ orgs }: { orgs: { id: string; name: string }[] }) {
   const router = useRouter();
   const { toast } = useToast();
@@ -129,7 +129,7 @@ export function NewTicketForm({ orgs }: { orgs: { id: string; name: string }[] }
         <Field label="Category">
           {(p) => (
             <NativeSelect {...p} {...form.register("categoryId")}>
-              <option value="">—</option>
+              <option value="">-</option>
               {categories.filter((c) => !c.parentId).map((c) => (<option key={c.id} value={c.id}>{c.name}</option>))}
             </NativeSelect>
           )}
@@ -137,7 +137,7 @@ export function NewTicketForm({ orgs }: { orgs: { id: string; name: string }[] }
         <Field label="Subcategory">
           {(p) => (
             <NativeSelect {...p} {...form.register("subcategoryId")} disabled={!categories.some((c) => c.parentId === categoryId)}>
-              <option value="">—</option>
+              <option value="">-</option>
               {categories.filter((c) => c.parentId === categoryId).map((c) => (<option key={c.id} value={c.id}>{c.name}</option>))}
             </NativeSelect>
           )}

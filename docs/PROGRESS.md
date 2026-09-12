@@ -5,9 +5,10 @@
 
 ## Owner decisions taken during the build (override the spec where they conflict)
 - **No auto-close** anywhere. Closing is a human action only (client confirms, staff closes/cancels). `auto_close*` transitions, settings and job removed.
-- **No Redis / Upstash, no Resend.** Rate limiter is Postgres-backed (`lib/ratelimit/provider.ts`); email is `EMAIL_PROVIDER=log` (server log + `.local/outbox.jsonl` dev outbox) behind `EmailProvider` — real mail client is a one-file adapter later.
+- **No Redis / Upstash, no Resend.** Rate limiter is Postgres-backed (`lib/ratelimit/provider.ts`); email is `EMAIL_PROVIDER=log` (server log + `.local/outbox.jsonl` dev outbox) behind `EmailProvider` - real mail client is a one-file adapter later.
 - **No pg-boss / long-lived worker.** Target is Vercel Hobby + Supabase free: jobs are plain functions behind `/api/cron/[job]` (Bearer `CRON_SECRET`), scheduled by Supabase `pg_cron` (`db/migrations/supabase/0001_pg_cron_schedule.sql`) + opportunistic `maybeTick()` on staff page loads. `vercel.json` only schedules the daily stats job.
 - **Auth is Supabase Auth in production** (`AUTH_PROVIDER=supabase`, `lib/auth/supabase.ts`, httpOnly cookies only). A portable Postgres-backed `local` adapter (`lib/auth/local.ts`: scrypt, opaque sessions, TOTP) is used for local dev / CI / e2e and is the "own auth" path.
+- No em dashes in UI copy (owner preference).
 - Everything external sits behind `lib/<area>/provider.ts` (auth, storage, email, ratelimit, realtime). DB = Drizzle over `DATABASE_URL`.
 - Git identity: the owner will set `git config user.email` themselves.
 
@@ -22,26 +23,22 @@ Users: admin@expendables.lk, lead@expendables.lk, nimal@/tharushi@ (agents), kas
 sanduni@ceylonagro.example (client_admin), priyantha@ceylonagro.example (client_user), roshan@serendibfreight.example …
 
 ## Steps (from PROMPT.md)
-| # | Step | State | Notes |
-|---|---|---|---|
-| 1 | Scaffold, env.ts, globals.css tokens, fonts, brand assets, security headers + nonce CSP | ✅ | `proxy.ts` sets CSP nonce; static headers in `next.config.ts`. ESLint boundaries: **TODO** (eslint.config.mjs not yet written) |
-| 2 | DB schema, migrations, RLS, grants, seed, pgTAP | ✅ | 33 tables all RLS; 36 pgTAP assertions pass (`pnpm test:rls`) |
-| 3 | Auth + authz | ✅ | login/magic link/reset/invite/TOTP pages; authz matrix test (347 cases) |
-| 4 | Domain (pure) | ✅ | 76 unit tests; coverage run **TODO** |
-| 5 | App shell + portal shell | ✅ | sidebar/topbar/⌘K/notifications/timer indicator |
-| 6 | Tickets: create, queues/table, detail, composer, properties, attachments, realtime | ✅ code written | needs browser verification |
-| 7 | Delivery loop: assign→work log/timer→work_state→submit→review | ✅ code written | needs browser verification |
-| 8 | SLA jobs, notifications (in-app + email outbox), matrix | ✅ | `lib/jobs/*` |
-| 9 | Admin console | ✅ code written | users, orgs, categories+canned, SLA, templates, settings, audit(+CSV) |
-| 10 | Four dashboards + daily_ticket_stats job | ✅ code written | charts: inline SVG per dataviz skill |
-| 11 | Demo seed | ✅ | 154 tickets |
-| 12 | Polish + hardening (apple-design checklist, security-review, Lighthouse, axe) | ⬜ | |
-| 13 | README, docs/runbooks/deploy.md, docs/STATUS.md | ⬜ | also docs/runbooks/providers.md |
-| — | Playwright e2e: 6 golden paths + IDOR + client snapshot test | ⬜ | `playwright.config.ts` not yet written; chromium installed |
-| — | ESLint config (boundaries, no dangerouslySetInnerHTML except SafeHtml) + `pnpm lint` green | ⬜ | |
-| — | First real browser smoke test of login → dashboards | ⬜ | next action |
+All 13 steps are complete. `docs/STATUS.md` has the per-FR table and the deviation list.
 
-## Known gaps / follow-ups
-- `lib/auth/supabase.ts` and `lib/storage/supabase.ts` are written but untested against a live project (no credentials yet).
-- Supabase prod needs: `DATABASE_URL` (pooler, role app_rw), `DATABASE_ADMIN_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, secrets, `APP_ENV=production`.
-- Company email spelling unresolved → `EMAIL_FROM` placeholder with TODO.
+| Check | Command | State |
+|---|---|---|
+| lint / typecheck | `pnpm lint && pnpm typecheck` | green |
+| unit + authz matrix | `pnpm test` (435) | green, coverage 95 % |
+| RLS | `pnpm test:rls` (38) | green |
+| e2e (6 golden paths, IDOR, snapshot, axe, mobile) | `APP_ENV=test pnpm test:e2e` (19) | green |
+| audit | `pnpm security` | clean |
+
+## Later owner decisions (after the first note)
+- No live/realtime updates anywhere (hook + endpoints removed). Bell refresh and opportunistic jobs are toggles (`NEXT_PUBLIC_NOTIFICATIONS_POLL_MS`, `OPPORTUNISTIC_JOBS`).
+- No em dashes in any UI text (replaced with ":" / "," / "-").
+- Errors shown to users are always plain sentences from `lib/errors.ts`; raw errors stay in server logs.
+
+## If you pick this up fresh
+1. `docker compose up -d db && cp .env.example .env.local && pnpm install && pnpm db:migrate && pnpm db:seed && pnpm dev`
+2. Read `docs/STATUS.md` for what is done and the open questions for the company.
+3. Deployment: `docs/runbooks/deploy.md`. Provider swaps: `docs/runbooks/providers.md`.

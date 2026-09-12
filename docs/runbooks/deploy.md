@@ -1,4 +1,4 @@
-# Deploy — Vercel (Hobby) + Supabase (free tier)
+# Deploy - Vercel (Hobby) + Supabase (free tier)
 
 The app is a single Next.js monolith. Nothing else runs: no worker, no Redis, no mail service.
 Background jobs are HTTP endpoints called by Supabase `pg_cron`.
@@ -7,8 +7,8 @@ Background jobs are HTTP endpoints called by Supabase `pg_cron`.
 
 1. Create a project (region closest to Colombo, e.g. `ap-south-1` / `ap-southeast-1`).
 2. **Database → Settings → Connection strings**. You need two:
-   - `DATABASE_ADMIN_URL` — *Direct connection* (session mode, port 5432) as `postgres`. Used only for migrations, seed, pgTAP.
-   - `DATABASE_URL` — *Transaction pooler* (port 6543) but **as the `app_rw` role** created below. Append `?sslmode=require`.
+   - `DATABASE_ADMIN_URL` - *Direct connection* (session mode, port 5432) as `postgres`. Used only for migrations, seed, pgTAP.
+   - `DATABASE_URL` - *Transaction pooler* (port 6543) but **as the `app_rw` role** created below. Append `?sslmode=require`.
 3. Run the migrations from your machine (they create the least-privilege `app_rw` role, every table, RLS policies, triggers, grants):
    ```bash
    DATABASE_ADMIN_URL='postgres://postgres.[ref]:[password]@...:5432/postgres?sslmode=require' pnpm db:migrate
@@ -18,12 +18,12 @@ Background jobs are HTTP endpoints called by Supabase `pg_cron`.
    alter role app_rw with login password '<strong-password>';
    ```
    `DATABASE_URL` is then `postgres://app_rw.[ref]:<strong-password>@...pooler...:6543/postgres?sslmode=require`.
-   (`app_rw` has no DDL rights and cannot bypass RLS — security.md A01.)
+   (`app_rw` has no DDL rights and cannot bypass RLS - security.md A01.)
 5. Reference data (no demo data in production):
    ```bash
    SEED_DEMO=0 DATABASE_ADMIN_URL=... pnpm db:seed
    ```
-6. **Storage**: create a bucket named `attachments`, **private**. No storage policies are needed — the server uploads and signs URLs with the service key; browsers only ever receive ≤ 60 s signed URLs.
+6. **Storage**: create a bucket named `attachments`, **private**. No storage policies are needed - the server uploads and signs URLs with the service key; browsers only ever receive ≤ 60 s signed URLs.
 7. **Auth** (only if `AUTH_PROVIDER=supabase`): Authentication → Providers → Email: enable, *disable* "Allow new users to sign up" (invite-only), enable email confirmations. Authentication → MFA: enable TOTP. Authentication → Security: enable leaked-password protection. Set the site URL to your Vercel URL and add `https://<app>/auth/callback` to redirect URLs.
    With `AUTH_PROVIDER=local` (self-owned auth in Postgres) none of this is required.
 8. **Cron**: Database → Extensions → enable `pg_cron` and `pg_net`. Then run `db/migrations/supabase/0001_pg_cron_schedule.sql` in the SQL editor after replacing `<APP_URL>` and `<CRON_SECRET>`. This calls:
@@ -49,9 +49,9 @@ Environment variables (Production):
 | `STORAGE_BUCKET` | `attachments` |
 | `NEXT_PUBLIC_SUPABASE_URL` | project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon key (browser-safe; every table is RLS-protected and never queried with supabase-js) |
-| `SUPABASE_SERVICE_ROLE_KEY` | service key — server only (storage uploads/signing, auth admin ops) |
+| `SUPABASE_SERVICE_ROLE_KEY` | service key - server only (storage uploads/signing, auth admin ops) |
 | `EMAIL_PROVIDER` | `log` until a mail client is chosen (see providers.md) |
-| `EMAIL_FROM` | `EXPENDABLES Support <support@…>` — **TODO: confirm the mailbox; the website shows two spellings** |
+| `EMAIL_FROM` | `EXPENDABLES Support <support@…>` - **TODO: confirm the mailbox; the website shows two spellings** |
 | `CRON_SECRET` | `openssl rand -hex 32` |
 | `WEBSITE_FORM_HMAC_SECRET` | `openssl rand -hex 32` |
 | `APP_ENCRYPTION_KEY` | `openssl rand -hex 32` (64 hex chars) |
@@ -76,7 +76,7 @@ It prints a single-use invitation link (7 days). Accepting it sets the password 
 |---|---|---|
 | pg_cron → `/api/cron/*` | 2 calls/min ≈ 88 k function invocations/month | Vercel Hobby: well within limits |
 | Notification bell refresh | 1 call/min per open staff tab (toggle: `NEXT_PUBLIC_NOTIFICATIONS_POLL_MS`) | modest |
-| Live updates | none by design (owner decision) | — |
+| Live updates | none by design (owner decision) | - |
 | Database | Supabase free: 500 MB, pooler connections; app uses `max: 1` per function + transaction pooling | fine for the prototype |
 | Storage | 1 GB free; 25 MB/file cap enforced server-side | |
 
