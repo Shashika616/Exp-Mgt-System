@@ -21,7 +21,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
       <Breadcrumbs items={[{ href: "/app", label: "Dashboard" }, { href: "/app/admin", label: "Admin" }, { label: "Audit log" }]} />
       <PageHeader title="Audit log" count={count} description="Append-only. Ticket-level changes live on each ticket's timeline; this is everything else." action={<a href={`/api/admin/audit.csv?${qs}`} className="text-label text-secondary hover:underline">Export CSV</a>} />
       <AuditFilters action={sp.action ?? ""} actor={sp.actor ?? ""} />
-      <div className="overflow-x-auto rounded-lg border border-outline-variant/40 bg-surface-container-lowest shadow-[var(--shadow-1)]">
+      <div className="overflow-x-auto rounded-lg border border-outline-variant/40 bg-surface-container-lowest shadow-[var(--shadow-1)]" tabIndex={0} role="region" aria-label="Audit entries">
         <table className="w-full min-w-[800px]">
           <thead className="bg-surface-container-low text-overline text-left text-on-surface-variant"><tr><th className="h-9 px-4 font-semibold">When</th><th className="px-4 font-semibold">Actor</th><th className="px-4 font-semibold">Action</th><th className="px-4 font-semibold">Entity</th><th className="px-4 font-semibold">Change</th><th className="px-4 font-semibold">From</th></tr></thead>
           <tbody>

@@ -13,7 +13,7 @@ export function CardHeader({ title, eyebrow, action, className }: { title: React
   return (
     <header className={cn("mb-4 flex items-start justify-between gap-4", className)}>
       <div>
-        {eyebrow ? <p className="text-overline text-secondary-container">{eyebrow}</p> : null}
+        {eyebrow ? <p className="text-overline text-secondary">{eyebrow}</p> : null}
         <h2 className="text-headline-sm mt-1">{title}</h2>
       </div>
       {action}

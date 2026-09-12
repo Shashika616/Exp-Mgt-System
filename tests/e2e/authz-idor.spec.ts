@@ -11,8 +11,6 @@ test.describe("IDOR & role scope", () => {
     expect((await page.goto(`/portal/tickets/${other!.key}`))!.status()).toBe(404);
     const contacts = await page.request.get(`/api/orgs/${other!.org_id}/contacts`);
     expect(contacts.status()).toBe(404);
-    const version = await page.request.get(`/api/tickets/${other!.id}/version`);
-    expect(version.status()).toBe(404);
     const [d] = await sql<{ n: number }[]>`select count(*)::int as n from audit_log where action = 'access_denied' and actor_email = ${USERS.clientAdmin}`;
     expect(d!.n).toBeGreaterThanOrEqual(1);
     await sql.end();

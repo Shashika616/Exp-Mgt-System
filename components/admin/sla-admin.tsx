@@ -28,7 +28,7 @@ export function SlaAdmin({ policies }: { policies: Policy[] }) {
     <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)]">
       <ul className="flex flex-col gap-1">
         {policies.map((p) => (
-          <li key={p.id}><button onClick={() => setSel(p)} className={cn("pressable w-full rounded-md px-3 py-2 text-left text-label text-on-surface-variant hover:bg-surface-container", sel.id === p.id && "bg-primary-fixed/50 text-primary")}>{p.name}{p.isDefault ? <span className="text-overline ml-2 text-secondary-container">default</span> : null}</button></li>
+          <li key={p.id}><button onClick={() => setSel(p)} className={cn("pressable w-full rounded-md px-3 py-2 text-left text-label text-on-surface-variant hover:bg-surface-container", sel.id === p.id && "bg-primary-fixed/50 text-primary")}>{p.name}{p.isDefault ? <span className="text-overline ml-2 text-secondary">default</span> : null}</button></li>
         ))}
         <li><Button variant="outline" size="sm" className="mt-2 w-full" onClick={() => setSel({ name: "New policy", calendar: DEFAULT_CALENDAR, targets: DEFAULT_SLA_TARGETS, isDefault: false })}>New policy</Button></li>
       </ul>
@@ -39,7 +39,7 @@ export function SlaAdmin({ policies }: { policies: Policy[] }) {
             <Field label="Name" required>{(p) => <Input {...p} value={sel.name} onChange={(e) => setSel({ ...sel, name: e.target.value })} />}</Field>
             <label className="flex items-center gap-2 self-end pb-2 text-body-md"><Checkbox checked={sel.isDefault} onCheckedChange={(c) => setSel({ ...sel, isDefault: !!c })} /> Default for new clients</label>
           </div>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Table">
             <table className="w-full min-w-[520px]">
               <thead className="text-overline text-left text-on-surface-variant"><tr><th className="pb-2 font-semibold">Priority</th><th className="pb-2 font-semibold">First response (min)</th><th className="pb-2 font-semibold">Resolution (min)</th><th className="pb-2 font-semibold">Calendar</th></tr></thead>
               <tbody>

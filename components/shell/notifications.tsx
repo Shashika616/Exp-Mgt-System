@@ -30,9 +30,11 @@ export function NotificationsPopover({ initialUnread }: { initialUnread: number 
     return () => clearTimeout(t);
   }, [open, load]);
   useEffect(() => {
+    const every = Number(process.env.NEXT_PUBLIC_NOTIFICATIONS_POLL_MS ?? 60_000) || 0;
+    if (every <= 0) return; // toggled off
     const id = setInterval(() => {
       if (document.visibilityState === "visible") void load();
-    }, 60_000);
+    }, Math.max(15_000, every));
     return () => clearInterval(id);
   }, [load]);
   return (
@@ -82,7 +84,7 @@ export function NotificationsPopover({ initialUnread }: { initialUnread: number 
                     <div className="min-w-0 flex-1">
                       <p className="text-body-md truncate text-primary">{n.title}</p>
                       {n.body ? <p className="text-body-sm line-clamp-2 text-on-surface-variant">{n.body}</p> : null}
-                      <p className="text-body-sm mt-0.5 text-outline">{relativeTime(n.createdAt)}</p>
+                      <p className="text-body-sm mt-0.5 text-on-surface-variant">{relativeTime(n.createdAt)}</p>
                     </div>
                   </div>
                 </Link>

@@ -180,7 +180,7 @@ export function PropertiesPanel({ t, viewer, onSubmitReview, onReview }: { t: Ti
               <span className="text-body-sm text-on-surface-variant">· {t.assignee.roleId}</span>
             </span>
           ) : (
-            <span className="text-body-md italic text-outline">Unassigned</span>
+            <span className="text-body-md italic text-on-surface-variant">Unassigned</span>
           )}
         </Row>
 
@@ -455,7 +455,7 @@ function AssigneePicker({ ticketId, value, name, onDone }: { ticketId: string; v
   return (
     <Menu.Root>
       <Menu.Trigger disabled={busy} className="pressable flex h-9 w-full items-center gap-2 rounded-md border border-outline-variant bg-surface-container-lowest px-2.5 text-left text-body-md hover:border-outline disabled:opacity-50" data-testid="assignee-picker">
-        {name ? <><Avatar name={name} size={24} /> <span className="flex-1 truncate">{name}</span></> : <span className="flex-1 italic text-outline">Unassigned — choose a developer</span>}
+        {name ? <><Avatar name={name} size={24} /> <span className="flex-1 truncate">{name}</span></> : <span className="flex-1 italic text-on-surface-variant">Unassigned — choose a developer</span>}
         <ChevronDown className="size-4 text-on-surface-variant" strokeWidth={1.75} />
       </Menu.Trigger>
       <Menu.Content className="max-h-80 w-72 overflow-y-auto">

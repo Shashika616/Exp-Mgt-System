@@ -2,18 +2,17 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Paperclip, RotateCcw, Send, ThumbsUp, XCircle, UserRoundPlus } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { addPortalParticipant, portalTransition, replyToTicket } from "@/lib/actions/portal/tickets";
 import { Button } from "@/components/ui/button";
 import { Textarea, NativeSelect } from "@/components/ui/input";
 import { ConfirmDialog } from "@/components/ui/overlay";
 import { useToast } from "@/components/ui/toast";
 import { AttachmentPicker, type Uploaded } from "@/components/tickets/attachment-picker";
-import { useTicketLive } from "@/lib/realtime/provider";
 import type { PortalTicket } from "@/lib/dal/portal/tickets";
 
 /** FR-CP-05: reply box, Reopen on resolved, Confirm (close) on resolved, Cancel on new/open, follow-up on closed. */
-export function PortalTicketActions({ t, colleagues, realtime }: { t: PortalTicket; colleagues: { id: string; name: string }[]; realtime: "poll" | "supabase" }) {
+export function PortalTicketActions({ t, colleagues }: { t: PortalTicket; colleagues: { id: string; name: string }[] }) {
   const router = useRouter();
   const { toast } = useToast();
   const [body, setBody] = useState("");
@@ -23,8 +22,6 @@ export function PortalTicketActions({ t, colleagues, realtime }: { t: PortalTick
   const [reason, setReason] = useState("");
   const [reopenOpen, setReopenOpen] = useState(false);
   const [reopenMsg, setReopenMsg] = useState("");
-  const refresh = useCallback(() => router.refresh(), [router]);
-  useTicketLive(t.id, refresh, realtime);
   const locked = t.status === "closed" || t.status === "cancelled";
   const transition = async (action: "reopen" | "close" | "cancel", extra: { reason?: string; message?: string } = {}) => {
     setBusy(true);

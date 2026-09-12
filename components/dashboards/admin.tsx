@@ -68,7 +68,7 @@ export function AdminDashboard({ data, review }: { data: Data; review: Awaited<R
 
       <Card>
         <CardHeader eyebrow="Developers" title="Load board" action={<Legend items={WS.map((w) => ({ label: w.label, color: w.color }))} />} />
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Table">
           <table className="w-full min-w-[640px]">
             <thead>
               <tr className="text-overline text-left text-on-surface-variant">

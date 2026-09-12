@@ -6,10 +6,13 @@ import { cn } from "@/lib/utils";
 
 export function Checkbox({ className, ...props }: React.ComponentProps<typeof BaseCheckbox.Root>) {
   return (
-    <BaseCheckbox.Root className={cn("pressable flex size-4 items-center justify-center rounded-sm border border-outline-variant bg-surface-container-lowest data-[checked]:border-primary-container data-[checked]:bg-primary-container", className)} {...props}>
-      <BaseCheckbox.Indicator className="text-on-primary">
-        <Check className="size-3" strokeWidth={3} aria-hidden />
-      </BaseCheckbox.Indicator>
+    // 24×24 hit target (WCAG 2.2 target-size) around a 16px box
+    <BaseCheckbox.Root className={cn("pressable group flex size-6 shrink-0 items-center justify-center rounded-sm", className)} {...props}>
+      <span className="flex size-4 items-center justify-center rounded-sm border border-outline-variant bg-surface-container-lowest group-data-[checked]:border-primary-container group-data-[checked]:bg-primary-container">
+        <BaseCheckbox.Indicator className="text-on-primary">
+          <Check className="size-3" strokeWidth={3} aria-hidden />
+        </BaseCheckbox.Indicator>
+      </span>
     </BaseCheckbox.Root>
   );
 }

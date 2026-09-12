@@ -71,7 +71,7 @@ export function TicketList({ rows, columns = DEFAULT_COLUMNS, compact = false, e
 
   return (
     <div className={cn(!embedded && "overflow-hidden rounded-lg border border-outline-variant/40 bg-surface-container-lowest shadow-[var(--shadow-1)]")}>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Table">
         <table ref={tableRef} className="w-full min-w-[720px] border-collapse">
           <thead className="bg-surface-container-low">
             <tr className="text-overline text-left text-on-surface-variant">
@@ -166,7 +166,7 @@ function Cell({ col, r }: { col: Column; r: TicketListRow }) {
           <Avatar name={r.assigneeName} size={24} /> <span className="truncate">{r.assigneeName}</span>
         </span>
       ) : (
-        <span className="text-body-sm italic text-outline">Unassigned</span>
+        <span className="text-body-sm italic text-on-surface-variant">Unassigned</span>
       );
     case "category":
       return <span className="text-body-sm text-on-surface-variant">{r.categoryName ?? "—"}</span>;

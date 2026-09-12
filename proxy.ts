@@ -19,7 +19,7 @@ export async function proxy(request: NextRequest) {
     "style-src 'self' 'unsafe-inline'",
     `img-src 'self' data: blob:${SUPABASE ? ` ${SUPABASE}` : ""}`,
     "font-src 'self'",
-    `connect-src 'self'${SUPABASE ? ` ${SUPABASE} ${SUPABASE.replace("https://", "wss://")}` : ""}${isDev ? " ws: http://localhost:*" : ""}`,
+    `connect-src 'self'${SUPABASE ? ` ${SUPABASE}` : ""}${isDev ? " ws: http://localhost:*" : ""}`,
     "frame-ancestors 'none'",
     "object-src 'none'",
     "base-uri 'self'",

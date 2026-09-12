@@ -1,6 +1,7 @@
 import "server-only";
 import { sql } from "drizzle-orm";
 import { db } from "@/lib/dal/db";
+import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
 import { dailyStats } from "./daily-stats";
 import { notifyFlush } from "./notify-flush";
@@ -35,6 +36,7 @@ export async function runJob(name: JobName): Promise<unknown> {
 let lastTick = 0;
 /** Cheap opportunistic tick from staff page loads: at most once a minute per server instance. */
 export async function maybeTick(): Promise<void> {
+  if (env.OPPORTUNISTIC_JOBS !== "true") return;
   const now = Date.now();
   if (now - lastTick < 60_000) return;
   lastTick = now;

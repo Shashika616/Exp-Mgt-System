@@ -2,7 +2,7 @@ import { z } from "zod";
 
 // Validated at import (docs/architecture.md §9, security.md A02): missing/invalid env fails fast.
 // Client-side bundles only ever receive NEXT_PUBLIC_* values.
-const providerEnum = <T extends readonly [string, ...string[]]>(values: T) => z.enum(values);
+const providerEnum = <const T extends readonly [string, ...string[]]>(values: T) => z.enum(values);
 
 const schema = z
   .object({
@@ -15,7 +15,6 @@ const schema = z
 
     AUTH_PROVIDER: providerEnum(["supabase", "local"]).default("supabase"),
     STORAGE_PROVIDER: providerEnum(["supabase", "local"]).default("supabase"),
-    REALTIME_PROVIDER: providerEnum(["supabase", "poll"]).default("poll"),
     EMAIL_PROVIDER: providerEnum(["log"]).default("log"),
     RATELIMIT_PROVIDER: providerEnum(["postgres"]).default("postgres"),
 
@@ -36,10 +35,14 @@ const schema = z
     LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),
     /** Multiplies every rate limit (tests use 20; production must stay 1). */
     RATE_LIMIT_SCALE: z.coerce.number().int().min(1).max(100).default(1),
+    /** Staff page loads may run the SLA tick + email flush at most once a minute (off when pg_cron owns it). */
+    OPPORTUNISTIC_JOBS: z.enum(["true", "false"]).default("true"),
+    /** Notification bell refresh while a tab is open, in ms; 0 disables. */
+    NEXT_PUBLIC_NOTIFICATIONS_POLL_MS: z.coerce.number().int().min(0).max(3_600_000).default(60_000),
   })
   .superRefine((e, ctx) => {
     const needsSupabase =
-      e.AUTH_PROVIDER === "supabase" || e.STORAGE_PROVIDER === "supabase" || e.REALTIME_PROVIDER === "supabase";
+      e.AUTH_PROVIDER === "supabase" || e.STORAGE_PROVIDER === "supabase";
     if (needsSupabase && (!e.NEXT_PUBLIC_SUPABASE_URL || !e.NEXT_PUBLIC_SUPABASE_ANON_KEY)) {
       ctx.addIssue({
         code: "custom",

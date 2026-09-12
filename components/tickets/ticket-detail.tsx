@@ -1,7 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
-import { useTicketLive } from "@/lib/realtime/provider";
+import { useState } from "react";
 import type { TicketDetail } from "@/lib/dal/tickets";
 import type { SubmissionRow } from "@/lib/dal/submissions";
 import { PropertiesPanel } from "./properties-panel";
@@ -11,13 +9,10 @@ import { firstName } from "@/lib/utils";
 
 type Viewer = { userId: string; role: "agent" | "developer" | "lead" | "admin"; perms: string[] };
 
-/** Client wrapper: realtime refresh + the two sheets (submit / review) opened from the properties panel. */
-export function TicketDetailClient({ t, viewer, openSubmission, realtime, children, openReview }: { t: TicketDetail; viewer: Viewer; openSubmission: SubmissionRow | null; realtime: "poll" | "supabase"; children: React.ReactNode; openReview?: boolean }) {
-  const router = useRouter();
+/** Client wrapper: the two sheets (submit / review) opened from the properties panel. No live updates by design. */
+export function TicketDetailClient({ t, viewer, openSubmission, children, openReview }: { t: TicketDetail; viewer: Viewer; openSubmission: SubmissionRow | null; children: React.ReactNode; openReview?: boolean }) {
   const [submitOpen, setSubmitOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(!!openReview);
-  const refresh = useCallback(() => router.refresh(), [router]);
-  useTicketLive(t.id, refresh, realtime);
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
       <div className="min-w-0">{children}</div>

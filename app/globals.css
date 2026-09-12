@@ -176,8 +176,9 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Base
+   Base (layered so Tailwind utilities always win over element defaults)
    --------------------------------------------------------------------------- */
+@layer base {
 html {
   font-family: var(--font-sans);
   color: var(--primary);
@@ -202,10 +203,12 @@ a { color: inherit; }
   border-radius: var(--radius-sm);
 }
 ::selection { background: var(--primary-fixed); }
+}
 
 /* ---------------------------------------------------------------------------
    2. Type scale — docs/design.md §2.2 (size-specific tracking)
    --------------------------------------------------------------------------- */
+@layer utilities {
 .text-display     { font-family: var(--font-heading); font-size: clamp(28px, 3.5vw, 36px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; }
 .text-headline-lg { font-family: var(--font-heading); font-size: 28px; font-weight: 700; line-height: 1.2;  letter-spacing: -0.015em; }
 .text-headline-md { font-family: var(--font-heading); font-size: 22px; font-weight: 600; line-height: 1.3;  letter-spacing: -0.01em; }
@@ -218,10 +221,12 @@ a { color: inherit; }
 .text-mono        { font-family: var(--font-mono); font-size: 13px; font-weight: 500; line-height: 1.4; }
 .tabular          { font-variant-numeric: tabular-nums; }
 .px-page          { padding-inline: var(--spacing-page); }
+}
 
 /* ---------------------------------------------------------------------------
    Materials (design.md §4) — translucent chrome, scroll-edge fade
    --------------------------------------------------------------------------- */
+@layer components {
 .material-topbar {
   background: rgba(248, 249, 250, 0.72);
   backdrop-filter: blur(20px) saturate(180%);
@@ -296,3 +301,4 @@ a { color: inherit; }
 /* Dense tables */
 .row-comfortable > td, .row-comfortable > th { height: 44px; }
 .row-compact > td, .row-compact > th { height: 36px; }
+}

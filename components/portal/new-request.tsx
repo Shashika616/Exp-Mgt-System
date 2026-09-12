@@ -72,7 +72,7 @@ export function NewRequest({ categories, followUpOf }: { categories: { id: strin
   if (done) {
     return (
       <div className="mx-auto max-w-lg rounded-lg border-t-4 border-secondary-container bg-surface-container-lowest p-8 shadow-[var(--shadow-1)]" role="status" data-testid="request-confirmation">
-        <p className="text-overline text-secondary-container">Request received</p>
+        <p className="text-overline text-secondary">Request received</p>
         <h1 className="text-headline-lg mt-2">{done.key}</h1>
         <p className="text-body-lg mt-3 text-on-surface-variant">Thanks — we&apos;ve logged your request{done.firstResponseDueAt ? <> and aim to respond by <strong className="text-primary">{formatDateTime(done.firstResponseDueAt)}</strong></> : null}. A confirmation email is on its way.</p>
         <div className="mt-6 flex flex-wrap gap-2">

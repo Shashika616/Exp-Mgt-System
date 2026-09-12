@@ -9,7 +9,6 @@ import { requireUserOrRedirect } from "@/lib/auth/require";
 import { getPortalTicket } from "@/lib/dal/portal/tickets";
 import { listOrgContacts } from "@/lib/dal/users";
 import { AppError } from "@/lib/errors";
-import { env } from "@/lib/env";
 import { STATUS_META } from "@/lib/design/status";
 import { CLIENT_STATUS_LABEL, PRIORITY_LABEL, TICKET_TYPE_LABEL, type ClientStatus } from "@/lib/domain/types";
 import { formatDateTime, formatMinutes, relativeTime } from "@/lib/utils";
@@ -55,7 +54,7 @@ export default async function PortalTicketPage({ params }: { params: Promise<{ k
           ))}
         </ol>
         <div className="mt-4">
-          <PortalTicketActions t={t} colleagues={colleagues} realtime={env.REALTIME_PROVIDER as "poll" | "supabase"} />
+          <PortalTicketActions t={t} colleagues={colleagues} />
         </div>
       </div>
       <aside className="flex flex-col gap-4 lg:sticky lg:top-[calc(var(--topbar-height)+24px)] lg:self-start" aria-label="Status">
