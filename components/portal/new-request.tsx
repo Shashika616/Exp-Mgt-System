@@ -13,7 +13,7 @@ import { Field } from "@/components/ui/field";
 import { Input, NativeSelect, Textarea } from "@/components/ui/input";
 import { Sheet } from "@/components/ui/overlay";
 import { useToast } from "@/components/ui/toast";
-import { AttachmentPicker, type Uploaded } from "@/components/tickets/attachment-picker";
+import { Paperclip, X } from "lucide-react";
 import { TICKET_TYPES, TICKET_TYPE_LABEL, TYPE_URGENCY_OPTIONS, type TicketType } from "@/lib/domain/types";
 import { cn, formatDateTime } from "@/lib/utils";
 
@@ -30,8 +30,9 @@ export function NewRequest({ categories, followUpOf }: { categories: { id: strin
   const router = useRouter();
   const { toast } = useToast();
   const [type, setType] = useState<TicketType | null>(followUpOf?.type ?? null);
-  const [files, setFiles] = useState<Uploaded[]>([]);
-  const [done, setDone] = useState<{ key: string; priority: string; firstResponseDueAt: string | null } | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [done, setDone] = useState<{ id: string; key: string; priority: string; firstResponseDueAt: string | null } | null>(null);
   const [isPhone, setIsPhone] = useState(false);
   const form = useForm<Input>({ resolver: zodResolver(PortalCreateTicketSchema), mode: "onBlur", defaultValues: { type: followUpOf?.type ?? "incident", subject: followUpOf ? `Follow-up: ${followUpOf.subject}` : "", description: "", urgency: "medium", categoryId: null, followUpOf: followUpOf?.key ?? null } });
   useEffect(() => {
@@ -116,6 +117,20 @@ export function NewRequest({ categories, followUpOf }: { categories: { id: strin
           return toast({ title: r.message, tone: "error" });
         }
         try { localStorage.removeItem(DRAFT_KEY); } catch {}
+        // Attachments need the ticket id for their private storage path (security.md A08): upload now.
+        if (files.length) {
+          setUploading(true);
+          let failed = 0;
+          for (const file of files) {
+            const fd = new FormData();
+            fd.set("ticketId", r.data.id);
+            fd.set("file", file);
+            const res = await fetch("/api/attachments", { method: "POST", body: fd });
+            if (!res.ok) failed++;
+          }
+          setUploading(false);
+          if (failed) toast({ title: `${failed} file${failed === 1 ? "" : "s"} could not be attached`, body: "You can add them again from the request page.", tone: "error" });
+        }
         setDone(r.data);
         router.refresh();
       })}
@@ -150,8 +165,34 @@ export function NewRequest({ categories, followUpOf }: { categories: { id: strin
           )}
         </Field>
       ) : null}
-      <p className="text-body-sm text-on-surface-variant">You can attach screenshots or files (up to 10, 25 MB each) after the request is created — from the request page.</p>
-      <span className="hidden"><AttachmentPicker ticketId="" value={files} onChange={setFiles} /></span>
+      <Field label="Attachments" hint="Up to 10 files, 25 MB each — PDF, images, text/CSV, Excel, Word, ZIP.">
+        {(p) => (
+          <div className="flex flex-col gap-2">
+            <input
+              id={p.id}
+              type="file"
+              multiple
+              accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.txt,.csv,.log,.xlsx,.docx,.zip"
+              className="text-body-md file:mr-3 file:h-10 file:rounded-md file:border-[1.5px] file:border-primary-container file:bg-transparent file:px-4 file:text-label file:text-primary-container hover:file:bg-surface-container-low"
+              onChange={(e) => setFiles((prev) => [...prev, ...Array.from(e.target.files ?? [])].slice(0, 10))}
+              data-testid="attachments"
+            />
+            {files.length ? (
+              <ul className="flex flex-wrap gap-2">
+                {files.map((f, i) => (
+                  <li key={`${f.name}-${i}`} className="inline-flex h-8 items-center gap-1.5 rounded-md border border-outline-variant bg-surface-container-lowest px-2 text-body-sm">
+                    <Paperclip className="size-3.5 text-on-surface-variant" strokeWidth={1.75} aria-hidden />
+                    <span className="max-w-40 truncate">{f.name}</span>
+                    <button type="button" className="text-on-surface-variant hover:text-error" onClick={() => setFiles((prev) => prev.filter((_, j) => j !== i))} aria-label={`Remove ${f.name}`}>
+                      <X className="size-3.5" strokeWidth={2} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        )}
+      </Field>
     </form>
   ) : null;
 
@@ -165,7 +206,7 @@ export function NewRequest({ categories, followUpOf }: { categories: { id: strin
     return (
       <>
         {picker}
-        <Sheet open onClose={() => setType(null)} side="bottom" title={TICKET_TYPE_LABEL[type].portal} footer={<Button size="lg" type="submit" form="new-request-form" loading={form.formState.isSubmitting} className="w-full">Send request</Button>}>
+        <Sheet open onClose={() => setType(null)} side="bottom" title={TICKET_TYPE_LABEL[type].portal} footer={<Button size="lg" type="submit" form="new-request-form" loading={form.formState.isSubmitting || uploading} className="w-full">Send request</Button>}>
           {formBody}
         </Sheet>
       </>
@@ -178,7 +219,7 @@ export function NewRequest({ categories, followUpOf }: { categories: { id: strin
       <p className="text-body-md mb-6 mt-1 text-on-surface-variant">{TICKET_TYPE_LABEL[type].help}</p>
       {formBody}
       <div className="mt-6 flex justify-end">
-        <Button size="lg" type="submit" form="new-request-form" loading={form.formState.isSubmitting} data-testid="send-request">Send request</Button>
+        <Button size="lg" type="submit" form="new-request-form" loading={form.formState.isSubmitting || uploading} data-testid="send-request">Send request</Button>
       </div>
     </div>
   );

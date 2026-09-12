@@ -32,7 +32,7 @@ export const createPortalTicket = action(PortalCreateTicketSchema, "ticket.creat
     followUpOf: input.followUpOf ?? null,
   });
   revalidate();
-  return { key: t.key, priority: t.priority, firstResponseDueAt: t.firstResponseDueAt?.toISOString() ?? null };
+  return { id: t.id, key: t.key, priority: t.priority, firstResponseDueAt: t.firstResponseDueAt?.toISOString() ?? null };
 });
 
 /** FR-CP-05 reply. Always public; pending_client → in_progress happens in the DAL. */

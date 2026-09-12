@@ -236,7 +236,7 @@ export function TotpForm({ next, mode, secret, uri, recoveryCodes }: { next?: st
       <h1 className="text-headline-lg">{mode === "enroll" ? "Set up two-factor authentication" : "Two-factor authentication"}</h1>
       {mode === "enroll" ? (
         <div className="text-body-md mt-2 text-on-surface-variant">
-          <p>Your role requires an authenticator app. Add this account to Google Authenticator, 1Password or similar, then enter the 6-digit code.</p>
+          <p>Add this account to Google Authenticator, 1Password or a similar app, then enter the 6-digit code. Required for admins and leads; optional but recommended for everyone else.</p>
           <div className="mt-4 rounded-lg border border-outline-variant/60 bg-surface-container-low p-4">
             <p className="text-overline text-on-surface-variant">Secret key</p>
             <p className="text-mono mt-1 break-all select-all text-primary" data-testid="totp-secret">

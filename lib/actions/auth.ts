@@ -180,8 +180,8 @@ export async function signOutAndRedirect() {
 
 /** Where to send a freshly signed-in user: straight in, or through the TOTP gate first (FR-AUTH-03). */
 function mfaGate(user: { roleId: string; mfaEnrolled: boolean }, next: string): string {
-  if (!MFA_REQUIRED_ROLES.includes(user.roleId as Role)) return next;
-  return user.mfaEnrolled ? `/mfa?next=${encodeURIComponent(next)}` : `/mfa/enroll?next=${encodeURIComponent(next)}`;
+  if (user.mfaEnrolled) return `/mfa?next=${encodeURIComponent(next)}`;
+  return MFA_REQUIRED_ROLES.includes(user.roleId as Role) ? `/mfa/enroll?next=${encodeURIComponent(next)}` : next;
 }
 
 async function providerIdFor(userId: string): Promise<string> {

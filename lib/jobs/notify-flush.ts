@@ -7,6 +7,8 @@ import { renderTicketEmail } from "@/lib/email/render";
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
 import { firstName } from "@/lib/utils";
+import { fillTemplate, loadTemplates, templateIdFor } from "@/lib/email/templates";
+import { PRIORITY_LABEL, type Priority } from "@/lib/domain/types";
 
 /**
  * notify.flush: sends queued notification emails through the email provider. Each row is sent at most
@@ -27,6 +29,9 @@ export async function notifyFlush(limit = 50): Promise<{ sent: number; failed: n
         name: schema.users.fullName,
         ticketKey: schema.tickets.key,
         ticketSubject: schema.tickets.subject,
+        ticketPriority: schema.tickets.priority,
+        ticketResolutionNote: schema.tickets.resolutionNote,
+        ticketEscalation: schema.tickets.escalationLevel,
       })
       .from(schema.notifications)
       .innerJoin(schema.users, eq(schema.users.id, schema.notifications.userId))
@@ -41,17 +46,33 @@ export async function notifyFlush(limit = 50): Promise<{ sent: number; failed: n
     return rows;
   });
   const provider = getEmailProvider();
+  const templates = batch.length ? await loadTemplates() : new Map();
   for (const n of batch) {
     try {
       const href = `${env.APP_URL}/login?next=${encodeURIComponent(n.href ?? "/")}`;
+      const tpl = templates.get(templateIdFor(n.kind) ?? "");
+      const vars = {
+        "ticket.key": n.ticketKey ?? "",
+        "ticket.subject": n.ticketSubject ?? "",
+        "ticket.priority": n.ticketPriority ? PRIORITY_LABEL[n.ticketPriority as Priority] : "",
+        "ticket.resolution_note": n.ticketResolutionNote ?? "",
+        "ticket.escalation_level": n.ticketEscalation ?? 0,
+        "requester.first_name": firstName(n.name),
+        "user.first_name": firstName(n.name),
+        "comment.snippet": n.body ?? "",
+        "review.notes": n.body ?? "",
+        "sla.metric": n.title.includes("first response") ? "first response" : "resolution",
+        "sla.due_at": "",
+        "ticket.target_response": n.body?.startsWith("We aim") ? n.body.replace("We aim to respond by ", "") : "",
+      };
       const mail = await renderTicketEmail({
-        subjectLine: n.title,
+        subjectLine: tpl ? fillTemplate(tpl.subject, vars) : n.title,
         title: n.title,
         recipientName: firstName(n.name),
         ticketKey: n.ticketKey ?? "",
         ticketSubject: n.ticketSubject ?? "",
-        bodyText: bodyFor(n.kind),
-        snippet: n.body,
+        bodyText: tpl ? fillTemplate(tpl.body, vars).replace(/^Hi [^,]+,\s*/i, "") : bodyFor(n.kind),
+        snippet: tpl ? null : n.body,
         ctaLabel: n.href?.startsWith("/portal") ? "Open request" : "Open ticket",
         ctaUrl: href,
       });

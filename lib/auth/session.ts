@@ -87,10 +87,8 @@ export const getSession = cache(async (): Promise<SessionState> => {
     requestId: meta.requestId,
   };
 
-  if (MFA_REQUIRED_ROLES.includes(role)) {
-    if (!user.mfaEnrolled) return { kind: "mfa_enroll_required", ctx };
-    if (!ctx.mfaVerified) return { kind: "mfa_required", ctx };
-  }
+  if (MFA_REQUIRED_ROLES.includes(role) && !user.mfaEnrolled) return { kind: "mfa_enroll_required", ctx };
+  if (user.mfaEnrolled && !ctx.mfaVerified) return { kind: "mfa_required", ctx }; // optional MFA, once enrolled, is enforced too
   return { kind: "authenticated", ctx };
 });
 
