@@ -79,3 +79,14 @@ export async function getAttachmentForDownload(ctx: AuthContext, id: string) {
     return row;
   });
 }
+
+/** Link freshly uploaded attachments (uploaded before the comment existed) to the comment. */
+export async function attachToComment(ctx: AuthContext, ticketId: string, commentId: string, attachmentIds: string[]) {
+  await withContext(ctx, async (tx) => {
+    const { inArray } = await import("drizzle-orm");
+    await tx
+      .update(schema.attachments)
+      .set({ commentId })
+      .where(and(eq(schema.attachments.ticketId, ticketId), inArray(schema.attachments.id, attachmentIds), isNull(schema.attachments.commentId), eq(schema.attachments.uploaderId, ctx.userId)));
+  });
+}

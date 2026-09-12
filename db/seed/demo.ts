@@ -170,8 +170,8 @@ export async function seedDemo(db: Db, opts: { staffOrgId: string; policyId: str
   const parents = categories.filter((c) => !c.parentId);
 
   // Skip ticket generation when already seeded
-  const [{ n }] = await db.select({ n: sql<number>`count(*)::int` }).from(schema.tickets);
-  if (n > 0) return { orgs, staff };
+  const [cnt] = await db.select({ n: sql<number>`count(*)::int` }).from(schema.tickets);
+  if ((cnt?.n ?? 0) > 0) return { orgs, staff };
 
   const policyFor = (orgIdx: number) => (DEMO_ORGS[orgIdx]!.tier === "enterprise" ? { targets: { p1: { first_response_min: 15, resolution_min: 240, calendar: "24x7" as const }, p2: { first_response_min: 60, resolution_min: 720, calendar: "24x7" as const }, p3: { first_response_min: 240, resolution_min: 1440, calendar: "24x7" as const }, p4: { first_response_min: 480, resolution_min: 2880, calendar: "24x7" as const } } } : { targets: DEFAULT_SLA_TARGETS });
 

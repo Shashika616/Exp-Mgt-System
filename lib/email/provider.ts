@@ -1,5 +1,5 @@
 import "server-only";
-import { env } from "@/lib/env";
+import { isDeployedProd } from "@/lib/env";
 import { logger } from "@/lib/logger";
 
 export type EmailMessage = {
@@ -30,8 +30,8 @@ class LogEmailProvider implements EmailProvider {
   async send(message: EmailMessage) {
     const id = `log_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     logger.info({ email: { id, to: message.to, subject: message.subject, tag: message.tag } }, "email (log provider)");
-    if (env.NODE_ENV !== "production") {
-      // Dev/test outbox: lets Playwright read magic links. Never enabled in production (env.ts refuses).
+    if (!isDeployedProd) {
+      // Dev/test outbox: lets Playwright read magic links. Never written on a production deployment.
       const { appendOutbox } = await import("./outbox");
       await appendOutbox({ id, ...message, sentAt: new Date().toISOString() });
     }

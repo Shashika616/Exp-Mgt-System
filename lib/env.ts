@@ -7,6 +7,9 @@ const providerEnum = <T extends readonly [string, ...string[]]>(values: T) => z.
 const schema = z
   .object({
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+    /** Deployment stage. Strict production checks apply only when this (or Vercel) says production. */
+    APP_ENV: z.enum(["development", "test", "production"]).optional(),
+    VERCEL_ENV: z.string().optional(),
     DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
     DATABASE_ADMIN_URL: z.string().optional(),
 
@@ -20,7 +23,6 @@ const schema = z
     NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().optional(),
     SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
     STORAGE_BUCKET: z.string().default("attachments"),
-    LOCAL_STORAGE_DIR: z.string().default("./.local/uploads"),
 
     EMAIL_FROM: z.string().default("EXPENDABLES Support <support@example.invalid>"),
 
@@ -50,7 +52,8 @@ const schema = z
         path: ["SUPABASE_SERVICE_ROLE_KEY"],
       });
     }
-    if (e.NODE_ENV === "production") {
+    const deployedProd = e.APP_ENV === "production" || e.VERCEL_ENV === "production";
+    if (deployedProd) {
       if (e.STORAGE_PROVIDER === "local") ctx.addIssue({ code: "custom", message: "STORAGE_PROVIDER=local is not allowed in production", path: ["STORAGE_PROVIDER"] });
       if (/change-me|^0+$/.test(e.CRON_SECRET + e.SESSION_SECRET + e.APP_ENCRYPTION_KEY)) {
         ctx.addIssue({ code: "custom", message: "placeholder secrets are not allowed in production", path: ["CRON_SECRET"] });
@@ -71,4 +74,6 @@ function load(): Env {
 
 export const env: Env = load();
 export const isProd = env.NODE_ENV === "production";
+/** True only for a real production deployment (APP_ENV / VERCEL_ENV), not for local `next build`. */
+export const isDeployedProd = env.APP_ENV === "production" || env.VERCEL_ENV === "production";
 export const isDev = env.NODE_ENV === "development";

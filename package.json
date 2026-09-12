@@ -2,7 +2,7 @@
   "name": "expendables-system",
   "version": "0.1.0",
   "private": true,
-  "description": "Expendables Client Request Management System — client portal, agent/developer workspace and admin console for EXPENDABLES (PVT) LTD",
+  "description": "Expendables Client Request Management System \u2014 client portal, agent/developer workspace and admin console for EXPENDABLES (PVT) LTD",
   "packageManager": "pnpm@12.4.1",
   "engines": {
     "node": ">=22.13"
@@ -27,7 +27,7 @@
     "test:rls": "tsx db/policies/run-pgtap.ts",
     "test:headers": "tsx tests/headers/check-headers.ts",
     "security": "pnpm audit --audit-level=high",
-    "worker": "tsx lib/jobs/worker.ts"
+    "cron": "tsx lib/jobs/cli.ts"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",

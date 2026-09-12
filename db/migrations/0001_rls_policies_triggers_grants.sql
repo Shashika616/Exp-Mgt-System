@@ -228,7 +228,7 @@ CREATE POLICY submissions_developer_insert ON submissions FOR INSERT WITH CHECK 
 -- immutable after review: only lead/admin/system may update, and only while undecided
 CREATE POLICY submissions_review ON submissions FOR UPDATE USING (
   app_role() IN ('lead','admin','system') AND outcome IS NULL
-);--> statement-breakpoint
+) WITH CHECK (app_role() IN ('lead','admin','system'));--> statement-breakpoint
 
 -- ---------------------------------------------------------------------------
 -- Ticket events (append-only): clients see only public events of their org

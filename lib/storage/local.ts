@@ -12,7 +12,7 @@ import { SIGNED_URL_TTL_SECONDS, type StorageProvider } from "./provider";
  */
 export class LocalStorageProvider implements StorageProvider {
   readonly name = "local" as const;
-  private root = resolve(process.cwd(), env.LOCAL_STORAGE_DIR);
+  private root = resolve(process.cwd(), ".local", "uploads");
 
   private path(key: string) {
     if (key.includes("..") || key.startsWith("/")) throw new Error("bad storage key");

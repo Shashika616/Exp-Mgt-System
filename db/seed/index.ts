@@ -4,7 +4,7 @@ import postgres from "postgres";
 import { loadEnv } from "../load-env";
 
 loadEnv();
-process.env.NODE_ENV ??= "development";
+if (!process.env.NODE_ENV) (process.env as Record<string, string>).NODE_ENV = "development";
 
 const url = process.env.DATABASE_ADMIN_URL ?? process.env.DATABASE_URL;
 if (!url) throw new Error("DATABASE_ADMIN_URL is required");
