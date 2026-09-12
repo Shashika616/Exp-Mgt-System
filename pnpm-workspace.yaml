@@ -1,0 +1,9 @@
+# Dependency build scripts are never run (docs/security.md A02/A03: no postinstall scripts).
+allowBuilds:
+  sharp: false
+  unrs-resolver: false
+  esbuild: false
+minimumReleaseAgeExclude:
+  - next@16.3.5
+# pnpm 12 supply-chain policy: we pin exact versions and review the lockfile in PRs instead of a release-age gate.
+minimumReleaseAge: 0
