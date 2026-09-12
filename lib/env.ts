@@ -15,7 +15,7 @@ const schema = z
 
     AUTH_PROVIDER: providerEnum(["supabase", "local"]).default("supabase"),
     STORAGE_PROVIDER: providerEnum(["supabase", "local"]).default("supabase"),
-    REALTIME_PROVIDER: providerEnum(["supabase", "sse"]).default("sse"),
+    REALTIME_PROVIDER: providerEnum(["supabase", "poll"]).default("poll"),
     EMAIL_PROVIDER: providerEnum(["log"]).default("log"),
     RATELIMIT_PROVIDER: providerEnum(["postgres"]).default("postgres"),
 

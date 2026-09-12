@@ -12,7 +12,7 @@ import { firstName } from "@/lib/utils";
 type Viewer = { userId: string; role: "agent" | "developer" | "lead" | "admin"; perms: string[] };
 
 /** Client wrapper: realtime refresh + the two sheets (submit / review) opened from the properties panel. */
-export function TicketDetailClient({ t, viewer, openSubmission, realtime, children, openReview }: { t: TicketDetail; viewer: Viewer; openSubmission: SubmissionRow | null; realtime: "sse" | "supabase"; children: React.ReactNode; openReview?: boolean }) {
+export function TicketDetailClient({ t, viewer, openSubmission, realtime, children, openReview }: { t: TicketDetail; viewer: Viewer; openSubmission: SubmissionRow | null; realtime: "poll" | "supabase"; children: React.ReactNode; openReview?: boolean }) {
   const router = useRouter();
   const [submitOpen, setSubmitOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(!!openReview);

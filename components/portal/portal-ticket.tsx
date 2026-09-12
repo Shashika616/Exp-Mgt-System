@@ -14,7 +14,7 @@ import type { PortalTicket } from "@/lib/dal/portal/tickets";
 import { cn } from "@/lib/utils";
 
 /** FR-CP-05: reply box, Reopen on resolved, Confirm (close) on resolved, Cancel on new/open, follow-up on closed. */
-export function PortalTicketActions({ t, colleagues, realtime }: { t: PortalTicket; colleagues: { id: string; name: string }[]; realtime: "sse" | "supabase" }) {
+export function PortalTicketActions({ t, colleagues, realtime }: { t: PortalTicket; colleagues: { id: string; name: string }[]; realtime: "poll" | "supabase" }) {
   const router = useRouter();
   const { toast } = useToast();
   const [body, setBody] = useState("");

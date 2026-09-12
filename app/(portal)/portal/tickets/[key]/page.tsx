@@ -55,7 +55,7 @@ export default async function PortalTicketPage({ params }: { params: Promise<{ k
           ))}
         </ol>
         <div className="mt-4">
-          <PortalTicketActions t={t} colleagues={colleagues} realtime={env.REALTIME_PROVIDER as "sse" | "supabase"} />
+          <PortalTicketActions t={t} colleagues={colleagues} realtime={env.REALTIME_PROVIDER as "poll" | "supabase"} />
         </div>
       </div>
       <aside className="flex flex-col gap-4 lg:sticky lg:top-[calc(var(--topbar-height)+24px)] lg:self-start" aria-label="Status">

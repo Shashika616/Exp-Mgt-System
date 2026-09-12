@@ -1,22 +1,24 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 /**
- * architecture.md §8: realtime on the ticket detail. Two implementations behind one hook:
- *  - sse: EventSource to /api/tickets/[id]/events (Postgres polling inside the stream; portable, no vendor)
+ * architecture.md §8: realtime on the ticket detail, behind one hook with two implementations:
+ *  - poll: fetches /api/tickets/[id]/version every 5 s while the tab is visible (portable, serverless-safe,
+ *    no long-lived connections — the right fit for Vercel Hobby)
  *  - supabase: Supabase Realtime postgres_changes with a short-lived access token from /api/realtime/token
- *    (the token stays in memory; refresh tokens never leave the httpOnly cookie)
- * The callback fires when the ticket changed; the page re-fetches via router.refresh().
+ *    (token stays in memory; refresh tokens never leave the httpOnly cookie)
+ * `onChange` fires when the ticket changed; the page then re-fetches via router.refresh().
  */
-export function useTicketLive(ticketId: string, onChange: () => void, provider: "sse" | "supabase" = "sse") {
+export function useTicketLive(ticketId: string, onChange: () => void, provider: "poll" | "supabase" = "poll") {
+  const last = useRef<string | null>(null);
   useEffect(() => {
-    let stop = () => {};
+    let stopped = false;
+    let cleanup = () => {};
     if (provider === "supabase") {
-      let cancelled = false;
       (async () => {
         const { createClient } = await import("@supabase/supabase-js");
         const res = await fetch("/api/realtime/token");
-        if (!res.ok || cancelled) return;
+        if (!res.ok || stopped) return;
         const { url, anonKey, token } = (await res.json()) as { url: string; anonKey: string; token: string };
         const client = createClient(url, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
         client.realtime.setAuth(token);
@@ -25,40 +27,35 @@ export function useTicketLive(ticketId: string, onChange: () => void, provider: 
           .on("postgres_changes", { event: "*", schema: "public", table: "tickets", filter: `id=eq.${ticketId}` }, onChange)
           .on("postgres_changes", { event: "INSERT", schema: "public", table: "comments", filter: `ticket_id=eq.${ticketId}` }, onChange)
           .subscribe();
-        stop = () => {
-          void client.removeChannel(channel);
-        };
+        cleanup = () => void client.removeChannel(channel);
       })();
       return () => {
-        cancelled = true;
-        stop();
+        stopped = true;
+        cleanup();
       };
     }
-    let es: EventSource | null = null;
-    let timer: ReturnType<typeof setTimeout> | null = null;
-    const connect = () => {
-      if (document.visibilityState !== "visible") return;
-      es = new EventSource(`/api/tickets/${ticketId}/events`);
-      es.addEventListener("change", onChange);
-      es.onerror = () => {
-        es?.close();
-        es = null;
-        timer = setTimeout(connect, 5000);
-      };
-    };
-    const onVisibility = () => {
-      if (document.visibilityState === "visible" && !es) connect();
-      if (document.visibilityState !== "visible") {
-        es?.close();
-        es = null;
+    const tick = async () => {
+      if (stopped || document.visibilityState !== "visible") return;
+      try {
+        const res = await fetch(`/api/tickets/${ticketId}/version`, { cache: "no-store" });
+        if (!res.ok) return;
+        const { fingerprint } = (await res.json()) as { fingerprint: string };
+        if (last.current && last.current !== fingerprint) onChange();
+        last.current = fingerprint;
+      } catch {
+        /* offline — try again next tick */
       }
     };
-    connect();
-    document.addEventListener("visibilitychange", onVisibility);
+    void tick();
+    const id = setInterval(tick, 5000);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void tick();
+    };
+    document.addEventListener("visibilitychange", onVisible);
     return () => {
-      document.removeEventListener("visibilitychange", onVisibility);
-      es?.close();
-      if (timer) clearTimeout(timer);
+      stopped = true;
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", onVisible);
     };
   }, [ticketId, onChange, provider]);
 }

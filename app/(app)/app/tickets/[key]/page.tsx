@@ -76,7 +76,7 @@ export default async function TicketPage({ params, searchParams }: { params: Pro
           <PriorityBadge priority={t.priority} />
         </div>
       </header>
-      <TicketDetailClient t={t} viewer={viewer} openSubmission={openSubmission} realtime={env.REALTIME_PROVIDER as "sse" | "supabase"} openReview={review === "1" && !!openSubmission && ctx.permissions.has("ticket.review")}>
+      <TicketDetailClient t={t} viewer={viewer} openSubmission={openSubmission} realtime={env.REALTIME_PROVIDER as "poll" | "supabase"} openReview={review === "1" && !!openSubmission && ctx.permissions.has("ticket.review")}>
         <div className="flex flex-col gap-6">
           <Thread description={t.description} comments={comments} events={t.events} submissions={submissions} attachments={attachments} />
           <Composer ticketId={t.id} ticketKey={t.key} requesterName={t.requester.fullName} viewerName={ctx.fullName} viewerRole={role} canPublic={ctx.permissions.has("comment.public") && (role !== "developer" || t.assigneeId === ctx.userId)} canInternal={ctx.permissions.has("comment.internal")} publicDisabledReason={devPublicReason} locked={locked} />
