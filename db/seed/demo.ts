@@ -306,12 +306,14 @@ export async function seedDemo(db: Db, opts: { staffOrgId: string; policyId: str
     // --- developer work logs & submissions
     if (developer && plan.status !== "new" && plan.status !== "open") {
       const entries = 1 + Math.floor(rand() * 3);
+      let running = 0;
       for (let i = 0; i < entries; i++) {
         const at = ageFraction(0.2 + i * 0.15);
         const minutes = 15 * (1 + Math.floor(rand() * 12));
         const state: WorkState = i === 0 ? "investigating" : "fix_in_progress";
         const [wl] = await db.insert(schema.workLogs).values({ ticketId, orgId: org.id, userId: developer, loggedOn: at.toISOString().slice(0, 10), minutes, note: pick(DEV_NOTES), workState: state, createdAt: at, updatedAt: at, startedAt: i === 0 ? new Date(at.getTime() - minutes * 60_000) : null, endedAt: i === 0 ? at : null }).returning({ id: schema.workLogs.id });
-        await ev("work_logged", at, developer, { workLogId: wl!.id, minutes, workState: state });
+        running += minutes;
+        await ev("work_logged", at, developer, { workLogId: wl!.id, minutes, workState: state, total: running });
         await ev("work_state_changed", at, developer, { from: i === 0 ? null : "investigating", to: state });
       }
       if (plan.workState === "blocked" || plan.workState === "needs_info") await ev("work_state_changed", ageFraction(0.75), developer, { from: "fix_in_progress", to: plan.workState, note: "Waiting on the vendor / client for details." });

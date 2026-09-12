@@ -15,7 +15,8 @@ export async function proxy(request: NextRequest) {
   const csp = [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ""}`,
-    `style-src 'self' 'nonce-${nonce}' 'unsafe-inline'`,
+    // style attributes (motion/charts) need 'unsafe-inline'; a nonce here would make browsers ignore it. Scripts stay nonce-only.
+    "style-src 'self' 'unsafe-inline'",
     `img-src 'self' data: blob:${SUPABASE ? ` ${SUPABASE}` : ""}`,
     "font-src 'self'",
     `connect-src 'self'${SUPABASE ? ` ${SUPABASE} ${SUPABASE.replace("https://", "wss://")}` : ""}${isDev ? " ws: http://localhost:*" : ""}`,

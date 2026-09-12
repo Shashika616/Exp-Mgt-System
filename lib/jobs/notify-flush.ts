@@ -34,7 +34,7 @@ export async function notifyFlush(limit = 50): Promise<{ sent: number; failed: n
       .where(and(eq(schema.notifications.emailStatus, "queued"), isNull(schema.notifications.emailSentAt), lt(schema.notifications.createdAt, new Date())))
       .orderBy(schema.notifications.createdAt)
       .limit(limit)
-      .for("update", { skipLocked: true });
+      .for("update", { of: [schema.notifications], skipLocked: true });
     if (rows.length) {
       await tx.update(schema.notifications).set({ emailStatus: "sending" }).where(sql`${schema.notifications.id} in ${rows.map((r) => r.id)}`);
     }

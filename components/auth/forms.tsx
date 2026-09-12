@@ -16,7 +16,7 @@ import { Tabs } from "@/components/ui/menu";
 function ErrorBanner({ error }: { error: PublicError | null }) {
   if (!error) return null;
   return (
-    <p className="rounded-md border border-danger-border bg-danger-bg px-3 py-2 text-body-sm text-danger-fg" role="alert">
+    <p className="rounded-md border border-danger-border bg-danger-bg px-3 py-2 text-body-sm text-danger-fg" role="alert" data-testid="form-error">
       {error.message}
     </p>
   );

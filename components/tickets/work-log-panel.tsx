@@ -109,7 +109,7 @@ export function WorkLogPanel({ ticketId, total, entries, canWrite, viewerId, run
         >
           <div className="grid grid-cols-[96px_1fr] gap-2">
             <Input type="number" min={1} max={1440} value={minutes} onChange={(e) => setMinutes(e.target.value === "" ? "" : Number(e.target.value))} placeholder="min" aria-label="Minutes" required className="h-9 tabular" data-testid="worklog-minutes" autoFocus />
-            <NativeSelect value={state} onChange={(e) => setState(e.target.value as WorkState | "")} aria-label="Work state" className="h-9">
+            <NativeSelect value={state} onChange={(e) => setState(e.target.value as WorkState | "")} aria-label="Work state for this entry" className="h-9" data-testid="worklog-state">
               <option value="">Keep work state</option>
               {WORK_STATES.map((ws) => (
                 <option key={ws} value={ws}>

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { HOLD_REASONS, LEVELS, LINK_KINDS, PRIORITIES, RESOLUTION_CODES, TICKET_STATUSES, TICKET_TYPES, TYPE_URGENCY_OPTIONS, WORK_STATES } from "@/lib/domain/types";
-import { boundedInt, markdown, optionalMarkdown, optionalText, text, ticketKey, uuid } from "./common";
+import { boundedInt, markdown, optionalMarkdown, optionalText, optionalUuid, text, ticketKey, uuid } from "./common";
 
 // Every schema is .strict(): unknown keys are rejected, so mass assignment is impossible (security.md A01).
 
@@ -11,9 +11,9 @@ export const PortalCreateTicketSchema = z
     subject: text(160),
     description: markdown(20000),
     urgency: z.enum(LEVELS),
-    categoryId: uuid.nullable().optional(),
+    categoryId: optionalUuid,
     participantIds: z.array(uuid).max(10).optional(),
-    followUpOf: ticketKey.nullable().optional(),
+    followUpOf: z.preprocess((v) => (v === "" ? null : v), ticketKey.nullable().optional()),
   })
   .strict()
   .superRefine((v, ctx) => {
@@ -25,16 +25,16 @@ export type PortalCreateTicketInput = z.infer<typeof PortalCreateTicketSchema>;
 export const AgentCreateTicketSchema = z
   .object({
     orgId: uuid,
-    requesterId: uuid.nullable().optional(),
+    requesterId: optionalUuid,
     newContact: z.object({ fullName: text(120), email: z.string().email().max(254) }).strict().nullable().optional(),
     type: z.enum(TICKET_TYPES),
     subject: text(160),
     description: markdown(20000),
     urgency: z.enum(LEVELS),
     impact: z.enum(LEVELS).default("medium"),
-    categoryId: uuid.nullable().optional(),
-    subcategoryId: uuid.nullable().optional(),
-    assigneeId: uuid.nullable().optional(),
+    categoryId: optionalUuid,
+    subcategoryId: optionalUuid,
+    assigneeId: optionalUuid,
   })
   .strict()
   .refine((v) => v.requesterId || v.newContact, { message: "Choose a contact or create one", path: ["requesterId"] });

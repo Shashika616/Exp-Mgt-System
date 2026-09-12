@@ -4,7 +4,8 @@ import { queueCounts } from "@/lib/dal/tickets";
 import { getRunningTimer } from "@/lib/dal/work-logs";
 import { touchLastSeen } from "@/lib/dal/users";
 import { maybeTick } from "@/lib/jobs/run";
-import { Sidebar, navFor } from "@/components/shell/sidebar";
+import { Sidebar } from "@/components/shell/sidebar";
+import { navFor } from "@/components/shell/nav";
 import { AppShellClient } from "@/components/shell/app-shell";
 
 export const dynamic = "force-dynamic";

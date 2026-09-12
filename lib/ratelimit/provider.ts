@@ -1,5 +1,6 @@
 import "server-only";
 import { sql } from "drizzle-orm";
+import { env } from "@/lib/env";
 import { AppError } from "@/lib/errors";
 
 /**
@@ -32,14 +33,16 @@ class PostgresRateLimiter implements RateLimiter {
     const { withContext } = await import("@/lib/dal/db");
     const { SYSTEM_CONTEXT } = await import("@/lib/authz/policy");
     const now = new Date();
-    const windowStartCutoff = new Date(now.getTime() - windowSeconds * 1000);
+    // raw sql params must be strings for postgres.js
+    const nowIso = now.toISOString();
+    const cutoffIso = new Date(now.getTime() - windowSeconds * 1000).toISOString();
     // Fixed window stored per key; only the system role may touch rate_limits (RLS).
     const rows = await withContext(SYSTEM_CONTEXT, (tx) =>
       tx.execute<{ count: number; window_start: Date }>(sql`
-        insert into rate_limits (key, window_start, count) values (${key}, ${now}, 1)
+        insert into rate_limits (key, window_start, count) values (${key}, ${nowIso}::timestamptz, 1)
         on conflict (key) do update set
-          count = case when rate_limits.window_start < ${windowStartCutoff} then 1 else rate_limits.count + 1 end,
-          window_start = case when rate_limits.window_start < ${windowStartCutoff} then ${now} else rate_limits.window_start end
+          count = case when rate_limits.window_start < ${cutoffIso}::timestamptz then 1 else rate_limits.count + 1 end,
+          window_start = case when rate_limits.window_start < ${cutoffIso}::timestamptz then ${nowIso}::timestamptz else rate_limits.window_start end
         returning count, window_start`),
     );
     const row = rows[0]!;
@@ -58,6 +61,6 @@ export function getRateLimiter(): RateLimiter {
 /** Throws AppError('rate_limited') when over the limit. */
 export async function enforceLimit(scope: LimitScope, subject: string): Promise<void> {
   const { limit, window } = LIMITS[scope];
-  const res = await getRateLimiter().hit(`${scope}:${subject}`, limit, window);
+  const res = await getRateLimiter().hit(`${scope}:${subject}`, limit * env.RATE_LIMIT_SCALE, window);
   if (!res.allowed) throw new AppError("rate_limited");
 }

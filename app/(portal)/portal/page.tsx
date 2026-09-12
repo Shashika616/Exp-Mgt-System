@@ -4,7 +4,7 @@ import { RequestCard } from "@/components/portal/request-card";
 import { PortalFilters } from "@/components/portal/portal-filters";
 import { StatTile, fmtMinutes } from "@/components/dashboards/stat-tile";
 import { EmptyState } from "@/components/ui/empty-state";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { requireUserOrRedirect } from "@/lib/auth/require";
 import { listMyRequests, orgMonthlySummary } from "@/lib/dal/portal/tickets";
 import { listOrgContacts } from "@/lib/dal/users";

@@ -73,7 +73,7 @@ export function TicketList({ rows, columns = DEFAULT_COLUMNS, compact = false, e
     <div className={cn(!embedded && "overflow-hidden rounded-lg border border-outline-variant/40 bg-surface-container-lowest shadow-[var(--shadow-1)]")}>
       <div className="overflow-x-auto">
         <table ref={tableRef} className="w-full min-w-[720px] border-collapse">
-          <thead className="sticky top-[var(--topbar-height)] z-10 bg-surface-container-low">
+          <thead className="bg-surface-container-low">
             <tr className="text-overline text-left text-on-surface-variant">
               {selectable ? (
                 <th className="w-10 px-3">
@@ -81,7 +81,7 @@ export function TicketList({ rows, columns = DEFAULT_COLUMNS, compact = false, e
                 </th>
               ) : null}
               {cols.map((c) => (
-                <th key={c} className={cn("h-9 px-3 font-semibold", (c === "updated" || c === "created" || c === "time") && "text-right")}>
+                <th key={c} className={cn("h-9 whitespace-nowrap px-3 font-semibold", c === "subject" && "w-full", (c === "updated" || c === "created" || c === "time") && "text-right")}>
                   {COLUMN_LABEL[c]}
                 </th>
               ))}
@@ -118,7 +118,7 @@ export function TicketList({ rows, columns = DEFAULT_COLUMNS, compact = false, e
                     </td>
                   ) : null}
                   {cols.map((c) => (
-                    <td key={c} className={cn("px-3 align-middle", (c === "updated" || c === "created" || c === "time") && "text-right")}>
+                    <td key={c} className={cn("px-3 align-middle", c !== "subject" && "whitespace-nowrap", c === "subject" && "max-w-0", (c === "updated" || c === "created" || c === "time") && "text-right")}>
                       <Cell col={c} r={r} />
                     </td>
                   ))}

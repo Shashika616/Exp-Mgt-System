@@ -99,9 +99,12 @@ CREATE POLICY rate_limits_system ON rate_limits FOR ALL USING (app_role() = 'sys
 CREATE POLICY organisations_staff ON organisations FOR SELECT USING (app_is_staff());--> statement-breakpoint
 CREATE POLICY organisations_client_own ON organisations FOR SELECT USING (app_is_client() AND id = app_org_id());--> statement-breakpoint
 CREATE POLICY organisations_admin ON organisations FOR ALL USING (app_is_admin());--> statement-breakpoint
+-- the staff organisation row (name only matters) and its global settings are readable by every signed-in user
+CREATE POLICY organisations_staff_org_visible ON organisations FOR SELECT USING (app_role() IS NOT NULL AND type = 'staff');--> statement-breakpoint
 CREATE POLICY org_settings_staff ON org_settings FOR SELECT USING (app_is_staff());--> statement-breakpoint
 CREATE POLICY org_settings_client_own ON org_settings FOR SELECT USING (app_is_client() AND org_id = app_org_id());--> statement-breakpoint
 CREATE POLICY org_settings_admin ON org_settings FOR ALL USING (app_is_admin());--> statement-breakpoint
+CREATE POLICY org_settings_global_visible ON org_settings FOR SELECT USING (app_role() IS NOT NULL AND EXISTS (SELECT 1 FROM organisations o WHERE o.id = org_settings.org_id AND o.type = 'staff'));--> statement-breakpoint
 
 -- ---------------------------------------------------------------------------
 -- Users: staff see all; clients see their own org's contacts and (name-only via DAL) staff users
@@ -122,6 +125,8 @@ CREATE POLICY users_admin ON users FOR ALL USING (app_is_admin());--> statement-
 -- Auth tables: only the system context (login flows, provider adapters) touches them
 CREATE POLICY invitations_system ON invitations FOR ALL USING (app_role() = 'system');--> statement-breakpoint
 CREATE POLICY invitations_admin_read ON invitations FOR SELECT USING (app_is_admin() OR (app_role() = 'client_admin' AND org_id = app_org_id()));--> statement-breakpoint
+-- admins invite anyone; client admins invite into their own organisation only
+CREATE POLICY invitations_admin_insert ON invitations FOR INSERT WITH CHECK (app_is_admin() OR (app_role() = 'client_admin' AND org_id = app_org_id()));--> statement-breakpoint
 CREATE POLICY auth_tokens_system ON auth_tokens FOR ALL USING (app_role() = 'system');--> statement-breakpoint
 CREATE POLICY local_credentials_system ON local_credentials FOR ALL USING (app_role() = 'system');--> statement-breakpoint
 CREATE POLICY auth_sessions_system ON auth_sessions FOR ALL USING (app_role() = 'system');--> statement-breakpoint
@@ -254,6 +259,13 @@ CREATE POLICY sla_timers_staff ON sla_timers FOR ALL USING (app_is_staff());--> 
 CREATE POLICY sla_timers_client_read ON sla_timers FOR SELECT USING (
   app_is_client() AND org_id = app_org_id() AND EXISTS (SELECT 1 FROM tickets t WHERE t.id = sla_timers.ticket_id)
 );--> statement-breakpoint
+-- clients create/reopen/close their own tickets: the DAL starts/pauses/stops timers in the same transaction
+CREATE POLICY sla_timers_client_write ON sla_timers FOR INSERT WITH CHECK (
+  app_is_client() AND org_id = app_org_id() AND EXISTS (SELECT 1 FROM tickets t WHERE t.id = sla_timers.ticket_id)
+);--> statement-breakpoint
+CREATE POLICY sla_timers_client_update ON sla_timers FOR UPDATE USING (
+  app_is_client() AND org_id = app_org_id() AND EXISTS (SELECT 1 FROM tickets t WHERE t.id = sla_timers.ticket_id)
+) WITH CHECK (app_is_client() AND org_id = app_org_id());--> statement-breakpoint
 
 -- Notifications: own rows only (system inserts)
 CREATE POLICY notifications_own ON notifications FOR SELECT USING (user_id = app_user_id());--> statement-breakpoint

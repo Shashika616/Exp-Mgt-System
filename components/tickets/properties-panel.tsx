@@ -210,7 +210,7 @@ export function PropertiesPanel({ t, viewer, onSubmitReview, onReview }: { t: Ti
               const state = b.state === "running" && b.ratio >= 0.75 ? "at_risk" : b.state;
               const meta = SLA_META[state];
               return (
-                <li key={tm.id} className="flex items-center justify-between gap-2 text-body-sm">
+                <li key={tm.id} className="flex items-center justify-between gap-2 text-body-sm" data-testid={`sla-${tm.metric}`}>
                   <span className="text-on-surface-variant">{tm.metric === "first_response" ? "First response" : "Resolution"}</span>
                   <span className="flex items-center gap-2">
                     <span className={cn("tabular", state === "breached" || state === "met_late" ? "text-danger-fg" : state === "at_risk" ? "text-warning-fg" : "text-primary")} title={formatDateTime(tm.dueAt)}>

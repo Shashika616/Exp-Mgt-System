@@ -34,6 +34,8 @@ const schema = z
     SENTRY_DSN: z.string().optional(),
     APP_URL: z.string().url().default("http://localhost:3000"),
     LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),
+    /** Multiplies every rate limit (tests use 20; production must stay 1). */
+    RATE_LIMIT_SCALE: z.coerce.number().int().min(1).max(100).default(1),
   })
   .superRefine((e, ctx) => {
     const needsSupabase =
@@ -55,6 +57,7 @@ const schema = z
     const deployedProd = e.APP_ENV === "production" || e.VERCEL_ENV === "production";
     if (deployedProd) {
       if (e.STORAGE_PROVIDER === "local") ctx.addIssue({ code: "custom", message: "STORAGE_PROVIDER=local is not allowed in production", path: ["STORAGE_PROVIDER"] });
+      if (e.RATE_LIMIT_SCALE !== 1) ctx.addIssue({ code: "custom", message: "RATE_LIMIT_SCALE must be 1 in production", path: ["RATE_LIMIT_SCALE"] });
       if (/change-me|^0+$/.test(e.CRON_SECRET + e.SESSION_SECRET + e.APP_ENCRYPTION_KEY)) {
         ctx.addIssue({ code: "custom", message: "placeholder secrets are not allowed in production", path: ["CRON_SECRET"] });
       }

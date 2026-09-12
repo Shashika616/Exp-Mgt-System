@@ -1,7 +1,7 @@
 -- pgTAP tests for the RLS policies (docs/architecture.md §4.3, security.md A01).
 -- Runs inside a transaction that is rolled back; fixtures below never persist.
 BEGIN;
-SELECT plan(36);
+SELECT plan(38);
 
 -- ---------------------------------------------------------------------------
 -- Fixtures (as owner, RLS bypassed)
@@ -60,7 +60,7 @@ SELECT lives_ok($$INSERT INTO comments (ticket_id, org_id, author_id, visibility
 SELECT throws_ok($$INSERT INTO comments (ticket_id, org_id, author_id, visibility, body) VALUES ('00000000-0000-0000-0000-000000000103','00000000-0000-0000-0000-000000000003','00000000-0000-0000-0000-000000000022','public','x')$$, '42501', NULL, 'client_user cannot comment on another org''s ticket');
 SELECT throws_ok($$INSERT INTO work_logs (ticket_id, org_id, user_id, minutes, note) VALUES ('00000000-0000-0000-0000-000000000101','00000000-0000-0000-0000-000000000002','00000000-0000-0000-0000-000000000022',5,'x')$$, '42501', NULL, 'client_user cannot write work logs');
 SELECT is((SELECT count(*)::int FROM users WHERE org_id='00000000-0000-0000-0000-000000000003'), 0, 'client_user cannot list another org''s contacts');
-SELECT is((SELECT count(*)::int FROM organisations), 1, 'client_user sees only own organisation');
+SELECT is((SELECT count(*)::int FROM organisations WHERE type = 'client'), 1, 'client_user sees only own client organisation');
 
 -- ---------------------------------------------------------------------------
 -- Client admin A: all tickets in org A
@@ -70,6 +70,8 @@ SELECT is((SELECT count(*)::int FROM tickets), 2, 'client_admin sees all tickets
 SELECT is((SELECT count(*)::int FROM tickets WHERE org_id='00000000-0000-0000-0000-000000000003'), 0, 'client_admin sees nothing from org B');
 SELECT is((SELECT count(*)::int FROM comments WHERE visibility='internal'), 0, 'client_admin sees no internal notes');
 SELECT is((SELECT count(*)::int FROM submissions), 0, 'client_admin sees no submissions');
+SELECT lives_ok($$INSERT INTO invitations (user_id, org_id, invited_by, token_hash, expires_at) VALUES ('00000000-0000-0000-0000-000000000023','00000000-0000-0000-0000-000000000002','00000000-0000-0000-0000-000000000021','h1', now() + interval '7 days')$$, 'client_admin can invite into own org');
+SELECT throws_ok($$INSERT INTO invitations (user_id, org_id, invited_by, token_hash, expires_at) VALUES ('00000000-0000-0000-0000-000000000031','00000000-0000-0000-0000-000000000003','00000000-0000-0000-0000-000000000021','h2', now() + interval '7 days')$$, '42501', NULL, 'client_admin cannot invite into another org');
 
 -- ---------------------------------------------------------------------------
 -- Developer: only assigned tickets

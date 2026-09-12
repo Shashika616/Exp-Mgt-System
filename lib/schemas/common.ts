@@ -60,6 +60,8 @@ export const optionalMarkdown = (max: number) =>
     .transform((s) => (s === "" ? null : s));
 
 export const uuid = z.string().uuid();
+/** Optional foreign key from a <select>: "" becomes null. */
+export const optionalUuid = z.preprocess((v) => (v === "" || v === undefined ? null : v), uuid.nullable());
 export const email = z
   .string()
   .transform((s) => s.trim().toLowerCase())

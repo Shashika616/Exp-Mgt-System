@@ -14,6 +14,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
+  agentRules: false,
   reactStrictMode: true,
   typedRoutes: false,
   images: { formats: ["image/avif", "image/webp"] },

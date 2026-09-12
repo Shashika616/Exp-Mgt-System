@@ -23,11 +23,12 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "playwright test",
+    "test:e2e": "next build && playwright test",
     "test:rls": "tsx db/policies/run-pgtap.ts",
     "test:headers": "tsx tests/headers/check-headers.ts",
     "security": "pnpm audit --audit-level=high",
-    "cron": "tsx lib/jobs/cli.ts"
+    "cron": "tsx lib/jobs/cli.ts",
+    "test:e2e:only": "playwright test"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",

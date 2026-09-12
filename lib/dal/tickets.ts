@@ -299,10 +299,7 @@ export async function getTicketDetail(ctx: AuthContext, key: string) {
       settings,
     };
   });
-  if (!result) {
-    await logAccessDenied(ctx, "ticket", key);
-    throw notFound();
-  }
+  if (!result) throw notFound(); // the route layout has already logged access_denied
   return result;
 }
 
@@ -635,3 +632,10 @@ export async function searchTickets(ctx: AuthContext, q: string, limit = 8) {
 }
 
 export { priorityRank };
+
+/** Cheap visibility probe used by the route layout so a hidden/missing ticket yields a real 404 status before streaming. */
+export async function ticketExistsForViewer(ctx: AuthContext, key: string): Promise<boolean> {
+  const [row] = await withContext(ctx, (tx) => tx.select({ id: schema.tickets.id }).from(schema.tickets).where(and(eq(schema.tickets.key, key), isNull(schema.tickets.deletedAt))).limit(1));
+  if (!row) await logAccessDenied(ctx, "ticket", key);
+  return !!row;
+}

@@ -7,7 +7,7 @@ import { FilterBar } from "@/components/tickets/filter-bar";
 import { DirectoryProvider } from "@/components/tickets/staff-directory";
 import { DEFAULT_COLUMNS, TicketList, type Column, COLUMN_LABEL } from "@/components/tickets/ticket-list";
 import { TicketListClient } from "@/components/tickets/ticket-list-client";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { requireUserOrRedirect } from "@/lib/auth/require";
 import { listCategories } from "@/lib/dal/categories";
 import { listClientOrgs } from "@/lib/dal/orgs";

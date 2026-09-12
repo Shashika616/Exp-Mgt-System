@@ -24,8 +24,8 @@ export function TicketDetailClient({ t, viewer, openSubmission, realtime, childr
       <div className="lg:sticky lg:top-[calc(var(--topbar-height)+24px)] lg:self-start">
         <PropertiesPanel t={t} viewer={viewer} onSubmitReview={() => setSubmitOpen(true)} onReview={() => setReviewOpen(true)} />
       </div>
-      <SubmitReviewSheet open={submitOpen} onClose={() => setSubmitOpen(false)} ticketId={t.id} loggedMinutes={t.timeSpentMinutes} version={t.version} requesterFirstName={firstName(t.requester.fullName)} />
-      <ReviewSheet open={reviewOpen} onClose={() => setReviewOpen(false)} ticketId={t.id} ticketKey={t.key} submission={openSubmission} version={t.version} />
+      <SubmitReviewSheet key={`submit-${t.version}`} open={submitOpen} onClose={() => setSubmitOpen(false)} ticketId={t.id} loggedMinutes={t.timeSpentMinutes} version={t.version} requesterFirstName={firstName(t.requester.fullName)} />
+      <ReviewSheet key={`review-${t.version}-${openSubmission?.id ?? ""}`} open={reviewOpen} onClose={() => setReviewOpen(false)} ticketId={t.id} ticketKey={t.key} submission={openSubmission} version={t.version} />
     </div>
   );
 }

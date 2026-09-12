@@ -6,21 +6,8 @@ import { BarChart3, Building2, ClipboardCheck, Code2, Inbox, LayoutDashboard, Pa
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipProvider } from "@/components/ui/menu";
-import type { Role } from "@/lib/domain/types";
-
-export type NavItem = { href: string; label: string; icon: "dashboard" | "tickets" | "work" | "review" | "clients" | "reports" | "admin"; badge?: number; exact?: boolean };
+import type { NavItem } from "./nav";
 const ICONS = { dashboard: LayoutDashboard, tickets: Inbox, work: Code2, review: ClipboardCheck, clients: Building2, reports: BarChart3, admin: Settings } as const;
-
-export function navFor(role: Role, counts: { review: number; myWork: number; unassigned: number }): NavItem[] {
-  const items: NavItem[] = [{ href: "/app", label: "Dashboard", icon: "dashboard", exact: true }];
-  if (role === "developer") items.push({ href: "/app/tickets", label: "My work", icon: "work", badge: counts.myWork });
-  else items.push({ href: "/app/tickets", label: "Tickets", icon: "tickets", badge: counts.unassigned });
-  if (role === "lead" || role === "admin") items.push({ href: "/app/review", label: "Review", icon: "review", badge: counts.review });
-  if (role !== "developer") items.push({ href: "/app/clients", label: "Clients", icon: "clients" });
-  if (role === "lead" || role === "admin") items.push({ href: "/app/reports", label: "Reports", icon: "reports" });
-  if (role === "admin") items.push({ href: "/app/admin", label: "Admin", icon: "admin" });
-  return items;
-}
 
 /** docs/design.md §8.1 — solid navy structural sidebar, 260px, ⌘B collapses to a 64px icon rail. */
 export function Sidebar({ items }: { items: NavItem[] }) {

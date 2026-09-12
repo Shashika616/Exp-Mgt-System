@@ -30,27 +30,49 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   let last = await fingerprint();
   if (last === null) return new Response("not found", { status: 404 });
   const encoder = new TextEncoder();
+  let closed = false;
   const stream = new ReadableStream({
     async start(controller) {
-      controller.enqueue(encoder.encode(`event: ready\ndata: ok\n\n`));
+      const send = (chunk: string) => {
+        if (closed || req.signal.aborted) return false;
+        try {
+          controller.enqueue(encoder.encode(chunk));
+          return true;
+        } catch {
+          closed = true;
+          return false;
+        }
+      };
+      const finish = () => {
+        if (closed) return;
+        closed = true;
+        try {
+          controller.close();
+        } catch {}
+      };
+      // Client went away: stop the loop; the consumer already cancelled the stream, no close() needed.
+      req.signal.addEventListener("abort", () => (closed = true), { once: true });
+      send(`event: ready\ndata: ok\n\n`);
       const started = Date.now();
       const loop = async () => {
-        while (Date.now() - started < (maxDuration - 5) * 1000) {
-          if (req.signal.aborted) break;
+        while (!closed && !req.signal.aborted && Date.now() - started < (maxDuration - 5) * 1000) {
           await new Promise((r) => setTimeout(r, 3000));
           try {
             const now = await fingerprint();
             if (now && now !== last) {
               last = now;
-              controller.enqueue(encoder.encode(`event: change\ndata: ${now}\n\n`));
-            } else controller.enqueue(encoder.encode(`: keepalive\n\n`));
+              if (!send(`event: change\ndata: ${now}\n\n`)) break;
+            } else if (!send(`: keepalive\n\n`)) break;
           } catch {
             break;
           }
         }
-        controller.close();
+        finish();
       };
       void loop();
+    },
+    cancel() {
+      closed = true;
     },
   });
   return new Response(stream, { headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache, no-transform", Connection: "keep-alive" } });

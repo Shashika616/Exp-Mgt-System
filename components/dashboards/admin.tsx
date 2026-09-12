@@ -53,12 +53,11 @@ export function AdminDashboard({ data, review }: { data: Data; review: Awaited<R
             <ul className="divide-y divide-outline-variant/40">
               {review.slice(0, 6).map((r) => (
                 <li key={r.id}>
-                  <Link href={`/app/review?ticket=${r.key}`} className="flex items-center gap-3 py-2.5 hover:bg-surface-container-low">
-                    <span className="text-mono w-20 shrink-0 text-on-surface-variant">{r.key}</span>
-                    <span className="min-w-0 flex-1 truncate text-body-md">{r.subject}</span>
-                    <span className="text-body-sm hidden shrink-0 text-on-surface-variant sm:inline">{r.developerName}</span>
-                    <span className="tabular text-body-sm shrink-0 text-on-surface-variant">{formatMinutes(r.minutesInReview)} in review</span>
+                  <Link href={`/app/review?ticket=${r.key}`} className="grid grid-cols-[auto_1fr_auto] items-center gap-x-3 py-2.5 hover:bg-surface-container-low">
+                    <span className="text-mono text-on-surface-variant">{r.key}</span>
+                    <span className="min-w-0 truncate text-body-md">{r.subject}</span>
                     <PriorityBadge priority={r.priority} short />
+                    <span className="col-span-3 text-body-sm text-on-surface-variant">{r.developerName} · {formatMinutes(r.minutesInReview)} in review</span>
                   </Link>
                 </li>
               ))}

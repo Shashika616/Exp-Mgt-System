@@ -3,7 +3,7 @@ import { Building2, Plus } from "lucide-react";
 import { Breadcrumbs } from "@/components/shell/breadcrumbs";
 import { PageHeader } from "@/components/shell/page-header";
 import { Avatar } from "@/components/ui/avatar";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { EmptyState } from "@/components/ui/empty-state";
 import { requirePermissionOrRedirect } from "@/lib/auth/require";
 import { listClientOrgs } from "@/lib/dal/orgs";
