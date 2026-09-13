@@ -36,6 +36,8 @@ Background jobs are HTTP endpoints called by Supabase `pg_cron`.
 
 Import the Git repository. Framework preset: Next.js. Build command `pnpm build`, install `pnpm install --frozen-lockfile`.
 
+**Region matters**: `vercel.json` pins functions to `sin1` (Singapore) to sit next to the Supabase `ap-southeast-1` database. If your Supabase project is elsewhere, change `regions` to the matching Vercel region; cross-region round trips make every page several times slower.
+
 Environment variables (Production):
 
 | Variable | Value |
@@ -56,7 +58,7 @@ Environment variables (Production):
 | `WEBSITE_FORM_HMAC_SECRET` | `openssl rand -hex 32` |
 | `APP_ENCRYPTION_KEY` | `openssl rand -hex 32` (64 hex chars) |
 | `SESSION_SECRET` | `openssl rand -hex 32` |
-| `OPPORTUNISTIC_JOBS` | `true` until pg_cron runs, then `false` |
+| `OPPORTUNISTIC_JOBS` | `false` once pg_cron is scheduled (`true` only as a stop-gap) |
 | `NEXT_PUBLIC_NOTIFICATIONS_POLL_MS` | `60000` (or `0` to disable the bell refresh) |
 | `RATE_LIMIT_SCALE` | `1` |
 
