@@ -16,7 +16,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   void maybeTick();
   void touchLastSeen(ctx);
   const [counts, notifications, timer] = await Promise.all([queueCounts(ctx), listNotifications(ctx, 1), ctx.permissions.has("worklog.write") ? getRunningTimer(ctx) : Promise.resolve(null)]);
-  const items = navFor(ctx.role, { review: counts.review, myWork: counts.my_work, unassigned: counts.unassigned });
+  const items = navFor(ctx.role, { review: counts.review, myWork: counts.my_work, allOpen: counts.all_open });
   return (
     <div className="min-h-dvh bg-background">
       <Sidebar items={items} />

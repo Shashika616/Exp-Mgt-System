@@ -12,7 +12,7 @@ import { requireUserOrRedirect } from "@/lib/auth/require";
 import { listCategories } from "@/lib/dal/categories";
 import { listClientOrgs } from "@/lib/dal/orgs";
 import { listSavedViews } from "@/lib/dal/saved-views";
-import { listTickets, queueCounts, type QueueId, type TicketFilter } from "@/lib/dal/tickets";
+import { countTickets, listTickets, queueCounts, type QueueId, type TicketFilter } from "@/lib/dal/tickets";
 import { listStaff } from "@/lib/dal/users";
 import { ListFilterSchema } from "@/lib/schemas/tickets";
 import { cn } from "@/lib/utils";
@@ -49,9 +49,10 @@ export default async function TicketsPage({ searchParams }: { searchParams: Prom
   const columns = (list(sp.cols)?.filter((c): c is Column => c in COLUMN_LABEL) ?? DEFAULT_COLUMNS) as Column[];
   const density = str(sp.density) === "compact" ? "compact" : "comfortable";
 
-  const [counts, page, views, staff, categories, orgs] = await Promise.all([
+  const [counts, page, total, views, staff, categories, orgs] = await Promise.all([
     queueCounts(ctx),
     listTickets(ctx, filter),
+    countTickets(ctx, filter),
     listSavedViews(ctx),
     listStaff(ctx, ["agent", "developer", "lead", "admin"]),
     listCategories(ctx),
@@ -81,7 +82,7 @@ export default async function TicketsPage({ searchParams }: { searchParams: Prom
       <Breadcrumbs items={[{ href: "/app", label: "Dashboard" }, { label: isDev ? "My work" : "Tickets" }]} />
       <PageHeader
         title={isDev ? "My work" : "Tickets"}
-        count={page.rows.length + (page.nextCursor ? 0 : 0)}
+        count={total}
         description={isDev ? "Tickets assigned to you, sorted by priority then SLA due." : "Queues, triage and everything in flight."}
         action={
           ctx.permissions.has("ticket.create.on_behalf") ? (
@@ -94,7 +95,8 @@ export default async function TicketsPage({ searchParams }: { searchParams: Prom
       <Suspense>
         <FilterBar queues={queues} savedViews={views.map((v) => ({ id: v.id, name: v.name, query: v.query }))} orgs={orgs.map((o) => ({ id: o.id, name: o.name }))} columns={columns} density={density} />
       </Suspense>
-      <TicketListClient initial={page.rows} nextCursor={page.nextCursor} filter={filter} columns={columns} compact={density === "compact"} selectable={ctx.permissions.has("ticket.bulk")} />
+      {/* keyed by the filter so the client-side row state resets whenever filters/sort change */}
+      <TicketListClient key={JSON.stringify({ ...filter, cols: columns, density })} initial={page.rows} nextCursor={page.nextCursor} filter={filter} columns={columns} compact={density === "compact"} selectable={ctx.permissions.has("ticket.bulk")} />
       <p className="text-body-sm mt-3 text-on-surface-variant">
         <kbd className="font-heading">J</kbd>/<kbd className="font-heading">K</kbd> move · <kbd className="font-heading">Enter</kbd> open{ctx.permissions.has("ticket.bulk") ? <> · <kbd className="font-heading">X</kbd> select</> : null}
       </p>
