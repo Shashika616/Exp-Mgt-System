@@ -1,6 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "./helpers/fixtures";
 import { USERS, newSession } from "./helpers/auth";
+import { runJobsNow } from "./helpers/db";
 
 /** design.md §12.11 - axe passes with zero violations on the main screens (WCAG 2.2 AA tags). */
 const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
@@ -14,7 +15,8 @@ async function audit(page: import("@playwright/test").Page, path: string) {
 
 test("login page", async ({ page }) => audit(page, "/login"));
 
-test("staff screens", async ({ browser }) => {
+test("staff screens", async ({ browser, baseURL }) => {
+  await runJobsNow(baseURL!); // populate daily_ticket_stats so the reports page renders with real rows
   const admin = await newSession(browser, USERS.admin);
   for (const p of ["/app", "/app/tickets", "/app/review", "/app/clients", "/app/reports", "/app/admin/users", "/app/admin/sla", "/app/admin/audit", "/app/tickets/new"]) await audit(admin, p);
   await admin.goto("/app/tickets");

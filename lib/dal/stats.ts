@@ -209,7 +209,7 @@ export async function dailyStats(ctx: AuthContext, days = 30) {
     tx
       .select()
       .from(schema.dailyTicketStats)
-      .where(gte(schema.dailyTicketStats.day, sql`current_date - ${days}`))
+      .where(gte(schema.dailyTicketStats.day, sql`(current_date - ${days}::int)::date`))
       .orderBy(asc(schema.dailyTicketStats.day)),
   );
 }
